@@ -7,14 +7,14 @@ package karaoke.music;
 /**
  * @author chessa, mattbev, sophias
  *
- * Lyric is an immutable ADT representing a single lyric, (i.e. perhaps only a syllable), during one playable component of music.
+ * Lyric is an immutable ADT representing a lyric of one syllable, during one playable component of music.
  */
 public class Lyric {
     
     private final String lyric;
     
     /**
-     * Mkae a lyric object that represents a single component's lyric
+     * Mkae a lyric object that represents a single syllable's lyric
      * 
      * @param lyric the lyric text
      */

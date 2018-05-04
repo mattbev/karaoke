@@ -6,7 +6,7 @@ import java.util.List;
  * 
  * @author chessa, mattbev, sophias
  * 
- * An immutable ADT to represent playable components in a piece of music that has lyrics
+ * An immutable ADT to represent one syllable component in a piece of music that has a lyric syllable
  *
  */
 public interface Playable {
@@ -47,9 +47,9 @@ public interface Playable {
     public double getDuration();
     
     /**
-     * Return the lyric that should be streamed during this component
+     * Return the syllable lyric that should be streamed during this component
      * 
-     * @return the lyric tied to this component
+     * @return the syllable lyric tied to this component
      */
     public Lyric getLyric();
     
