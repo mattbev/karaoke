@@ -1,4 +1,5 @@
 package karaoke.sound;
+import karaoke.*;
 
 import java.util.function.Consumer;
 
