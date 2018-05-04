@@ -304,51 +304,65 @@ public class SequencePlayerTest {
         
         player.addNote(piano, new Pitch('D'), startBeat++, 1);
         startBeat += 1;
+        System.out.println("A-");
         // end measure
         
         player.addNote(piano, new Pitch('G'), startBeat++, 2);
         startBeat += 2;
+        System.out.println("ma-");
         
         player.addNote(piano, new Pitch('B'), startBeat++, 3.0/4);
         startBeat += 3.0/4;
         player.addNote(piano, new Pitch('G'), startBeat++, 3.0/4);
         startBeat += 3.0/4;
+        System.out.println("zing-");
         //end measure and tuplet
         
         player.addNote(piano, new Pitch('B'), startBeat++, 2);
         startBeat += 2;
+        System.out.println("grace!");
         player.addNote(piano, new Pitch('A'), startBeat++, 1);
         startBeat += 1;
+        System.out.println("How");
         //end measure
         
         player.addNote(piano, new Pitch('G'), startBeat++, 2);
+        System.out.println("sweet");
         startBeat += 2;
         player.addNote(piano, new Pitch('E'), startBeat++, 1);
         startBeat += 1;
+        System.out.println("the");
         //end measure
         
         player.addNote(piano, new Pitch('D'), startBeat++, 2);
         startBeat += 2;
+        System.out.println("sound");
         player.addNote(piano, new Pitch('D'), startBeat++, 1);
         startBeat += 1;
+        System.out.println("That");
         //end measure
         
         player.addNote(piano, new Pitch('G'), startBeat++, 2);
+        System.out.println("saved");
         startBeat += 2;
         
         player.addNote(piano, new Pitch('B'), startBeat++, 3.0/4);
         startBeat += 3.0/4;
         player.addNote(piano, new Pitch('G'), startBeat++, 3.0/4);
         startBeat += 3.0/4;
+        System.out.println("a");
         //end measure and tuplet
         
         player.addNote(piano, new Pitch('B'), startBeat++, 2);
+        System.out.println("wretch");
         startBeat += 2;
         player.addNote(piano, new Pitch('A'), startBeat++, 1);
+        System.out.println("like");
         startBeat += 1;
         //end measure
         
         player.addNote(piano, new Pitch('D').transpose(Pitch.OCTAVE), startBeat++, 3);
+        System.out.println("me.");
         startBeat += 3;
         //end measure
         
