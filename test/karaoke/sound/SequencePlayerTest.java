@@ -2,6 +2,8 @@ package karaoke.sound;
 
 import static org.junit.Assert.*;
 
+import java.util.function.Consumer;
+
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
@@ -282,13 +284,64 @@ public class SequencePlayerTest {
         System.out.println("done playing");
         
     }
-    
+    public Consumer<Double> consumerMaker(Double startBeat){
+        Consumer<Double> c1 = i -> System.out.println("not initialized");
+        
+        if(startBeat == 2.0) {
+            c1= i-> System.out.print("A-");
+
+        }
+        if(startBeat == 3.0) {
+            c1= i-> System.out.print("ma-");
+        }
+        if(startBeat == 5.0) {
+            c1= i-> System.out.print("zing");
+            
+        }
+        if(startBeat == 6.5) {
+            c1= i-> System.out.print(" grace!");
+        }
+        if(startBeat == 8.5) {
+            c1= i-> System.out.print(" How");
+        }
+        if(startBeat == 9.5) {
+            c1= i-> System.out.print(" sweet");
+        }
+        if(startBeat == 11.5) {
+            c1= i-> System.out.print(" the");
+        }
+        if(startBeat == 12.5) {
+            c1= i-> System.out.print(" sound");
+        }
+        if(startBeat == 14.5) {
+            c1= i-> System.out.print(" That");
+        }
+        if(startBeat == 15.5) {
+            c1= i-> System.out.print(" saved");
+        }
+        if(startBeat == 17.5) {
+            c1= i-> System.out.print(" a");
+        }
+        if(startBeat == 19.0) {
+            c1= i-> System.out.print(" wretch");
+        }
+        if(startBeat == 21.0) {
+            c1= i-> System.out.print(" like");
+        }
+        if(startBeat == 22.0) {
+            c1= i-> System.out.print(" me.");
+        }
+        return c1;
+            
+        }
     //Covers:
     //      piece3.abc
     @Test
     public void testPiece3() throws MidiUnavailableException, InvalidMidiDataException{
         Instrument piano = Instrument.PIANO;
-
+        
+//        }
+//        Consumer<Double> c1 = x -> System.out.println(x);
         // create a new player
         final int beatsPerMinute = 100; // a beat is a quarter note, so this is 120 quarter notes per minute
         final int ticksPerBeat = 64; // allows up to 1/64-beat notes to be played with fidelity
@@ -303,66 +356,82 @@ public class SequencePlayerTest {
         startBeat += 4 * numBeats;   // 2 beat rest
         
         player.addNote(piano, new Pitch('D'), startBeat, 1);
+        player.addEvent(startBeat, consumerMaker(startBeat));
         startBeat += 1;
-        System.out.println("A-");
+
         // end measure
         
         player.addNote(piano, new Pitch('G'), startBeat, 2);
+        player.addEvent(startBeat, consumerMaker(startBeat));
+
         startBeat += 2;
-        System.out.println("ma-");
         
         player.addNote(piano, new Pitch('B'), startBeat, 3.0/4);
+        player.addEvent(startBeat, consumerMaker(startBeat));
+
         startBeat += 3.0/4;
         player.addNote(piano, new Pitch('G'), startBeat, 3.0/4);
         startBeat += 3.0/4;
-        System.out.println("zing-");
         //end measure and tuplet
         
         player.addNote(piano, new Pitch('B'), startBeat, 2);
+        player.addEvent(startBeat, consumerMaker(startBeat));
+
         startBeat += 2;
-        System.out.println("grace!");
         player.addNote(piano, new Pitch('A'), startBeat, 1);
+        player.addEvent(startBeat, consumerMaker(startBeat));
+
         startBeat += 1;
-        System.out.println("How");
         //end measure
         
         player.addNote(piano, new Pitch('G'), startBeat, 2);
-        System.out.println("sweet");
+        player.addEvent(startBeat, consumerMaker(startBeat));
+
         startBeat += 2;
         player.addNote(piano, new Pitch('E'), startBeat, 1);
+        player.addEvent(startBeat, consumerMaker(startBeat));
+
         startBeat += 1;
-        System.out.println("the");
         //end measure
         
         player.addNote(piano, new Pitch('D'), startBeat, 2);
+        player.addEvent(startBeat, consumerMaker(startBeat));
+
         startBeat += 2;
-        System.out.println("sound");
         player.addNote(piano, new Pitch('D'), startBeat, 1);
+        player.addEvent(startBeat, consumerMaker(startBeat));
+
         startBeat += 1;
-        System.out.println("That");
         //end measure
         
         player.addNote(piano, new Pitch('G'), startBeat, 2);
-        System.out.println("saved");
+        player.addEvent(startBeat, consumerMaker(startBeat));
+
         startBeat += 2;
         
         player.addNote(piano, new Pitch('B'), startBeat, 3.0/4);
+        player.addEvent(startBeat, consumerMaker(startBeat));
+
         startBeat += 3.0/4;
         player.addNote(piano, new Pitch('G'), startBeat, 3.0/4);
+
         startBeat += 3.0/4;
-        System.out.println("a");
         //end measure and tuplet
         
         player.addNote(piano, new Pitch('B'), startBeat, 2);
-        System.out.println("wretch");
+        player.addEvent(startBeat, consumerMaker(startBeat));
+
         startBeat += 2;
         player.addNote(piano, new Pitch('A'), startBeat, 1);
-        System.out.println("like");
+        player.addEvent(startBeat, consumerMaker(startBeat));
+
+   
         startBeat += 1;
         //end measure
         
-        player.addNote(piano, new Pitch('D').transpose(Pitch.OCTAVE), startBeat++, 3);
-        System.out.println("me.");
+        player.addNote(piano, new Pitch('D').transpose(Pitch.OCTAVE), startBeat, 3);
+        player.addEvent(startBeat, consumerMaker(startBeat));
+
         startBeat += 3;
         //end measure
         
