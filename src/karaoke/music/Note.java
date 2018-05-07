@@ -14,17 +14,20 @@ public class Note {
     private final Instrument instrument;
     private final double magnitude;
     private final Pitch pitch;
+    private final String accidental;
     
     /**
      * 
      * @param i the instrument that plays this note
      * @param magnitude the magnitude of this note (i.e. 1/4 = quarter, 1 = whole, etc)
      * @param p the pitch of this note
+     * @param accidental the accidental of the note
      */
-    public Note(Instrument i, double magnitude, Pitch p) {
+    public Note(Instrument i, double magnitude, Pitch p, String accidental) {
         this.instrument = i;
         this.magnitude = magnitude;
         this.pitch = p;
+        this.accidental = accidental;
     }
     
     
