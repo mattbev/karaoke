@@ -14,7 +14,7 @@ public class Lyric {
     private final String lyric;
     
     /**
-     * Mkae a lyric object that represents a single syllable's lyric
+     * Make a lyric object that represents a single syllable's lyric
      * 
      * @param lyric the lyric text
      */

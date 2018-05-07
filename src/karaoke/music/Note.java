@@ -6,7 +6,7 @@ import karaoke.sound.*;
 /**
  * @author chessa, mattbev, sophias
  * 
- * A mutable ADT to represent a note of music played by an instrument
+ * A immutable ADT to represent a note of music played by an instrument
  *
  */
 public class Note {
