@@ -4,25 +4,38 @@ import java.util.List;
 
 public class Tuplet implements Playable {
     
-    private final List<Note> notes;
+    private final List<Chord> chords;
+    private double duration;
+    private String lyricText;
     
-    public Tuplet(List<Note> notes) {
-        this.notes = notes;
+    /**
+     * creates an instance of a Tuplet object
+     * @param chords the notes in the tuplet
+     */
+    public Tuplet(List<Chord> chords) {
+        this.chords = chords;
+        for (Chord chord : this.chords) {
+            this.duration += chord.getDuration();
+        }
+        
+        for (Chord chord : this.chords) {
+            this.lyricText += chord.getLyricText();
+        }
     }
-
+    
+    @Override
     public double getDuration() {
-        // TODO Auto-generated method stub
-        return 0;
+        return this.duration;
     }
-
+    
+    @Override
     public Lyric getLyric() {
-        // TODO Auto-generated method stub
-        return null;
+        return new Lyric(this.lyricText);
     }
-
+    
+    @Override
     public String getLyricText() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.lyricText;
     }
 
 }
