@@ -21,11 +21,11 @@ public interface Playable {
      * Create a new playable chord with lyric lyric
      * 
      * @param notes the notes to be in this chord
-     * @param lyric the lyric associated with this chord
+     * @param lyrics the lyric associated with this chord
      * @return a new chord 
      */
-    public static Chord createChord(List<Note> notes, Lyric lyric) {
-        return new Chord(notes, lyric);
+    public static Chord createChord(List<Note> notes, List<Lyric> lyrics) {
+        return new Chord(notes, lyrics);
     }
     
     /**
@@ -46,12 +46,15 @@ public interface Playable {
      */
     public double getDuration();
     
-    /**
+    /*
+    
      * Return the syllable lyric that should be streamed during this component
      * 
      * @return the syllable lyric tied to this component
-     */
+     
     public Lyric getLyric();
+    
+    */
     
     /**
      * Return the lyric text of this component of music

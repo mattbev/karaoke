@@ -17,29 +17,34 @@ import java.util.List;
 public class Chord implements Playable{ 
     
     private List<Note> notes = new ArrayList<Note>();
-    private final Lyric lyric;
+    private  List<Lyric> lyrics = new ArrayList<Lyric>();
     
+    // AF(notes, lyric): A chord where notes is a list of the notes of the chord (in the order they were in in the 
+    //                   abc file) and lyrics is the list of lyric(s) to be streamed during this chord
+    //
+    // RI: notes.size > 1
+    //     
+    // Safety from Rep Exposure:
+    //
+    // Thread Safety Argument:
+    //
     
     /**
      * Make a chord, which is a combination of one or more notes
      * 
      * @param notes the list of notes that make up this chord
-     * @param lyric the lyric to be streamed during this chord
+     * @param lyrics the lyric to be streamed during this chord
      */
-    public Chord(List<Note> notes, Lyric lyric) {
-        this.notes = notes; // not correct, we will want to make a defensive copy of the list
-        this.lyric = lyric;
+    public Chord(List<Note> notes, List<Lyric> lyrics) {
+        this.notes = notes; // not correct, we will want to make defensive copies of the lists
+        this.lyrics = lyrics;
     }
+    
     @Override
     public double getDuration() {
-        return 0; // not correct, we will probably want to return the max duration of all notes
+        return this.notes.get(0).getDuration();
     }
 
-
-    @Override
-    public Lyric getLyric() {
-        return lyric;
-    }
     
     /**
      * Get this chord's notes
@@ -47,7 +52,7 @@ public class Chord implements Playable{
      * @return the notes that make up this chord
      */
     public List<Note> getNotes() {
-        return this.notes; // obviously not correct as this is not defensive, just placeholder
+        return this.notes; // not correct as this is not defensive, just placeholder
     }
     
     /**
@@ -61,7 +66,7 @@ public class Chord implements Playable{
     
     @Override
     public String getLyricText() {
-        return this.lyric.getText();
+        return null;
     }
 }
 

@@ -8,6 +8,14 @@ public class Tuplet implements Playable {
     private double duration;
     private String lyricText;
     
+    // AF(chords, duration, lyricText): A Tuplet where chords are the chords in the 
+    //
+    //
+    //
+    //
+    //
+    //
+    
     /**
      * creates an instance of a Tuplet object
      * @param chords the notes in the tuplet
@@ -26,11 +34,6 @@ public class Tuplet implements Playable {
     @Override
     public double getDuration() {
         return this.duration;
-    }
-    
-    @Override
-    public Lyric getLyric() {
-        return new Lyric(this.lyricText);
     }
     
     @Override

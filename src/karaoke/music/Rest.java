@@ -31,10 +31,6 @@ public class Rest implements Playable {
         return this.duration;
     }
 
-    @Override
-    public Lyric getLyric() {
-        return this.lyric;
-    }
 
     @Override
     public String getLyricText() {
