@@ -27,7 +27,7 @@ public class WebServer {
     // 
     // Thread safety argument:
     //   the shared karaoke is immutable, with immutable lyrics as well
-    //   will never have multiple web servers on the same thread (multiple players are on multiple threads)
+    //   safe b/c will never have multiple users on the same thread (multiple players are on multiple threads)
     //   uses thread safe types internally
 
 
