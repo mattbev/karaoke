@@ -2,6 +2,8 @@ package karaoke.music;
 
 import java.util.List;
 
+import karaoke.sound.SequencePlayer;
+
 /**
  * 
  * @author chessa, mattbev, sophias
@@ -66,4 +68,13 @@ public interface Playable {
      * @return the lyric of this component as a string
      */
     public String getLyricText();
+    
+    /**
+     * Play this playable
+     * @param player player on which to play
+     * @param startBeat when to play
+     */
+    public void play(SequencePlayer player, double startBeat) ;
+        
+    
 }

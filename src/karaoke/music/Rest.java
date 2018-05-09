@@ -3,6 +3,7 @@
  */
 package karaoke.music;
 
+import karaoke.sound.SequencePlayer;
 
 /**
  * @author chessa, mattbev, sophias
@@ -35,6 +36,14 @@ public class Rest implements Playable {
     @Override
     public String getLyricText() {
         return this.lyric.getText();
+    }
+    
+    /**
+     * Play rest
+     */
+    @Override
+    public void play(SequencePlayer player, double startBeat) {
+        return;
     }
 
 }
