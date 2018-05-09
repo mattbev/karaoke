@@ -41,5 +41,13 @@ public class Lyric {
         return new Lyric(this.getText());
     }
     
+    /**
+     * creates an empty instance of a lyric
+     * @return a new Lyric instance representing the absence of a lyric
+     */
+    public static Lyric emptyLyric() {
+        return new Lyric(" ");
+    }
+    
 
 }

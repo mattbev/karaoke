@@ -7,6 +7,7 @@ import java.util.List;
 import edu.mit.eecs.parserlib.ParseTree;
 import edu.mit.eecs.parserlib.Parser;
 import edu.mit.eecs.parserlib.UnableToParseException;
+import karaoke.music.Concat;
 import karaoke.music.Karaoke;
 
 /**
@@ -62,7 +63,7 @@ public class MusicParser {
     private static Parser<ABCGrammar> makeParser() {
         try {
             // read the grammar as a file, relative to the project root.
-            final File grammarFile = new File("src/karaoke.parser/ABC.g");
+            final File grammarFile = new File("src/karaoke.parser/Abc.g");
             return Parser.compile(grammarFile, ABCGrammar.ABC_TUNE);
         } catch (IOException e) {
             throw new RuntimeException("can't read the grammar file", e);
@@ -103,6 +104,10 @@ public class MusicParser {
             {
                 final List<ParseTree<ABCGrammar>> children = parseTree.children();
                 Karaoke karaoke = makeAbstractSyntaxTree(children.get(0));
+                for (int i=1; i < children.size(); i++) {
+                    karaoke = new Concat(karaoke, makeAbstractSyntaxTree(children.get(i)));
+                }
+                return karaoke;
             }
             
         /* header */

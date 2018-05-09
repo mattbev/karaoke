@@ -36,7 +36,7 @@ public class Chord implements Playable{
      * @param lyrics the lyric to be streamed during this chord
      */
     public Chord(List<Note> notes, List<Lyric> lyrics) {
-        this.notes = notes; // not correct, we will want to make defensive copies of the lists
+        this.notes = new ArrayList<>(notes); 
         this.lyrics = lyrics;
     }
     
@@ -53,7 +53,7 @@ public class Chord implements Playable{
      * @return the notes that make up this chord
      */
     public List<Note> getNotes() {
-        return this.notes; // not correct as this is not defensive, just placeholder
+        return new ArrayList<>(this.notes); 
     }
     
     
@@ -92,19 +92,8 @@ public class Chord implements Playable{
             notesCopy.add(Note.createNote(note.getInstrument(), duration/denom, note.getPitch(), note.getAccidental()));
         }
         
-        return createChord(notes, lyrics);
-        
-    }
-    
-    /**
-     * Create a new chord with given notes, and lyrics to be sung during it
-     * 
-     * @param notes the list of notes in the chord
-     * @param lyrics the list of lyrics in the chord
-     * @return a new chord with the given notes and lyrics sung the chord being played
-     */
-    public static Chord createChord(List<Note> notes, List<Lyric> lyrics) {
         return new Chord(notes, lyrics);
+        
     }
     
     /**
@@ -137,6 +126,16 @@ public class Chord implements Playable{
         List<Lyric> lyricsCopy = new ArrayList<>();
         for (Lyric l : this.lyrics) {
             lyricsCopy.add(l.createLyricCopy());
-        } return lyricsCopy;
+        } 
+        return lyricsCopy;
+    } 
+    
+    @Override
+    public Lyric getLyric() {
+        String lyric = "";
+        for (Lyric l : this.lyrics) {
+            lyric += l;
+        } 
+        return new Lyric(lyric);
     } 
 }

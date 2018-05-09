@@ -13,23 +13,26 @@ import karaoke.sound.SequencePlayer;
  */
 public class Rest implements Playable {
     
-    private final Lyric lyric;
+    private final Lyric lyric = Lyric.emptyLyric();
     private final double duration;
     
     /**
      * Make a component to represent a pause in a piece of music
      * 
-     * @param lyric the lyric to be streamed during this pause
      * @param duration the duration of the pause
      */
-    public Rest(Lyric lyric, double duration) { 
-        this.lyric = lyric;
+    public Rest(double duration) { 
         this.duration = duration;
     }
 
     @Override
     public double getDuration() {
         return this.duration;
+    }
+    
+    @Override
+    public Lyric getLyric() {
+        return new Lyric(this.lyric.getText());
     }
 
     

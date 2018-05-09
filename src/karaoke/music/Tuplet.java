@@ -85,6 +85,11 @@ public class Tuplet implements Playable {
     }
     
     @Override
+    public Lyric getLyric() {
+        return Lyric.emptyLyric(); //not correct, need to revisit
+    }
+    
+    @Override
     public void play(SequencePlayer player, double startBeat) {
         
         double beginBeat = startBeat;

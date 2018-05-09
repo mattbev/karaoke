@@ -33,12 +33,11 @@ public interface Playable {
     /**
      * Create a new music rest with lyric lyric of duration duration
      * 
-     * @param lyric the lyric associated with this pause
      * @param duration the length of this rest
      * @return a new rest in music with length duration and lyric lyric
      */
-    public static Rest createRest(Lyric lyric, double duration) {
-        return new Rest(lyric, duration);
+    public static Rest createRest(double duration) {
+        return new Rest(duration);
     }
 
     /**
@@ -50,26 +49,13 @@ public interface Playable {
     
     
     
-    /*
-    
+    /**    
      * Return the syllable lyric that should be streamed during this component
      * 
      * @return the syllable lyric tied to this component
-     
-    public Lyric getLyric();
-    
-    */
-    
-    /**
-     * Create new chord consisting of the given notes and given lyric
-     * 
-     * @param notes
-     * @param lyrics
-     * @return
      */
-    public static Chord createNewChord(List<Note> notes, List<Lyric> lyrics) {
-        return new Chord(notes, lyrics);
-    }
+    public Lyric getLyric();
+        
 
     /**
      * Play this playable
