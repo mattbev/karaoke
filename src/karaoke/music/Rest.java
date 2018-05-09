@@ -32,14 +32,9 @@ public class Rest implements Playable {
         return this.duration;
     }
 
-
-    @Override
-    public String getLyricText() {
-        return this.lyric.getText();
-    }
     
     /**
-     * Play rest
+     * Provide a rest in the karaoke
      */
     @Override
     public void play(SequencePlayer player, double startBeat) {

@@ -52,6 +52,15 @@ public class Note {
     }
     
     /**
+     * Return the accidental of this note
+     * 
+     * @return the accidental of the note
+     */
+    public String getAccidental() {
+        return this.accidental;
+    }
+    
+    /**
      * Return the instrument this note is played by
      * 
      * @return this note's instrument
@@ -66,10 +75,20 @@ public class Note {
      * @param player player producing the note
      * @param startBeat beat at which the note should play
      */
-    
     public void play(SequencePlayer player, double startBeat) {
         player.addNote(instrument, pitch, startBeat, magnitude);
         
     }
     
+    /**
+     * 
+     * @param i the instrument the note is played by
+     * @param magnitude the duration of the note
+     * @param p the pitch of the note
+     * @param accidental the accidental of the note
+     * @return a new note of the given magnitude, pitch, and accidental played by the instrument i
+     */
+    public static Note createNote(Instrument i, double magnitude, Pitch p, String accidental) {
+        return new Note(i, magnitude, p, accidental);
+    }
 }
