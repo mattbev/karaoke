@@ -21,8 +21,8 @@ public class Tuplet implements Playable {
     private double duration;
     private String lyricText;
     
-    // AF(chords, duration, lyricText): A tuplet where chords are the chords in the tuplet
-    //
+    // AF(chords, lyrics): A tuplet of type type where chords are the chords in the tuplet, and lyrics is the ordered list of Lyric syllables 
+    //                     associated with the chords
     //
     //
     //
