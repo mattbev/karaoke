@@ -84,10 +84,13 @@ public class Tuplet implements Playable {
         return this.duration;
     }
     
-  
-
     @Override
     public void play(SequencePlayer player, double startBeat) {
         
+        double beginBeat = startBeat;
+        for(Chord chord: newChords) {
+            chord.play(player, beginBeat);
+            beginBeat += chord.getDuration();
+        }
     }
 }
