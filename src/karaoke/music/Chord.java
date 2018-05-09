@@ -22,7 +22,7 @@ public class Chord implements Playable{
     // AF(notes, lyric): A chord where notes is a list of the notes of the chord (in the order they were in in the 
     //                   abc file) and lyrics is the list of lyric(s) to be streamed during this chord
     //
-    // RI: notes.size > 1
+    // RI: notes.size >= 1
     //     
     // Safety from Rep Exposure:
     //

@@ -8,7 +8,7 @@ public class Tuplet implements Playable {
     private double duration;
     private String lyricText;
     
-    // AF(chords, duration, lyricText): A Tuplet where chords are the chords in the 
+    // AF(chords, duration, lyricText): A tuplet where chords are the chords in the tuplet
     //
     //
     //

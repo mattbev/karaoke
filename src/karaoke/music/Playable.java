@@ -46,6 +46,8 @@ public interface Playable {
      */
     public double getDuration();
     
+    
+    
     /*
     
      * Return the syllable lyric that should be streamed during this component
@@ -55,6 +57,8 @@ public interface Playable {
     public Lyric getLyric();
     
     */
+    
+    
     
     /**
      * Return the lyric text of this component of music
