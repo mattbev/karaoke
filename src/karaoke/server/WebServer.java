@@ -1,18 +1,10 @@
 package karaoke.server;
 import karaoke.music.*;
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.InetSocketAddress;
-import java.util.Arrays;
-import java.util.concurrent.Executors;
 
-import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 /**
@@ -32,6 +24,7 @@ public class WebServer {
     // Safety from rep exposure:
     //   all fields private and final
     //   defensive copies are made of inputs 
+    // 
     // Thread safety argument:
     //   the shared karaoke is immutable, with immutable lyrics as well
     //   will never have multiple web servers on the same thread
@@ -58,7 +51,15 @@ public class WebServer {
         assert true;
     }
     
-    // this was the handleLook from ps4, here as a guide for when we implement if needed
+    /**
+     * 
+     * @param exchange the Http exchange where the lyrics are being watched
+     * @param karaoke the karaoke to be watched 
+     */
+    private void handleWatch(HttpExchange exchange, Karaoke karaoke) { 
+        ;
+    }
+    // this was a handleLook from ps4, here as a guide for when we implement if needed
     
     
     /*
