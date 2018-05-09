@@ -31,6 +31,14 @@ public class Tuplet implements Playable {
     //
     //
     
+    
+    // Thread safety argument:
+    //    This class is threadsafe because it's immutable:
+    //    - newChord, type, duration, and lyricMap are final
+    //    -The newChords array is never exposed to a client.
+    //    -the lyricMap HashMap is never exposed to a client
+    //    -The mutable reps (newChords and lyricMaps) are only mutated in the constructor
+    //      which is a synchronized, threadsafe method
     /**
      * creates an instance of a Tuplet object
      * @param chords the notes in the tuplet

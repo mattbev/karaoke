@@ -21,6 +21,10 @@ public class Lyric {
     // Safety from rep exposure:
     //      field is private and final and immutable
     //      all return types are immutable
+    // Thread safety argument:
+    //    This class is threadsafe because it's immutable:
+    //    - lyric is final and an immutable datatype
+    //    - lyric is never exposed to a client.
     
     /**
      * Make a lyric object that represents a single syllable's lyric
