@@ -40,5 +40,6 @@ public class Lyric {
     public Lyric createLyricCopy() {
         return new Lyric(this.getText());
     }
+    
 
 }

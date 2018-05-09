@@ -60,17 +60,17 @@ public interface Playable {
     
     */
     
+    /**
+     * Create new chord consisting of the given notes and given lyric
+     * 
+     * @param notes
+     * @param lyrics
+     * @return
+     */
     public static Chord createNewChord(List<Note> notes, List<Lyric> lyrics) {
         return new Chord(notes, lyrics);
     }
-    
-    /**
-     * Return the lyric text of this component of music
-     * 
-     * @return the lyric of this component as a string
-     */
-    public String getLyricText();
-    
+
     /**
      * Play this playable
      * @param player player on which to play

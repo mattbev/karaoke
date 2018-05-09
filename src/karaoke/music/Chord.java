@@ -56,19 +56,7 @@ public class Chord implements Playable{
         return this.notes; // not correct as this is not defensive, just placeholder
     }
     
-    /**
-     * Return the instruments played in this chord
-     * 
-     * @return the list of instruments in this chord
-     */
-    public List<Instrument> getInstruments() {
-        return null;
-    }
     
-    @Override
-    public String getLyricText() {
-        return null;
-    }
     
     /**
      * Play this chord
@@ -87,11 +75,11 @@ public class Chord implements Playable{
     /**
      * Make a new chord which consists of the same notes and lyrics, but has a different duration depending on the Tuplet type t
      * 
-     * @param duration the new duration
+     * @param duration  the new duration
      * @param t the tuplet type
      * @return a new Chord with a different duration depending on the tuplet
      */
-    public Chord makeChordNewDuration(double duration, Tuplet.Type t) {
+    public Chord copyChordNewDuration(double duration, Tuplet.Type t) {
         
         List<Lyric> lyricsCopy = new ArrayList<>();
         for (Lyric lyric : this.lyrics) {
@@ -104,8 +92,26 @@ public class Chord implements Playable{
             notesCopy.add(Note.createNote(note.getInstrument(), duration/denom, note.getPitch(), note.getAccidental()));
         }
         
+        return createChord(notes, lyrics);
+        
     }
     
+    /**
+     * Create a new chord with given notes, and lyrics to be sung during it
+     * 
+     * @param notes the list of notes in the chord
+     * @param lyrics the list of lyrics in the chord
+     * @return a new chord with the given notes and lyrics sung the chord being played
+     */
+    public static Chord createChord(List<Note> notes, List<Lyric> lyrics) {
+        return new Chord(notes, lyrics);
+    }
+    
+    /**
+     * 
+     * @param t the tuplet type
+     * @return the number to divide the total duration by
+     */
     private static int getDenominator(Tuplet.Type t) {
         switch (t) {
         
@@ -121,4 +127,16 @@ public class Chord implements Playable{
         default: throw new AssertionError("should never get here");
         }
     }
+    
+    /**
+     * Create a copy of the lyrics list
+     * 
+     * @return a copy of the lyrics list, with copied lyrics as well
+     */
+    public List<Lyric> getLyrics() {
+        List<Lyric> lyricsCopy = new ArrayList<>();
+        for (Lyric l : this.lyrics) {
+            lyricsCopy.add(l.createLyricCopy());
+        } return lyricsCopy;
+    } 
 }
