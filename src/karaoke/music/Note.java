@@ -38,6 +38,7 @@ public class Note {
         this.duration = duration;
         this.pitch = p;
         this.accidental = accidental;
+        checkRep();
     }
     
     /**
@@ -56,7 +57,7 @@ public class Note {
      * @return the duration of this note
      */
     public double getDuration() {
-        
+        checkRep();
         return this.duration; 
     }
     
@@ -66,6 +67,7 @@ public class Note {
      * @return the pitch of the note
      */
     public Pitch getPitch() {
+        checkRep();
         return this.pitch;
     }
     
@@ -75,6 +77,7 @@ public class Note {
      * @return the accidental of the note
      */
     public String getAccidental() {
+        checkRep();
         return this.accidental;
     }
     
@@ -84,6 +87,7 @@ public class Note {
      * @return this note's instrument
      */
     public Instrument getInstrument() {
+        checkRep();
         return this.instrument;
     }
     
@@ -95,6 +99,7 @@ public class Note {
      */
     public void play(SequencePlayer player, double startBeat) {
         player.addNote(instrument, pitch, startBeat, duration);
+        checkRep();
         
     }
     
@@ -112,10 +117,12 @@ public class Note {
     
     @Override
     public boolean equals(Object that) {
+        checkRep();
         return (that instanceof Note) && this.sameNote((Note) that);
     }
     
     private boolean sameNote(Note that) {
+        checkRep();
         return this.getAccidental().equals(that.getAccidental()) 
                 && this.getPitch().equals(that.getPitch())
                 && this.getDuration() == that.getDuration();
@@ -123,6 +130,7 @@ public class Note {
     
     @Override 
     public int hashCode() {
+        checkRep();
         return this.pitch.hashCode() + this.accidental.hashCode() + (int) this.getDuration();
     }
 }

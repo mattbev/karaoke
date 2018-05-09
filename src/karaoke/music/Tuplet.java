@@ -20,16 +20,22 @@ public class Tuplet implements Playable {
     }
     private final List<Chord> newChords = new ArrayList<Chord>();
     private final Type type;
-    private double duration;
+    private final double duration;
     private final  Map<Chord,List<Lyric>> lyricMap = new HashMap<Chord,List<Lyric>>();
     
-    // AF(chords, lyrics): A tuplet of type type where chords are the chords in the tuplet, and lyrics is the ordered list of Lyric syllables 
-    //                     associated with the chords
+    // AF(newChords, type, duration, lyricMap): A tuplet of type type and time length duration, where newChords are the chords
+    //        in the tuplet, played in the order they appear in the list, and for every chord c in newChords, lyricMap.get(c)
+    //        is the ordered list of lyric(s) to be streamed during that chord.
     //
+    // RI: 
+    //      newChords.size() = 2, 3, 4
+    //      duration > 0
+    //      lyricMap.keySet().size() == newChords.size()
+    //      for all c in newChords: lyricMap.get(c) exists, and != null
     //
-    //
-    //
-    //
+    // Safety from rep exposure:
+    //      all fields private final, and never mutated after contructor
+    //      all return types are immutable, rep is never exposed
     
     
     // Thread safety argument:
@@ -63,10 +69,10 @@ public class Tuplet implements Playable {
         if(type == Type.DUPLET) {
             this.duration = noteDuration * TIME_OF_NOTES;
         }
-        if(type == Type.TRIPLET) {
+        else if(type == Type.TRIPLET) {
             this.duration = noteDuration * 2;
         }
-        if(type == Type.QUADRUPLET) {
+        else {
             this.duration = noteDuration * TIME_OF_NOTES;
         }
         
