@@ -33,9 +33,6 @@ public class Concat implements Karaoke {
         secondKaraoke.play(player, startBeat + firstKaraoke.duration());
     }
 
-    @Override
-    public String getLyricText() {
-        return null;
-    }
+   
 
 }

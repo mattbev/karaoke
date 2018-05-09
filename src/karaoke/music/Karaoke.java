@@ -52,11 +52,6 @@ public interface Karaoke {
      */
     public void play(SequencePlayer player, double startBeat);
     
-    /**
-     * Get the lyric string of this piece of karaoke
-     * 
-     * @return the text that makes up the entire lyric of this piece of karaoke
-     */
-    public String getLyricText();
+   
     
 }
