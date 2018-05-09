@@ -35,9 +35,7 @@ public class Tuplet implements Playable {
     //
     // Safety from rep exposure:
     //      all fields private final, and never mutated after contructor
-    //      all return types are immutable, rep is never exposed
-    
-    
+    //      all return types are immutable, rep is never exposed    
     // Thread safety argument:
     //    This class is threadsafe because it's immutable:
     //    - newChord, type, duration, and lyricMap are final
@@ -45,6 +43,7 @@ public class Tuplet implements Playable {
     //    -the lyricMap HashMap is never exposed to a client
     //    -The mutable reps (newChords and lyricMaps) are only mutated in the constructor
     //      which is a synchronized, threadsafe method
+    
     /**
      * creates an instance of a Tuplet object
      * @param chords the notes in the tuplet
@@ -119,15 +118,15 @@ public class Tuplet implements Playable {
     
     @Override
     public boolean equals(Object that) {
-        return (that instanceof Tuplet) && this.sameTuplet((Tuplet) that);
-    }
-    
-    private boolean sameTuplet(Tuplet that) {
-        for (int i = 0; i < this.newChords.size(); i++) {
-            if (! this.newChords.get(i).equals(that.newChords.get(i))) {
-                return false;
-            }
-        } return true;
+        if (that instanceof Tuplet) {
+            for (int i = 0; i < this.newChords.size(); i++) {
+                if (! this.newChords.get(i).equals(((Tuplet) that).newChords.get(i))) {
+                    return false;
+                }
+            } 
+            return true;
+        }
+        return false;
     }
     
     @Override 

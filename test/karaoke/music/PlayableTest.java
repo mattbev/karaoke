@@ -3,15 +3,10 @@ package karaoke.music;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiUnavailableException;
-
 import org.junit.Test;
 
 import karaoke.sound.Instrument;
-import karaoke.sound.MidiSequencePlayer;
 import karaoke.sound.Pitch;
-import karaoke.sound.SequencePlayer;
 
 /**
  * test suite for the playable interface
@@ -38,7 +33,6 @@ public class PlayableTest {
     //
     // testing: getDuration()
     // partition the outputs as follows:
-    //   0 seconds 
     //   >0 seconds
     //
     // testing play(SequencePlayer player, double startBeat)
@@ -120,17 +114,9 @@ public class PlayableTest {
     
     
     //testing getDuration...
+ 
     
-    //tests that a duration of 0 was returned for a playable with magnitude zero
-    @Test
-    public void testGetDurationZeroSeconds() {
-        List<Note> notes = Arrays.asList(new Note(Instrument.ACCORDION, 0, Pitch.MIDDLE_C, ""));
-        List<Lyric> lyrics = Arrays.asList(new Lyric("hello"), new Lyric("goodbye"));
-        Playable playable = Playable.createChord(notes, lyrics);
-        assert playable.getDuration() == 0;
-    }
-    
-  //tests that a duration of 0 was returned for a playable with non zero magnitude
+    //tests that a duration of 0 was returned for a playable with non zero magnitude
     @Test
     public void testGetDurationNonZeroSeconds() {
         Playable playable = Playable.createRest(5);

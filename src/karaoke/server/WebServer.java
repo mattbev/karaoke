@@ -57,7 +57,7 @@ public class WebServer {
      * @param karaoke the karaoke to be watched 
      */
     private void handleWatch(HttpExchange exchange, Karaoke karaoke) { 
-        ;
+        //TODO
     }
     // this was a handleLook from ps4, here as a guide for when we implement if needed
     

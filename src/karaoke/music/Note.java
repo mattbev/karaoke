@@ -118,15 +118,16 @@ public class Note {
     @Override
     public boolean equals(Object that) {
         checkRep();
-        return (that instanceof Note) && this.sameNote((Note) that);
+        if (that instanceof Note) {
+            if (this.getAccidental().equals(((Note) that).getAccidental()) 
+                && this.getPitch().equals(((Note) that).getPitch())
+                && this.getDuration() == ((Note) that).getDuration()) {
+                return true;
+            }
+        }
+        return false;
     }
     
-    private boolean sameNote(Note that) {
-        checkRep();
-        return this.getAccidental().equals(that.getAccidental()) 
-                && this.getPitch().equals(that.getPitch())
-                && this.getDuration() == that.getDuration();
-    }
     
     @Override 
     public int hashCode() {

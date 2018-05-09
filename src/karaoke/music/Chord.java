@@ -48,9 +48,13 @@ public class Chord implements Playable{
         checkRep();
     }
     
+    /**
+     * checks that the rep is not broken
+     */
     private void checkRep() {
         assert notes.size() > 0 : "a chord must contain at least one note";
     }
+    
     @Override
     public double getDuration() {
         checkRep();

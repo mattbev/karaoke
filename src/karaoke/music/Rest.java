@@ -67,11 +67,12 @@ public class Rest implements Playable {
     
     @Override
     public boolean equals(Object that) {
-        return (that instanceof Rest) && this.sameDuration((Rest) that);
-    }
-    
-    private boolean sameDuration(Rest that) {
-        return this.getDuration() == that.getDuration();
+        if (that instanceof Rest) {
+            if (this.getDuration() == ((Rest) that).getDuration()) {
+                return true;
+            }
+        }
+        return false;
     }
     
     @Override 

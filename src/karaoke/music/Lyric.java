@@ -43,6 +43,7 @@ public class Lyric {
     private void checkRep() {
         assert lyric.length() > 0 : "cannot have empty lyric text (empty lyric has one space)";
     }
+    
     /**
      * Return the lyric text of this component
      * 
@@ -75,13 +76,14 @@ public class Lyric {
     @Override
     public boolean equals(Object that) {
         checkRep();
-        return (that instanceof Lyric) && this.sameContent((Lyric) that);
+        if (that instanceof Lyric) {
+            if (this.getText().equals(((Lyric) that).getText())) {
+                return true;
+            }
+        }
+        return false;
     }
-    
-    private boolean sameContent(Lyric that) {
-        checkRep();
-        return this.getText().equals(that.getText());
-    }
+
     
     @Override 
     public int hashCode() {
