@@ -39,10 +39,7 @@ public class Measure implements Karaoke{
         }
     }
 
-    @Override
-    public String getLyricText() {
-        return null;
-    }
+   
     
 
 }
