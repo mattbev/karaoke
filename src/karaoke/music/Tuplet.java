@@ -35,7 +35,7 @@ public class Tuplet implements Playable {
     //
     // Safety from rep exposure:
     //      all fields private final, and never mutated after contructor
-    //      all return types are immutable, rep never exposed
+    //      all return types are immutable, rep is never exposed
     
     /**
      * creates an instance of a Tuplet object
