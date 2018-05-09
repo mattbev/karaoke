@@ -68,4 +68,7 @@ public interface Playable {
     
     @Override
     public int hashCode();
+    
+    @Override
+    public String toString();
 }

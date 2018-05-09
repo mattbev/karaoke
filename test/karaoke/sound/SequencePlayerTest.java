@@ -1,7 +1,5 @@
 package karaoke.sound;
 
-import static org.junit.Assert.*;
-
 import java.util.function.Consumer;
 
 import javax.sound.midi.InvalidMidiDataException;
