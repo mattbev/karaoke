@@ -10,7 +10,7 @@ abc-tune ::= abc-header abc-body
 ; ignore space-or-tab between terminals in the header
 @skip space-or-tab {
     abc-header ::= number comment* title other-fields* field-key
-	number ::= "X:" digit+ end-of-line
+	number ::= "X:" digit+ end-of-line 
 	title ::= "T:" text end-of-line
 	other-fields ::= composer | default-length | meter | tempo | voice | comment
 	composer ::= "C:" text end-of-line

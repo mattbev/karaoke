@@ -60,7 +60,9 @@ public interface Playable {
     
     */
     
-    
+    public static Chord createNewChord(List<Note> notes, List<Lyric> lyrics) {
+        return new Chord(notes, lyrics);
+    }
     
     /**
      * Return the lyric text of this component of music

@@ -31,5 +31,14 @@ public class Lyric {
     public String getText() {
         return this.lyric;
     }
+    
+    /**
+     * Create a copy of this lyric with the same text
+     * 
+     * @return a new replicated lyric object
+     */
+    public Lyric createLyricCopy() {
+        return new Lyric(this.getText());
+    }
 
 }
