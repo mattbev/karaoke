@@ -66,6 +66,7 @@ public class Note {
      * @param player player producing the note
      * @param startBeat beat at which the note should play
      */
+    
     public void play(SequencePlayer player, double startBeat) {
         player.addNote(instrument, pitch, startBeat, magnitude);
         

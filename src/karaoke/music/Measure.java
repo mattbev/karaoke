@@ -32,6 +32,11 @@ public class Measure implements Karaoke{
     @Override
     public void play(SequencePlayer player, double startBeat) {
         
+        double beginBeat = startBeat;
+        for(Playable component: components) {
+            component.play(player, beginBeat);
+            beginBeat += component.getDuration();
+        }
     }
 
     @Override

@@ -68,5 +68,19 @@ public class Chord implements Playable{
     public String getLyricText() {
         return null;
     }
+    
+    /**
+     * Play this chord
+     * @param player player producing the chord
+     * @param startBeat beat at which the chord should play
+     */
+    @Override
+    public void play(SequencePlayer player, double startBeat) {
+        
+        //iterate through every note in the chord and give it the same startBeat on which to play
+        for(Note note: notes) {
+            note.play(player, startBeat);
+        }
+    }
 }
 

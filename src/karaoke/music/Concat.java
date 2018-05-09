@@ -29,7 +29,8 @@ public class Concat implements Karaoke {
 
     @Override
     public void play(SequencePlayer player, double startBeat) {
-        player.play();
+        firstKaraoke.play(player,startBeat);
+        secondKaraoke.play(player, startBeat + firstKaraoke.duration());
     }
 
     @Override
