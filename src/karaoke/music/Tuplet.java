@@ -86,7 +86,11 @@ public class Tuplet implements Playable {
     
     @Override
     public Lyric getLyric() {
-        return Lyric.emptyLyric(); //not correct, need to revisit
+        String lyric = "";
+        for (Chord c : this.newChords) {
+            lyric += c.getLyric().getText();
+        } 
+        return new Lyric(lyric);
     }
     
     @Override
