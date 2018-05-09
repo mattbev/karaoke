@@ -65,14 +65,14 @@ public class Tuplet implements Playable {
         
         //add notes of correct length into chord list
         for(Chord chord : chords) {
-            Chord newChord = chord.makeChordNewDuration(this.duration, this.type);
+            Chord newChord = chord.copyChordNewDuration(this.duration, this.type);
             newChords.add(newChord);
         }
         
         //create HashMap mapping chords to the list of lyrics associated with them
         for (Chord chord : this.newChords) {
             List<Lyric> chordLyricList = new ArrayList<Lyric>();
-            for(Lyric lyric: chord.getLyrics) {
+            for(Lyric lyric: chord.getLyrics()) {
                 chordLyricList.add(lyric);    
             }
             this.lyricMap.put(chord, chordLyricList);
