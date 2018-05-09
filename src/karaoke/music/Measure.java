@@ -55,8 +55,12 @@ public class Measure implements Karaoke{
     
     @Override
     public double duration() {
+        double d = 0;
         checkRep();
-        return 0;
+        for(Playable playable: components) {
+            d += playable.getDuration();
+        }
+        return d;
     }
 
     @Override

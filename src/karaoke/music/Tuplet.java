@@ -36,8 +36,6 @@ public class Tuplet implements Playable {
     // Safety from rep exposure:
     //      all fields private final, and never mutated after contructor
     //      all return types are immutable, rep is never exposed
-    
-    
     // Thread safety argument:
     //    This class is threadsafe because it's immutable:
     //    - newChord, type, duration, and lyricMap are final
@@ -137,14 +135,5 @@ public class Tuplet implements Playable {
             hash += this.newChords.get(i).hashCode();
         }
         return hash;
-    }
-    
-    @Override
-    public String toString() {
-        String chord = "(";
-        for (Chord c : this.newChords) {
-            chord += c.toString();
-        }
-        return chord;
     }
 }
