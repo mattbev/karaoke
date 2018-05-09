@@ -14,8 +14,8 @@ import karaoke.sound.SequencePlayer;
 public interface Playable {
     
     // Datatype definition:
-    //      Playable = Chord(notes: List<Note>, lyric: Lyric)
-    //                 + Rest(lyric: Lyric, duration: double)
+    //      Playable = Chord(notes: List<Note>, lyric: List<Lyric>)
+    //                 + Rest(duration: double)
     //
     //
     

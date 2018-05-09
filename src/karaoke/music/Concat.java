@@ -43,7 +43,7 @@ public class Concat implements Karaoke {
 
     @Override
     public double duration() {
-        return 0;
+        return firstKaraoke.duration() + secondKaraoke.duration();
     }
 
     @Override

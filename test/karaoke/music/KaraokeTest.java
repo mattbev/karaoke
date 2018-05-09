@@ -28,20 +28,20 @@ public class KaraokeTest {
      * Testing Strategy for createMeasure():
      * 
      * Partition the input as follows:
-     * Components: size = 0 , 1, > 1
+     * Components: size = 1, > 1
      * Partitioning: Cover each part
      * 
      * Testing Strategy for createConcat():
      * 
      * Partition the input as follows:
-     * firstKaraoke: measure with components size = 0, 1, > 1
-     * secondKaraoke: measure with components size = 0, 1, > 1
+     * firstKaraoke: measure with components size = 1, > 1
+     * secondKaraoke: measure with components size = 1, > 1
      * Partitioning: Cover each part
      * 
      * Testing Strategy for duration():
      * 
      * Partition the output as follows:
-     * duration = 0, 1, > 1
+     * duration = 1, > 1
      * Partitioning: Cover each part
      * 
      * Testing Strategy for play():
@@ -59,16 +59,7 @@ public class KaraokeTest {
     
     //TEST createMeasure()
 
-    //Covers: 
-    //Components size = 0
-    
-    @Test
-    public void testCreateMeasureComponentsSizeZero() {
-        List<Playable> components = new ArrayList<Playable>();
-        Measure newMeasure = Karaoke.createMeasure(components);
-        double expectedDuration = 0;
-        assertEquals("expect Measure duration to be zero",expectedDuration, newMeasure.duration(), .0001);
-    }
+
     
     //Covers: 
     //Components size = 1
@@ -120,20 +111,8 @@ public class KaraokeTest {
     }
     
     
-    
-    
     //TEST duration()
     
-    //Covers: 
-    //duration = 0
-    
-    @Test
-    public void testDurationEqualsZero() {
-        List<Playable> components = new ArrayList<Playable>();
-        Measure newMeasure = Karaoke.createMeasure(components);
-        double expectedDuration = 0;
-        assertEquals("expect duration to be zero",expectedDuration, newMeasure.duration(), .0001);
-    }
     
     //Covers:
     //duration = 1
@@ -237,34 +216,7 @@ public class KaraokeTest {
     
     //TEST createConcat()
 
-    //Covers: 
-    //firstKaraoke: measure with components size = 0
-    //secondKaraoke: measure with components size = 1
-    
-    @Test
-    public void testConcatComponentsZeroComponentsOne() {
-        List<Playable> components1 = new ArrayList<Playable>();
-        Measure newMeasure1 = Karaoke.createMeasure(components1);
-        
-      //create components list
-        List<Playable> components2 = new ArrayList<Playable>();
-        
-        //create new note to add to a chord to add to components
-        Note componentNote = new Note(Instrument.PIANO, 1.0, Pitch.MIDDLE_C, "=");
-        List<Note> notes = new ArrayList<Note>();
-        notes.add(componentNote);
-        List<Lyric> lyrics = new ArrayList<Lyric>();   //no lyrics
-        Chord testChord = new Chord(notes, lyrics);
-        
-        components2.add(testChord);
-        
-        Measure newMeasure2 = Karaoke.createMeasure(components2);
-        
-        Concat concatTest = new Concat(newMeasure1, newMeasure2);
-        
-        double expectedDuration = 1;
-        assertEquals("expect Measure duration to be one",expectedDuration, concatTest.duration(), .0001);
-    }
+
     
     //Covers: 
     //firstKaraoke: measure with components size = 1
@@ -309,36 +261,8 @@ public class KaraokeTest {
         assertEquals("expect concat duration to be five",expectedDuration, concatTest.duration(), .0001);
     }
     
-    //Covers: 
-    //firstKaraoke: measure with components size > 1
-    //secondKaraoke: measure with components size = 0
+   
     
-    @Test
-    public void testConcatComponentsGreaterThanOneComponentsZero() {
-      //create components list
-        List<Playable> components1 = new ArrayList<Playable>();
-        
-        //create new note to add to a chord to add to components
-        Note componentNote1 = new Note(Instrument.BRIGHT_PIANO, 4.0, Pitch.MIDDLE_C, "=");
-        List<Note> notes1 = new ArrayList<Note>();
-        notes1.add(componentNote1);
-        List<Lyric> lyrics1 = new ArrayList<Lyric>();   //no lyrics
-        Chord testChord1 = new Chord(notes1, lyrics1);
-        
-        Rest componentRest = new Rest(2.0);
-        
-        components1.add(testChord1);
-        components1.add(componentRest);
-        
-        Measure newMeasure1 = Karaoke.createMeasure(components1);
-        
-        List<Playable> components2 = new ArrayList<Playable>();
-        Measure newMeasure2 = Karaoke.createMeasure(components2);
-        
-        Concat concatTest = new Concat(newMeasure1, newMeasure2);
-        
-        double expectedDuration = 6;
-        assertEquals("expect concat duration to be six",expectedDuration, concatTest.duration(), .0001);
-    }
+   
 
 }

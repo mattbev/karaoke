@@ -25,6 +25,9 @@ public class Note {
     // Safety from rep exposure:
     //      all fields private and final
     //      all return types immutable, rep never exposed
+    // Thread Safety Argument:
+    //      immutable class:
+    //      all fields private final and immutable (so no beneficent mutation), all return types immutable
     
     /**
      * 

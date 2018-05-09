@@ -27,8 +27,8 @@ public class WebServer {
     // 
     // Thread safety argument:
     //   the shared karaoke is immutable, with immutable lyrics as well
-    //   will never have multiple web servers on the same thread
-    //   uses threadsafe types internally
+    //   safe b/c will never have multiple users on the same thread (multiple players are on multiple threads)
+    //   uses thread safe types internally
 
 
     /**
@@ -56,10 +56,10 @@ public class WebServer {
      * @param exchange the Http exchange where the lyrics are being watched
      * @param karaoke the karaoke to be watched 
      */
-    private void handleWatch(HttpExchange exchange, Karaoke karaoke) { 
+    private void handleWatch(HttpExchange exchange, Karaoke karaoke) throws IOException { 
         //TODO
     }
-    // this was a handleLook from ps4, here as a guide for when we implement if needed
+    // this was handleLook from ps4, as a guide for when we implement if needed
     
     
     /*
