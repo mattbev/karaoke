@@ -11,12 +11,32 @@ import karaoke.sound.SequencePlayer;
  * Rest represents a pause in a piece of music, a variant of playable.
  *
  */
+
+
+
 public class Rest implements Playable {
     
     private static final double ONE_HUNDRED = 100;
     private final Lyric lyric = Lyric.emptyLyric();
     private final double duration;
     
+    // AF(lyric, duration): a pause in the music of length duration during which <lyric> 
+    //                      is the lyric played and is always an empty lyric.
+    //
+    // RI: 
+    //      duration > 0
+    //      lyric.getText.length() = 0
+    //
+    // Safety from rep exposure:
+    //      all fields private final, and never mutated after contructor
+    //      all return types are immutable, rep is never exposed
+    // Thread safety argument:
+    //    This class is threadsafe because it's immutable:
+    //    - lyric, and duration are final
+    //    - lyric may be shared with other Playable objects,
+    //      but they never mutate it
+    //    - getLyric returns a defensive copy of the lyric
+    //    
     /**
      * Make a component to represent a pause in a piece of music
      * 
