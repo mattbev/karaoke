@@ -16,6 +16,7 @@ public class Tuplet implements Playable {
         
     }
     private final List<Chord> chords;
+    private final List<Chord> newChords;
     private final Type type;
     private double duration;
     private String lyricText;
@@ -55,9 +56,14 @@ public class Tuplet implements Playable {
         if(type == Type.QUADRUPLET) {
             this.duration = noteDuration * TIME_OF_NOTES;
         }
+        //List<Chord> newChords;
+        for(Chord chord : chords) {
+            //make chord copy here! <3
+        }
         
         
-        for (Chord chord : this.chords) {
+        
+        for (Chord chord : this.chords) {       //newChords
             this.lyricText += chord.getLyricText();
         }
     }
