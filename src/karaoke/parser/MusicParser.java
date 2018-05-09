@@ -2,6 +2,7 @@ package karaoke.parser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import edu.mit.eecs.parserlib.ParseTree;
 import edu.mit.eecs.parserlib.Parser;
@@ -30,8 +31,24 @@ public class MusicParser {
     
     // the nonterminals of the grammar
     private static enum ABCGrammar {
-        COMPOSER,
-//        EXPRESSION, RESIZE, PRIMITIVE, TOPTOBOTTOMOPERATOR, FILENAME, NUMBER, WHITESPACE, HORIZONTAL, BOTTOMOVERLAY, TOPOVERLAY, CAPTION,
+       // end product
+       ABC_TUNE, 
+       
+       // header
+       ABC_HEADER, FIELD_NUMBER, FIELD_TITLE, OTHER_FIELDS, FIELD_COMPOSER, 
+       FIELD_DEFAULT_LENGTH, FIELD_METER, FIELD_TEMPO, FIELD_VOICE, FIELD_KEY, 
+       KEY, KEYNOTE, METER, METER_FRACTION, TEMPO, 
+       
+       // body
+       ABC_BODY, ABC_LINE, ELEMENT, // spaces and tabs
+       NOTE_ELEMENT, NOTE, PITCH, NOTE_LENGTH, NOTE_LENGTH_STRICT, // notes
+       REST_ELEMENT, // rests
+       TUPLET_ELEMENT, TUPLET_SPEC, // tuplets
+       CHORD, // chords
+       MIDDLE_OF_BODY_FIELD, LYRIC, LYRICAL_ELEMENT, // voice
+       
+       // general
+       COMMENT, COMMENT_TEXT, END_OF_LINE,       
     }
     
     private static Parser<ABCGrammar> parser = makeParser();
@@ -46,7 +63,7 @@ public class MusicParser {
         try {
             // read the grammar as a file, relative to the project root.
             final File grammarFile = new File("src/karaoke.parser/ABC.g");
-            return Parser.compile(grammarFile, ABCGrammar.COMPOSER);
+            return Parser.compile(grammarFile, ABCGrammar.ABC_TUNE);
         } catch (IOException e) {
             throw new RuntimeException("can't read the grammar file", e);
         } catch (UnableToParseException e) {
@@ -81,11 +98,151 @@ public class MusicParser {
      */
     private static Karaoke makeAbstractSyntaxTree(final ParseTree<ABCGrammar> parseTree) {
         switch (parseTree.name()) {
-        case COMPOSER: // composer ::= "C:" ' '* first (' ' middle)? ' ' last;
+        /* highest level */
+        case ABC_TUNE: //abc_tune ::= abc_header abc_body
             {
-                System.out.println("composer babyyyyyyy");
-                return Karaoke.createMeasure(null);
+                final List<ParseTree<ABCGrammar>> children = parseTree.children();
+                Karaoke karaoke = makeAbstractSyntaxTree(children.get(0));
             }
+            
+        /* header */
+        case ABC_HEADER: //abc_header ::= field_number comment* field_title other_fields* field_key
+            {
+                //TODO
+             }
+        case FIELD_NUMBER: //field_number ::= "X:" digit+ end_of_line
+            {
+                //TODO
+            }
+        case FIELD_TITLE: //field_title ::= "T:" text end_of_line
+            {
+                //TODO
+            }
+        case OTHER_FIELDS: //other_fields ::= field_composer | field_default_length | field_meter | field_tempo | field_voice | comment
+            {
+               //TODO 
+            }
+        case FIELD_COMPOSER: //field_composer ::= "C:" text end_of_line
+            {
+               //TODO
+            }
+        case FIELD_DEFAULT_LENGTH: //field_default_length ::= "L:" note_length end_of_line
+            {
+                //TODO 
+            }
+        case FIELD_METER: //field_meter ::= "M:" meter end_of_line
+            {
+                //TODO 
+            }
+        case FIELD_TEMPO: //field-tempo ::= "Q:" tempo end_of_line
+            {
+                //TODO 
+            }
+        case FIELD_VOICE: //field_voice ::= "V:" text end_of_line
+            {
+                //TODO 
+            }
+        case FIELD_KEY: //field_key ::= "K:" key end_of_line
+            {
+                //TODO 
+            }
+        case KEY: //key ::= keynote "m"?
+            {
+                //TODO 
+            }
+        case KEYNOTE: //keynote ::= basenote ("#" | "b")?
+            {
+                //TODO 
+            }
+        case METER: //meter ::= "C" | "C|" | meter_fraction
+            {
+                //TODO 
+            }
+        case METER_FRACTION: //meter_fraction ::= digit+ "/" digit+
+            {
+                //TODO 
+            }
+        case TEMPO: //tempo ::= meter_fraction "=" digit+
+            {
+                //TODO 
+            }
+            
+        /* body */
+        case ABC_BODY: //abc_body ::= abc_line+
+            {
+                //TODO 
+            }
+        case ABC_LINE: //abc_line ::= element+ end_of_line (lyric end_of_line)?  | middle_of_body_field | comment
+            {
+                //TODO 
+            }
+        case ELEMENT: //element ::= note_element | rest_element | tuplet_element | barline | nth_repeat | space_or_tab 
+            {
+                //TODO 
+            }
+        case NOTE_ELEMENT: //note_element ::= note | chord
+            {
+                //TODO 
+            }
+        case NOTE: //note ::= pitch note_length?
+            {
+                //TODO 
+            }
+        case PITCH: //pitch ::= accidental? basenote octave?
+            {
+                //TODO 
+            }
+        case NOTE_LENGTH: //note_length ::= (digit+)? ("/" (digit+)?)?
+            {
+                //TODO 
+            }
+        case NOTE_LENGTH_STRICT: //note_length_strict ::= digit+ "/" digit+
+            {
+                //TODO 
+            }
+        case REST_ELEMENT: //rest_element ::= "z" note-length
+            {
+                //TODO 
+            }
+        case TUPLET_ELEMENT: //tuplet_element ::= tuplet_spec note_element+
+            {
+                //TODO 
+            }
+        case TUPLET_SPEC: //tuplet_spec ::= "(" digit 
+            {
+                //TODO 
+            }
+        case CHORD: //chord ::= "[" note+ "]"
+            {
+                //TODO 
+            }
+        case MIDDLE_OF_BODY_FIELD: //middle_of_body_field ::= voice
+            {
+                //TODO 
+            }
+        case LYRIC: //lyric ::= "w:" lyrical_element*
+            {
+                //TODO 
+            }
+        case LYRICAL_ELEMENT: //lyrical_element ::= " "+ | "-" | "_" | "*" | "~" | backslash_hyphen | "|" | lyric_text
+            {
+                //TODO 
+            }
+        
+        /* general */ 
+        case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
+            {
+                //TODO 
+            }
+        case COMMENT_TEXT: //comment_text ::= [^(newline)]*
+            {
+                //TODO 
+            }
+        case END_OF_LINE: //end_of_line ::= comment | newline
+            {
+                //TODO 
+            }
+            
         default:
             throw new AssertionError("should never get here");
         }
