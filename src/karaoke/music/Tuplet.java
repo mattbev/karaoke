@@ -1,6 +1,9 @@
 package karaoke.music;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import karaoke.sound.SequencePlayer;
 
@@ -15,11 +18,10 @@ public class Tuplet implements Playable {
         DUPLET, TRIPLET, QUADRUPLET
         
     }
-    private final List<Chord> chords;
-    private final List<Chord> newChords;
+    private final List<Chord> newChords = new ArrayList<Chord>();
     private final Type type;
     private double duration;
-    private String lyricText;
+    private final  Map<Chord,List<Lyric>> lyricMap = new HashMap<Chord,List<Lyric>>();
     
     // AF(chords, duration, lyricText): A tuplet where chords are the chords in the tuplet
     //
@@ -35,7 +37,7 @@ public class Tuplet implements Playable {
      */
     public Tuplet(List<Chord> chords) {
         
-        this.chords = chords;
+        //determine type of tuplet {duplet, triplet, quadruplet}
         if(chords.size() == DUPLET_NOTES) {
             this.type = Type.DUPLET;
         }
@@ -45,8 +47,11 @@ public class Tuplet implements Playable {
         else {
             type = Type.QUADRUPLET;
         }
+        
+        //determine initial duration of notes in tuplets
         double noteDuration = chords.get(0).getDuration();
         
+        //determine correct duration of tuplet based on type
         if(type == Type.DUPLET) {
             this.duration = noteDuration * TIME_OF_NOTES;
         }
@@ -56,15 +61,21 @@ public class Tuplet implements Playable {
         if(type == Type.QUADRUPLET) {
             this.duration = noteDuration * TIME_OF_NOTES;
         }
-        //List<Chord> newChords;
+        
+        
+        //add notes of correct length into chord list
         for(Chord chord : chords) {
-            //make chord copy here! <3
+            Chord newChord = chord.makeChordNewDuration(this.duration, this.type);
+            newChords.add(newChord);
         }
         
-        
-        
-        for (Chord chord : this.chords) {       //newChords
-            this.lyricText += chord.getLyricText();
+        //create HashMap mapping chords to the list of lyrics associated with them
+        for (Chord chord : this.newChords) {
+            List<Lyric> chordLyricList = new ArrayList<Lyric>();
+            for(Lyric lyric: chord.getLyrics) {
+                chordLyricList.add(lyric);    
+            }
+            this.lyricMap.put(chord, chordLyricList);
         }
     }
     
@@ -73,10 +84,7 @@ public class Tuplet implements Playable {
         return this.duration;
     }
     
-    @Override
-    public String getLyricText() {
-        return this.lyricText;
-    }
+  
 
     @Override
     public void play(SequencePlayer player, double startBeat) {
