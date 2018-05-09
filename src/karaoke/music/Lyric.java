@@ -71,10 +71,10 @@ public class Lyric {
     @Override
     public boolean equals(Object that) {
         checkRep();
-        return (that instanceof Lyric) && this.sameDuration((Lyric) that);
+        return (that instanceof Lyric) && this.sameContent((Lyric) that);
     }
     
-    private boolean sameDuration(Lyric that) {
+    private boolean sameContent(Lyric that) {
         checkRep();
         return this.getText().equals(that.getText());
     }
@@ -83,5 +83,10 @@ public class Lyric {
     public int hashCode() {
         checkRep();
         return this.getText().hashCode();
+    }
+    
+    @Override
+    public String toString() {
+        return this.lyric;
     }
 }
