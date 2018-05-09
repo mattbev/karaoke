@@ -1,5 +1,6 @@
 package karaoke.music;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import karaoke.sound.SequencePlayer;
@@ -15,17 +16,46 @@ public class Measure implements Karaoke{
     
     private final List<Playable> components;
 
+    // AF(components): A measure of music where components.get(i) is the ith component to be played in the measure, 
+    //                 which is a type of playable.
+    //
+    // Rep invariant: 
+    //      components.size() > 0
+    //
+    // safety from rep exposure:
+    //      field is private and final
+    //      components is copied defensively in constructor, never mutated afterwards
+    //      all return types immutable
+    //      
+    // Thread safety argument:
+    //    This class is threadsafe because it's immutable:
+    //    - components is private and final, and never exposed to a client
+    //    -The mutable rep is only mutated in the constructor
+    //      which is a synchronized, threadsafe method
+    
     /**
      * Create a measure of music
      * 
      * @param components the ordered playable components that make up this measure
      */
     public Measure(List<Playable> components) {
-        this.components = components;
+        this.components = new ArrayList<>(components);
+        checkRep();
+    }
+    
+    /**
+     * check the stated and implied rep invariant
+     */
+    private void checkRep() {
+        assert components.size() > 0 : "A measure cannot be empty";
+        for (Playable p : components) {
+            assert p != null : "A measure cannot contain null elements";
+        }
     }
     
     @Override
     public double duration() {
+        checkRep();
         return 0;
     }
 
@@ -37,6 +67,7 @@ public class Measure implements Karaoke{
             component.play(player, beginBeat);
             beginBeat += component.getDuration();
         }
+        checkRep();
     }
 
    

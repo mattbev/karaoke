@@ -40,9 +40,18 @@ public class Chord implements Playable{
         this.lyrics = lyrics;
         checkRep();
     }
-    
+    /**
+     * check the stated and implied rep invariant
+     */
     private void checkRep() {
         assert notes.size() > 0 : "a chord must contain at least one note";
+        for (Note n : this.notes) {
+            assert n != null : "Notes cannot be null";
+        }
+        
+        for (Lyric l : this.lyrics) {
+            assert l != null : "Lyrics cannot be null";
+        }
     }
     @Override
     public double getDuration() {
