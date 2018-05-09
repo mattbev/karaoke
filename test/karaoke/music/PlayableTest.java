@@ -1,7 +1,17 @@
 package karaoke.music;
 
-import static org.junit.Assert.*;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
+
 import org.junit.Test;
+
+import karaoke.sound.Instrument;
+import karaoke.sound.MidiSequencePlayer;
+import karaoke.sound.Pitch;
+import karaoke.sound.SequencePlayer;
 
 /**
  * test suite for the playable interface
@@ -20,26 +30,135 @@ public class PlayableTest {
     //
     // testing: createRest(double duration)
     // partition the inputs as follows:
-    //   duration = 0;
-    //   0 < duration < number of beats per measure
-    //   duration = number of beats per measure
+    //   duration = 0
+    //   duration > 0
     // partition the outputs as follows:
     //   rest of 0 beats
-    //   rest of 0 < beats < number of beats per measure
-    //   rest of number of beats per measure beats
+    //   rest of > 0 beats
     //
     // testing: getDuration()
     // partition the outputs as follows:
     //   0 seconds 
-    //   max seconds allowed by time signature and tempo
-    //   some amount of seconds in between the above 2 partitions
+    //   >0 seconds
     //
     // testing play(SequencePlayer player, double startBeat)
     // partition the inputs as follows:
-    //   TODO
+    //   player that has: positive beatsPerMinute,
+    //                    positive ticksPerBeat
+    //   startBeat: 0, >0
     // partition the outputs as follows:
-    //   TODO
+    //   manually listen for correct sound output
     
     
+    @Test(expected=AssertionError.class)
+    public void testAssertionsEnabled() {
+        assert false; // make sure assertions are enabled with VM argument: -ea
+    }
     
+    //testing createChord...
+    
+    //tests that a correct chord was created for a single note chord and single lyric
+    @Test
+    public void testCreateChordOneNoteOneLyric() {
+        List<Note> notes = Arrays.asList(new Note(Instrument.ACCORDION, .25, Pitch.MIDDLE_C, ""));
+        List<Lyric> lyrics = Arrays.asList(new Lyric("hello"));
+        Playable playable = Playable.createChord(notes, lyrics);
+        assert playable.getDuration() == .25;
+        assert playable.getLyric().equals(new Lyric("hello"));
+    }
+    
+    //tests that a correct chord was created for a single note chord and multiple lyrics
+    @Test
+    public void testCreateChordOneNoteMultipleLyrics() {
+        List<Note> notes = Arrays.asList(new Note(Instrument.ACCORDION, .25, Pitch.MIDDLE_C, ""));
+        List<Lyric> lyrics = Arrays.asList(new Lyric("hello"), new Lyric("goodbye"));
+        Playable playable = Playable.createChord(notes, lyrics);
+        assert playable.getDuration() == .25;
+        assert playable.getLyric().equals(new Lyric("hellogoodbye"));
+    }
+    
+    //tests that a correct chord was created for a multiple note chord and single lyric
+    @Test
+    public void testCreateChordMultipleNotesOneLyric() {
+        List<Note> notes = Arrays.asList(new Note(Instrument.ACCORDION, .50, Pitch.MIDDLE_C, ""),
+                new Note(Instrument.ACCORDION, .25, Pitch.MIDDLE_C.transpose(Pitch.OCTAVE), ""));
+        List<Lyric> lyrics = Arrays.asList(new Lyric("good bye"));
+        Playable playable = Playable.createChord(notes, lyrics);
+        assert playable.getDuration() == .50;
+        assert playable.getLyric().equals(new Lyric("good bye"));
+    }
+    
+    //tests that a correct chord was created for a multiple note chord and multiple lyrics
+    @Test
+    public void testCreateChordMultipleNotesMultipleLyrics() {
+        List<Note> notes = Arrays.asList(new Note(Instrument.ACCORDION, .50, Pitch.MIDDLE_C, ""),
+                new Note(Instrument.ACCORDION, .25, Pitch.MIDDLE_C.transpose(Pitch.OCTAVE), ""));
+        List<Lyric> lyrics = Arrays.asList(new Lyric("hello"), new Lyric("goodbye"));
+        Playable playable = Playable.createChord(notes, lyrics);
+        assert playable.getDuration() == .50;
+        assert playable.getLyric().equals(new Lyric("hellogoodbye"));
+    }
+    
+    
+    //testing createRest...
+    
+    //tests that a correct rest was made for a rest of duration 0
+    @Test
+    public void testCreateRestZeroDuration() {
+        Playable playable = Playable.createRest(0);
+        assert playable.getDuration() == 0;
+        assert playable.getLyric().equals(Lyric.emptyLyric());
+    }
+    
+    //tests that a correct rest was made for a rest of duration >0
+    @Test
+    public void testCreateRestNonZeroDuration() {
+        Playable playable = Playable.createRest(.5);
+        assert playable.getDuration() == .5;
+        assert playable.getLyric().equals(Lyric.emptyLyric());
+    }
+    
+    
+    //testing getDuration...
+    
+    //tests that a duration of 0 was returned for a playable with magnitude zero
+    @Test
+    public void testGetDurationZeroSeconds() {
+        List<Note> notes = Arrays.asList(new Note(Instrument.ACCORDION, 0, Pitch.MIDDLE_C, ""));
+        List<Lyric> lyrics = Arrays.asList(new Lyric("hello"), new Lyric("goodbye"));
+        Playable playable = Playable.createChord(notes, lyrics);
+        assert playable.getDuration() == 0;
+    }
+    
+  //tests that a duration of 0 was returned for a playable with non zero magnitude
+    @Test
+    public void testGetDurationNonZeroSeconds() {
+        Playable playable = Playable.createRest(5);
+        assert playable.getDuration() == 5;
+    }
+    
+    
+    //testing play...
+    
+    //manually listening for correct playing of a playable at startBeat 0
+    @Test
+    public void testPlayStartZero() throws MidiUnavailableException, InvalidMidiDataException {
+        SequencePlayer player = new MidiSequencePlayer(140, 64);
+        List<Note> notes = Arrays.asList(new Note(Instrument.ALTO_SAX, 3, Pitch.MIDDLE_C, ""));
+        List<Lyric> lyrics = Arrays.asList(Lyric.emptyLyric());
+        Playable playable = Playable.createChord(notes, lyrics);
+        playable.play(player, 0);
+        //manual test, listen for a 3 beat middle C
+    }
+    
+  //manually listening for correct playing of a playable at startBeat > 0
+    @Test
+    public void testPlayStartNonZero() throws MidiUnavailableException, InvalidMidiDataException {
+        SequencePlayer player = new MidiSequencePlayer(140, 64);
+        List<Note> notes = Arrays.asList(new Note(Instrument.ALTO_SAX, 3, Pitch.MIDDLE_C, ""));
+        List<Lyric> lyrics = Arrays.asList(Lyric.emptyLyric());
+        Playable playable = Playable.createChord(notes, lyrics);
+        playable.play(player, 2);
+        //manual test, listen for a 1 beat middle C
+    }
 }
