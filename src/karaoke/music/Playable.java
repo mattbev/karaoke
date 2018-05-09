@@ -63,9 +63,9 @@ public interface Playable {
     /**
      * Create new chord consisting of the given notes and given lyric
      * 
-     * @param notes
-     * @param lyrics
-     * @return
+     * @param notes the notes in this chord, beginning at the same time
+     * @param lyrics the lyrics associated with this chord
+     * @return a new chord of the given notes, to be sung with given lyrics
      */
     public static Chord createNewChord(List<Note> notes, List<Lyric> lyrics) {
         return new Chord(notes, lyrics);
