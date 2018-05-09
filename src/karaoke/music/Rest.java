@@ -13,6 +13,7 @@ import karaoke.sound.SequencePlayer;
  */
 public class Rest implements Playable {
     
+    private static final double ONE_HUNDRED = 100;
     private final Lyric lyric = Lyric.emptyLyric();
     private final double duration;
     
@@ -42,6 +43,20 @@ public class Rest implements Playable {
     @Override
     public void play(SequencePlayer player, double startBeat) {
         return;
+    }
+    
+    @Override
+    public boolean equals(Object that) {
+        return (that instanceof Rest) && this.sameDuration((Rest) that);
+    }
+    
+    private boolean sameDuration(Rest that) {
+        return this.getDuration()== that.getDuration();
+    }
+    
+    @Override 
+    public int hashCode() {
+        return (int) (this.duration*ONE_HUNDRED);
     }
 
 }

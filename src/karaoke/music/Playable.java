@@ -64,5 +64,9 @@ public interface Playable {
      */
     public void play(SequencePlayer player, double startBeat) ;
         
+    @Override
+    public boolean equals(Object that);
     
+    @Override
+    public int hashCode();
 }

@@ -98,4 +98,26 @@ public class Tuplet implements Playable {
             beginBeat += chord.getDuration();
         }
     }
+    
+    @Override
+    public boolean equals(Object that) {
+        return (that instanceof Tuplet) && this.sameTuplet((Tuplet) that);
+    }
+    
+    private boolean sameTuplet(Tuplet that) {
+        for (int i = 0; i < this.newChords.size(); i++) {
+            if (! this.newChords.get(i).equals(that.newChords.get(i))) {
+                return false;
+            }
+        } return true;
+    }
+    
+    @Override 
+    public int hashCode() {
+        int hash = 0;
+        for (int i = 0; i < this.newChords.size(); i ++) {
+            hash += this.newChords.get(i).hashCode();
+        }
+        return hash;
+    }
 }

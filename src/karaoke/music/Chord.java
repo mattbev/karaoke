@@ -22,7 +22,7 @@ public class Chord implements Playable{
     // AF(notes, lyric): A chord where notes is a list of the notes of the chord (in the order they were in in the 
     //                   abc file) and lyrics is the list of lyric(s) to be streamed during this chord
     //
-    // RI: notes.size >= 1
+    // RI: notes.size > 0
     //     
     // Safety from Rep Exposure:
     //
@@ -38,11 +38,15 @@ public class Chord implements Playable{
     public Chord(List<Note> notes, List<Lyric> lyrics) {
         this.notes = new ArrayList<>(notes); 
         this.lyrics = lyrics;
+        checkRep();
     }
     
-    
+    private void checkRep() {
+        assert notes.size() > 0 : "a chord must contain at least one note";
+    }
     @Override
     public double getDuration() {
+        checkRep();
         return this.notes.get(0).getDuration();
     }
 
@@ -53,6 +57,7 @@ public class Chord implements Playable{
      * @return the notes that make up this chord
      */
     public List<Note> getNotes() {
+        checkRep();
         return new ArrayList<>(this.notes); 
     }
     
@@ -70,6 +75,7 @@ public class Chord implements Playable{
         for(Note note: notes) {
             note.play(player, startBeat);
         }
+        checkRep();
     }
     
     /**
@@ -91,7 +97,7 @@ public class Chord implements Playable{
             int denom = getDenominator(t);
             notesCopy.add(Note.createNote(note.getInstrument(), duration/denom, note.getPitch(), note.getAccidental()));
         }
-        
+        checkRep();
         return new Chord(notes, lyrics);
         
     }
@@ -127,6 +133,7 @@ public class Chord implements Playable{
         for (Lyric l : this.lyrics) {
             lyricsCopy.add(l.createLyricCopy());
         } 
+        checkRep();
         return lyricsCopy;
     } 
     
@@ -136,6 +143,34 @@ public class Chord implements Playable{
         for (Lyric l : this.lyrics) {
             lyric += l;
         } 
+        checkRep();
         return new Lyric(lyric);
     } 
+    
+    @Override
+    public boolean equals(Object that) {
+        checkRep();
+        return (that instanceof Chord) && this.sameChord((Chord) that);
+    }
+    
+    private boolean sameChord(Chord that) {
+        for (int i = 0; i < this.notes.size(); i++) {
+            if (! this.notes.get(i).equals(that.getNotes().get(i))) {
+                checkRep();
+                return false;
+            }
+        } 
+        checkRep();
+        return true;
+    }
+    
+    @Override 
+    public int hashCode() {
+        int hash = 0;
+        for (int i = 0; i < this.notes.size(); i ++) {
+            hash += this.notes.get(i).hashCode();
+        }
+        checkRep();
+        return hash;
+    }
 }
