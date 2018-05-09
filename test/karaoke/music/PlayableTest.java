@@ -140,25 +140,25 @@ public class PlayableTest {
     
     //testing play...
     
-    //manually listening for correct playing of a playable at startBeat 0
-    @Test
-    public void testPlayStartZero() throws MidiUnavailableException, InvalidMidiDataException {
-        SequencePlayer player = new MidiSequencePlayer(140, 64);
-        List<Note> notes = Arrays.asList(new Note(Instrument.ALTO_SAX, 3, Pitch.MIDDLE_C, ""));
-        List<Lyric> lyrics = Arrays.asList(Lyric.emptyLyric());
-        Playable playable = Playable.createChord(notes, lyrics);
-        playable.play(player, 0);
-        //manual test, listen for a 3 beat middle C
-    }
+//    //manually listening for correct playing of a playable at startBeat 0
+//    @Test
+//    public void testPlayStartZero() throws MidiUnavailableException, InvalidMidiDataException {
+//        SequencePlayer player = new MidiSequencePlayer(140, 64);
+//        List<Note> notes = Arrays.asList(new Note(Instrument.ALTO_SAX, 3, Pitch.MIDDLE_C, ""));
+//        List<Lyric> lyrics = Arrays.asList(Lyric.emptyLyric());
+//        Playable playable = Playable.createChord(notes, lyrics);
+//        playable.play(player, 0);
+//        //manual test, listen for a 3 beat middle C
+//    }
     
-  //manually listening for correct playing of a playable at startBeat > 0
-    @Test
-    public void testPlayStartNonZero() throws MidiUnavailableException, InvalidMidiDataException {
-        SequencePlayer player = new MidiSequencePlayer(140, 64);
-        List<Note> notes = Arrays.asList(new Note(Instrument.ALTO_SAX, 3, Pitch.MIDDLE_C, ""));
-        List<Lyric> lyrics = Arrays.asList(Lyric.emptyLyric());
-        Playable playable = Playable.createChord(notes, lyrics);
-        playable.play(player, 2);
-        //manual test, listen for a 1 beat middle C
-    }
+//  //manually listening for correct playing of a playable at startBeat > 0
+//    @Test
+//    public void testPlayStartNonZero() throws MidiUnavailableException, InvalidMidiDataException {
+//        SequencePlayer player = new MidiSequencePlayer(140, 64);
+//        List<Note> notes = Arrays.asList(new Note(Instrument.ALTO_SAX, 3, Pitch.MIDDLE_C, ""));
+//        List<Lyric> lyrics = Arrays.asList(Lyric.emptyLyric());
+//        Playable playable = Playable.createChord(notes, lyrics);
+//        playable.play(player, 2);
+//        //manual test, listen for a 1 beat middle C
+//    }
 }

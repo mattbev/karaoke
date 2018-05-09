@@ -133,4 +133,9 @@ public class Note {
         checkRep();
         return this.pitch.hashCode() + this.accidental.hashCode() + (int) this.getDuration();
     }
+    
+    @Override
+    public String toString() {
+        return "" + this.accidental + this.pitch + this.duration;
+    }
 }

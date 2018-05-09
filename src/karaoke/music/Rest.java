@@ -51,12 +51,17 @@ public class Rest implements Playable {
     }
     
     private boolean sameDuration(Rest that) {
-        return this.getDuration()== that.getDuration();
+        return this.getDuration() == that.getDuration();
     }
     
     @Override 
     public int hashCode() {
         return (int) (this.duration*ONE_HUNDRED);
+    }
+    
+    @Override
+    public String toString() {
+        return "z" + this.duration;
     }
 
 }

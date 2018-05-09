@@ -138,4 +138,13 @@ public class Tuplet implements Playable {
         }
         return hash;
     }
+    
+    @Override
+    public String toString() {
+        String chord = "(";
+        for (Chord c : this.newChords) {
+            chord += c.toString();
+        }
+        return chord;
+    }
 }

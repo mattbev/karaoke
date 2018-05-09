@@ -16,18 +16,25 @@ import java.util.List;
  */
 public class Chord implements Playable{ 
     
-    private List<Note> notes = new ArrayList<Note>();
-    private  List<Lyric> lyrics = new ArrayList<Lyric>();
+    private final List<Note> notes;
+    private final List<Lyric> lyrics;
     
     // AF(notes, lyric): A chord where notes is a list of the notes of the chord (in the order they were in in the 
     //                   abc file) and lyrics is the list of lyric(s) to be streamed during this chord
     //
     // RI: notes.size > 0
     //     
-    // Safety from Rep Exposure:
+    // Safety from Rep Exposure: 
+    //      all fields private final
+    //      immutable data type
+    //      no mutators that directly expose the rep
+    //      check rep checks that a chord always has 1+ note
     //
     // Thread Safety Argument:
-    //
+    //      The class is threadsafe because it is immutable:
+    //          notes and lyrics are final 
+    //          notes and lyrics are mutable, but they are encapsulated in this object, not shared with any other object 
+    //              or exposed to the client
     
     /**
      * Make a chord, which is a combination of one or more notes
@@ -37,7 +44,7 @@ public class Chord implements Playable{
      */
     public Chord(List<Note> notes, List<Lyric> lyrics) {
         this.notes = new ArrayList<>(notes); 
-        this.lyrics = lyrics;
+        this.lyrics = new ArrayList<>(lyrics);
         checkRep();
     }
     
@@ -172,5 +179,17 @@ public class Chord implements Playable{
         }
         checkRep();
         return hash;
+    }
+    
+    @Override
+    public String toString() {
+        if (this.notes.size() == 1) {
+            return this.notes.get(0).toString();
+        }
+        String chord = "[";
+        for (Note n : this.notes) {
+            chord += n.toString();
+        }
+        return chord + "]";
     }
 }
