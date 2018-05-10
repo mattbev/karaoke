@@ -1,4 +1,14 @@
 package karaoke.parser;
+import karaoke.music.*;
+import karaoke.sound.*;
+
+import static org.junit.Assert.*;
+
+import java.io.IOException;
+
+import org.junit.Test;
+
+import edu.mit.eecs.parserlib.UnableToParseException;
 
 /**
  * Tests for the 
@@ -13,7 +23,6 @@ public class MusicParserTest {
     //      invalid file paths:
     //              file does not exist
     //              file is not of '.abc' format
-    //              file otherwise has opening error
     //
     //      valid file paths, but unparsable contents:
     //              header errors:
@@ -78,8 +87,7 @@ public class MusicParserTest {
     //                  2 sharps, flats
     //                  accidental that overrides previous accidental
     //              rests:
-    //                  default length
-    //                  mult. factor
+    //                  length = default length, mult. factor
     //              chords:
     //                  chord size = 1, >1 
     //                  chord contains note w/ accidental, mult. factor
@@ -98,4 +106,40 @@ public class MusicParserTest {
     //                  multiple voices have lyrics
     //                  repeated bar has lyrics
 
+    @Test(expected=AssertionError.class)
+    public void testAssertionsEnabled() {
+        assert false; // make sure assertions are enabled with VM argument: -ea
+    }
+    
+    //covers file does not exist
+    @Test(expected=IOException.class)
+    public void testNonexistentAbcFile() throws UnableToParseException {
+        Karaoke karaoke = MusicParser.parse("sample-abc/nonexistent.abc");
+    }
+    
+    //covers file is not of ".abc" format
+    @Test(expected=IOException.class)
+    public void testNotAbcFile() throws UnableToParseException {
+        Karaoke karaoke = MusicParser.parse("sample-abc/piece1.jpg");
+    }
+    
+    //covers: header contains additional fields
+    //        composer is default unknown
+    //        note: octave deviation +1
+    //        tuplet: duplet
+    //        note lengths: mult. factor is whole #
+    //        rests with mult. factor
+    //        lyrics contain -, _, multiple underscores
+    @Test
+    public void testCorrectPiece3() {
+        try {
+            Karaoke karaoke = MusicParser.parse("sample-abc/piece3.jpg");
+            SequencePlayer player = new MidiSequencePlayer();
+            double startBeat = 0;
+            karaoke.play(player, startBeat);
+        } catch (Exception e) {
+            assert false: "file should have parsed correctly";
+        }
+    }
+    
 }
