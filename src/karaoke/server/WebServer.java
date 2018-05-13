@@ -1,7 +1,11 @@
 package karaoke.server;
 import karaoke.music.*;
+import java.lang.Object;
+import java.io.Writer;
+import java.io.PrintWriter;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 
 import com.sun.net.httpserver.HttpExchange;
@@ -56,8 +60,37 @@ public class WebServer {
      * @param exchange the Http exchange where the lyrics are being watched
      * @param karaoke the karaoke to be watched 
      */
-    private void handleWatch(HttpExchange exchange, Karaoke karaoke) throws IOException { 
-        //TODO
+    private void handleWatch(HttpExchange exchange, Karaoke karaoke) throws IOException {
+     // if you want to know the requested path:
+        final String path = exchange.getRequestURI().getPath();
+        
+        // it will always start with the base path from server.createContext():
+        final String base = exchange.getHttpContext().getPath();     
+        assert path.startsWith(base);
+        
+        final String voiceID = path.substring(base.length());
+        
+        final String response;
+        final Player player;
+        exchange.sendResponseHeaders(200, 0);
+        if (board.getPlayers().containsKey(playerID)) {
+            // if the request is valid, respond with HTTP code 200 to indicate success
+            player = board.getPlayerFromID(playerID);
+//        } else {
+//            player = new Player(playerID, board);
+//        }
+        response = player.boardToStringWeb();
+//        else {
+//            // otherwise, respond with HTTP code 404 to indicate an error
+//            exchange.sendResponseHeaders(404, 0);
+//            response = "player " + playerID + " is an invalid player";
+//        }
+        // write the response to the output stream using UTF-8 character encoding
+        OutputStream body = exchange.getResponseBody();
+        PrintWriter out = new PrintWriter(body, true);
+        out.println(response);
+        exchange.close();
+    }
     }
     // this was handleLook from ps4, as a guide for when we implement if needed
     
