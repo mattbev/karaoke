@@ -283,6 +283,7 @@ public class WebServer {
     public void start() {
         System.err.println("Server will listen on " + server.getAddress());
         server.start();
+        //htmlString should be called here?
     }
     
     /**

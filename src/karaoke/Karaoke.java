@@ -2,6 +2,8 @@ package karaoke;
 
 import java.util.List;
 
+import karaoke.sound.SequencePlayer;
+
 /**
  * 
  * @author chessa, mattbev, sophias
@@ -59,6 +61,15 @@ public class Karaoke {
         List<String> lyricLines = this.body.getVoiceLyricLines(voice);
         return lyricLines;
 
+    }
+    
+    /**
+     * Play this karaoke
+     * @param player player to play on
+     * @param startBeat when to play
+     */
+    public void play(SequencePlayer player, double startBeat) {
+        //IMPLEMENT
     }
 
 }
