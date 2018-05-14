@@ -1,5 +1,6 @@
 package karaoke;
 
+import java.util.List;
 
 /**
  * 
@@ -45,6 +46,19 @@ public class Karaoke {
      */
     public static Karaoke createKaraoke(Header h, Body b) {
         return new Karaoke(h,b);
+    }
+    
+    
+    
+    /**
+     * Provides a copy of the lyric lines of a certain voice
+     * @param voice voice whose lyric lines are returned
+     * @return the lyric lines of voice <voice>
+     */
+    public List<String> getVoiceLyricLinesList(String voice){
+        List<String> lyricLines = this.body.getVoiceLyricLines(voice);
+        return lyricLines;
+
     }
 
 }
