@@ -11,6 +11,9 @@ import karaoke.sound.SequencePlayer;
 public class Tuplet implements Playable {
     
     public static final int DUPLET_NOTES = 2;
+    public static final double DUPLET_QUOTIENT = 3.0/2;
+    public static final double TRIPLET_QUOTIENT = 2.0/3;
+    public static final double QUADRUPLET_QUOTIENT = 3.0/4;
     public static final int TRIPLET_NOTES = 3;
     public static final int QUADRUPLET_NOTES = 4;
     public static final int TIME_OF_NOTES = 3;
@@ -50,7 +53,8 @@ public class Tuplet implements Playable {
      * @param chords the notes in the tuplet
      */
     public Tuplet(List<Chord> chords) {
-        
+        double dur = 0;
+        double multiplier;
         //determine type of tuplet {duplet, triplet, quadruplet}
         if(chords.size() == DUPLET_NOTES) {
             this.type = Type.DUPLET;
@@ -61,25 +65,24 @@ public class Tuplet implements Playable {
         else {
             type = Type.QUADRUPLET;
         }
-        
-        //determine initial duration of notes in tuplets
-        double noteDuration = chords.get(0).duration();
-        
+      
         //determine correct duration of tuplet based on type
         if(type == Type.DUPLET) {
-            this.duration = noteDuration * TIME_OF_NOTES;
+            multiplier = DUPLET_QUOTIENT;
         }
         else if(type == Type.TRIPLET) {
-            this.duration = noteDuration * 2;
+            multiplier = TRIPLET_QUOTIENT;
         }
         else {
-            this.duration = noteDuration * TIME_OF_NOTES;
+            multiplier = QUADRUPLET_QUOTIENT;
         }
         
         
         //add notes of correct length into chord list
         for(Chord chord : chords) {
-            Chord newChord = chord.copyChordNewDuration(this.duration, this.type);
+            double newDuration = chord.duration() * multiplier;
+            Chord newChord = chord.copyChordNewDuration(newDuration, this.type);
+            dur += newDuration;
             newChords.add(newChord);
         }
         
@@ -91,6 +94,8 @@ public class Tuplet implements Playable {
             }
             this.lyricMap.put(chord, chordLyricList);
         }
+        
+        this.duration = dur;
     }
     
     @Override
