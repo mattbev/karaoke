@@ -1,5 +1,4 @@
 package karaoke.server;
-import karaoke.music.*;
 import java.lang.Object;
 import java.io.Writer;
 import java.io.PrintWriter;
@@ -10,6 +9,8 @@ import java.net.InetSocketAddress;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+
+import karaoke.*;
 
 /**
  * 

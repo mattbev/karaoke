@@ -4,7 +4,7 @@ package karaoke.sound;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
-import karaoke.music.Karaoke;
+import karaoke.Karaoke;
 
 
 

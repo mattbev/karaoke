@@ -1,7 +1,7 @@
 /**
  * 
  */
-package karaoke.music;
+package karaoke;
 import karaoke.sound.*;
 
 import java.util.ArrayList;

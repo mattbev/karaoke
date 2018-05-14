@@ -1,4 +1,4 @@
-package karaoke.music;
+package karaoke;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,9 +14,17 @@ import karaoke.sound.SequencePlayer;
  *
  */
 public class Overlay implements Karaoke {
-    private final HashMap<String,Karaoke> overlayDict = new HashMap<String,Karaoke>();
+    private HashMap<String,Karaoke> overlayDict = new HashMap<String,Karaoke>();
     
-
+    
+    /**
+     * 
+     * @param firstKaraoke the first Karaoke piece in the overlay
+     * @param secondKaraoke the second Karaoke piece in the sequence
+     */
+    public Overlay(HashMap<String,Karaoke> map) {
+        this.overlayDict = map;
+    }
     public double duration() {
         // TODO Auto-generated method stub
         return 0;

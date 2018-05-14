@@ -1,4 +1,4 @@
-package karaoke.music;
+package karaoke;
 
 
 import karaoke.sound.*;

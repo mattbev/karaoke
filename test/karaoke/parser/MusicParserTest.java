@@ -1,5 +1,5 @@
 package karaoke.parser;
-import karaoke.music.*;
+import karaoke.*;
 import karaoke.sound.*;
 
 import static org.junit.Assert.*;

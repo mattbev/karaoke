@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import karaoke.Lyric;
+import karaoke.Note;
+import karaoke.Playable;
 import karaoke.sound.Instrument;
 import karaoke.sound.Pitch;
 

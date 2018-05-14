@@ -12,6 +12,14 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import karaoke.Chord;
+import karaoke.Concat;
+import karaoke.Karaoke;
+import karaoke.Lyric;
+import karaoke.Measure;
+import karaoke.Note;
+import karaoke.Playable;
+import karaoke.Rest;
 import karaoke.sound.Instrument;
 import karaoke.sound.MidiSequencePlayer;
 import karaoke.sound.Pitch;

@@ -8,15 +8,15 @@ import java.util.List;
 import edu.mit.eecs.parserlib.ParseTree;
 import edu.mit.eecs.parserlib.Parser;
 import edu.mit.eecs.parserlib.UnableToParseException;
-import karaoke.music.Chord;
-import karaoke.music.Concat;
-import karaoke.music.Karaoke;
-import karaoke.music.Lyric;
-import karaoke.music.Measure;
-import karaoke.music.Note;
-import karaoke.music.Playable;
-import karaoke.music.Rest;
-import karaoke.music.Tuplet;
+import karaoke.Chord;
+import karaoke.Concat;
+import karaoke.Karaoke;
+import karaoke.Lyric;
+import karaoke.Measure;
+import karaoke.Note;
+import karaoke.Playable;
+import karaoke.Rest;
+import karaoke.Tuplet;
 
 /**
  * 

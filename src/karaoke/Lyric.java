@@ -1,7 +1,7 @@
 /**
  * 
  */
-package karaoke.music;
+package karaoke;
 
 
 /**
