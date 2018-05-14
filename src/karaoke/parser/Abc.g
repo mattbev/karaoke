@@ -1,11 +1,13 @@
-// Grammar for ABC music notation 
-
+/*
+ * Grammar for ABC music notation 
+ */
+ 
 abc_tune ::= abc_header abc_body
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Header
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Header
 
-; ignore space-or-tab between terminals in the header
+% ignore space-or-tab between terminals in the header
 @skip space_or_tab {
     abc_header ::= field_number comment* field_title other_fields* field_key
     
@@ -15,7 +17,7 @@ abc_tune ::= abc_header abc_body
 	field_composer ::= "C:" text end_of_line
 	field_default_length ::= "L:" note_length end_of_line
 	field_meter ::= "M:" meter end_of_line
-	field-tempo ::= "Q:" tempo end_of_line
+	field_tempo ::= "Q:" tempo end_of_line
 	field_voice ::= "V:" text end_of_line
     field_key ::= "K:" key end_of_line
 
@@ -27,16 +29,16 @@ abc_tune ::= abc_header abc_body
 	
     tempo ::= meter_fraction "=" digit+
 }
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Body
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Body
 
-; spaces and tabs have explicit meaning in the body, dont automatically ignore them
+% spaces and tabs have explicit meaning in the body, dont automatically ignore them
 
 abc_body ::= abc_line+
 abc_line ::= element+ end_of_line (lyric end_of_line)?  | middle_of_body_field | comment
 element ::= note_element | rest_element | tuplet_element | barline | nth_repeat | space_or_tab 
 
-;; notes
+%% notes
 note_element ::= note | chord
 
 note ::= pitch note_length?
@@ -45,27 +47,27 @@ octave ::= "'"+ | ","+
 note_length ::= (digit+)? ("/" (digit+)?)?
 note_length_strict ::= digit+ "/" digit+
 
-;; "^" is sharp, "_" is flat, and "=" is neutral
+%% "^" is sharp, "_" is flat, and "=" is neutral
 accidental ::= "^" | "^^" | "_" | "__" | "="
 
 basenote ::= "C" | "D" | "E" | "F" | "G" | "A" | "B"
         | "c" | "d" | "e" | "f" | "g" | "a" | "b"
 
-;; rests
-rest_element ::= "z" note-length?
+%% rests
+rest_element ::= "z" note_length?
 
-;; tuplets
+%% tuplets
 tuplet_element ::= tuplet_spec note_element+
 tuplet_spec ::= "(" digit 
 
-;; chords
+%% chords
 chord ::= "[" note+ "]"
 
 barline ::= "|" | "||" | "[|" | "|]" | ":|" | "|:"
 nth_repeat ::= "[1" | "[2"
 
-; A voice field might reappear in the middle of a piece
-; to indicate the change of a voice
+% A voice field might reappear in the middle of a piece
+% to indicate the change of a voice
 middle_of_body_field ::= voice
 
 lyric ::= "w:" lyrical_element*
@@ -73,10 +75,10 @@ lyrical_element ::= " "+ | "-" | "_" | "*" | "~" | backslash_hyphen | "|" | lyri
 lyric_text ::= ([A-Z]|[a-z])*
 
 backslash_hyphen = "\\" "-"
-; backslash immediately followed by hyphen
+% backslash immediately followed by hyphen
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; General
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% General
 
 comment ::= space_or_tab* "%" comment_text newline
 comment_text ::= [ ^(newline)]*

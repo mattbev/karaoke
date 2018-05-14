@@ -1,6 +1,7 @@
 package karaoke.music;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +63,7 @@ public class Tuplet implements Playable {
         }
         
         //determine initial duration of notes in tuplets
-        double noteDuration = chords.get(0).getDuration();
+        double noteDuration = chords.get(0).duration();
         
         //determine correct duration of tuplet based on type
         if(type == Type.DUPLET) {
@@ -93,7 +94,7 @@ public class Tuplet implements Playable {
     }
     
     @Override
-    public double getDuration() {
+    public double duration() {
         return this.duration;
     }
     
@@ -112,7 +113,7 @@ public class Tuplet implements Playable {
         double beginBeat = startBeat;
         for(Chord chord: newChords) {
             chord.play(player, beginBeat);
-            beginBeat += chord.getDuration();
+            beginBeat += chord.duration();
         }
     }
     
@@ -136,5 +137,10 @@ public class Tuplet implements Playable {
             hash += this.newChords.get(i).hashCode();
         }
         return hash;
+    }
+    
+    @Override
+    public List<Measure> getMusic() {
+        return Arrays.asList(new Measure(Arrays.asList(this)));
     }
 }

@@ -1,6 +1,7 @@
 package karaoke.music;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import karaoke.sound.SequencePlayer;
@@ -12,7 +13,7 @@ import karaoke.sound.SequencePlayer;
  * Measure is an immutable variant of Karaoke
  *
  */
-public class Measure implements Karaoke{
+public class Measure implements Karaoke {
     
     private final List<Playable> components;
 
@@ -53,12 +54,20 @@ public class Measure implements Karaoke{
         }
     }
     
+    /**
+     * gets the components of a measure
+     * @return a list of the measure components
+     */
+    public List<Playable> getComponents() {
+        return new ArrayList<>(this.components);
+    }
+    
     @Override
     public double duration() {
         double d = 0;
         checkRep();
         for(Playable playable: components) {
-            d += playable.getDuration();
+            d += playable.duration();
         }
         return d;
     }
@@ -69,9 +78,14 @@ public class Measure implements Karaoke{
         double beginBeat = startBeat;
         for(Playable component: components) {
             component.play(player, beginBeat);
-            beginBeat += component.getDuration();
+            beginBeat += component.duration();
         }
         checkRep();
+    }
+
+    @Override
+    public List<Measure> getMusic() {
+        return Arrays.asList(this);
     }
 
    

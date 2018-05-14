@@ -1,5 +1,8 @@
 package karaoke.music;
-import karaoke.sound.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import karaoke.sound.SequencePlayer;
 
 /**
  * 
@@ -50,6 +53,14 @@ public class Concat implements Karaoke {
     public void play(SequencePlayer player, double startBeat) {
         firstKaraoke.play(player,startBeat);
         secondKaraoke.play(player, startBeat + firstKaraoke.duration());
+    }
+
+    @Override
+    public List<Measure> getMusic() {
+        List<Measure> measures = new ArrayList<>();
+        measures.addAll(this.firstKaraoke.getMusic());
+        measures.addAll(this.secondKaraoke.getMusic());
+        return measures;
     }
 
    

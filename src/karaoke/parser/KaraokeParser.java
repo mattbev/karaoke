@@ -2,20 +2,29 @@ package karaoke.parser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.mit.eecs.parserlib.ParseTree;
 import edu.mit.eecs.parserlib.Parser;
 import edu.mit.eecs.parserlib.UnableToParseException;
+import karaoke.music.Chord;
 import karaoke.music.Concat;
 import karaoke.music.Karaoke;
+import karaoke.music.Lyric;
+import karaoke.music.Measure;
+import karaoke.music.Note;
+import karaoke.music.Playable;
+import karaoke.music.Rest;
+import karaoke.music.Tuplet;
 
 /**
  * 
  * @author mattj
  *
  */
-public class MusicParser {
+
+public class KaraokeParser {
     /**
      * Main method. Parses and then reprints an example expression.
      * 
@@ -191,7 +200,13 @@ public class MusicParser {
             }
         case NOTE: //note ::= pitch note_length?
             {
-                //TODO 
+//                final ParseTree<ABCGrammar> pitch = parseTree.children().get(0);
+//                try {
+//                    final ParseTree<ABCGrammar> noteLength = parseTree.children().get(1);
+//                } catch (IndexOutOfBoundsException e){
+//                    final 
+//                }
+                
             }
         case PITCH: //pitch ::= accidental? basenote octave?
             {
@@ -203,15 +218,26 @@ public class MusicParser {
             }
         case NOTE_LENGTH_STRICT: //note_length_strict ::= digit+ "/" digit+
             {
-                //TODO 
+                final List<ParseTree<ABCGrammar>> children = parseTree.children();
+                final double numerator = (double) Integer.parseInt(children.get(0).text());
+                final double denominator = (double) Integer.parseInt(children.get(1).text());
+//                return numerator/denominator;
             }
-        case REST_ELEMENT: //rest_element ::= "z" note-length
+        case REST_ELEMENT: //rest_element ::= "z" note_length
             {
-                //TODO 
+                final List<ParseTree<ABCGrammar>> children = parseTree.children();
+                final int noteLength = Integer.parseInt(children.get(1).text());
+                return new Rest(noteLength);
             }
         case TUPLET_ELEMENT: //tuplet_element ::= tuplet_spec note_element+
             {
-                //TODO 
+                final List<ParseTree<ABCGrammar>> children = parseTree.children();
+                List<Chord> chords = new ArrayList<>();
+                for (int i=1; i<children.size(); i++) {
+                    Karaoke karaoke = makeAbstractSyntaxTree(children.get(i));
+                    chords.add((Chord) karaoke.getMusic().get(0).getComponents().get(0));
+                }
+                return new Tuplet(chords);
             }
         case TUPLET_SPEC: //tuplet_spec ::= "(" digit 
             {
@@ -219,7 +245,16 @@ public class MusicParser {
             }
         case CHORD: //chord ::= "[" note+ "]"
             {
-                //TODO 
+                final List<ParseTree<ABCGrammar>> children = parseTree.children();
+                final List<Note> notes = new ArrayList<>();
+                final String lyrics = ""; //TODO
+                for (int i=1; i<children.size()-1; i++) {
+                    Karaoke karaoke = makeAbstractSyntaxTree(children.get(i));
+                    Measure measure = karaoke.getMusic().get(0);
+                    Playable playable = measure.getComponents().get(0);
+                    notes.add((Note) playable);
+                }
+                return new Chord(notes, null);
             }
         case MIDDLE_OF_BODY_FIELD: //middle_of_body_field ::= voice
             {
@@ -227,25 +262,37 @@ public class MusicParser {
             }
         case LYRIC: //lyric ::= "w:" lyrical_element*
             {
-                //TODO 
+                final List<ParseTree<ABCGrammar>> children = parseTree.children();
+                Karaoke karaoke = makeAbstractSyntaxTree(children.get(0));
+                for (int i=1; i<children.size(); i++) {
+                    karaoke = new Concat(karaoke, makeAbstractSyntaxTree(children.get(i)));
+                }
+                return karaoke;
             }
-        case LYRICAL_ELEMENT: //lyrical_element ::= " "+ | "-" | "_" | "*" | "~" | backslash_hyphen | "|" | lyric_text
-            {
-                //TODO 
-            }
+//        case LYRICAL_ELEMENT: //lyrical_element ::= " "+ | "-" | "_" | "*" | "~" | backslash_hyphen | "|" | lyric_text
+//            {
+//                //TODO 
+//            }
         
         /* general */ 
         case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
             {
                 //TODO 
             }
-        case COMMENT_TEXT: //comment_text ::= [^(newline)]*
-            {
-                //TODO 
-            }
+//        case COMMENT_TEXT: //comment_text ::= [ ^(newline)]*
+//            {
+//                //TODO 
+//            }
         case END_OF_LINE: //end_of_line ::= comment | newline
             {
-                //TODO 
+//                final ParseTree<ABCGrammar> child = parseTree.children().get(0);
+//                // check which alternative (comment or newline) was actually matched
+//                switch(child.name()) {
+//                case COMMENT:
+//                    return makeAbstractSyntaxTree(child);
+//                case NEWLINE:
+//                    
+//                }
             }
             
         default:

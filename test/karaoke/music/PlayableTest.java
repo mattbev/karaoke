@@ -57,7 +57,7 @@ public class PlayableTest {
         List<Note> notes = Arrays.asList(new Note(Instrument.ACCORDION, .25, Pitch.MIDDLE_C, ""));
         List<Lyric> lyrics = Arrays.asList(new Lyric("hello"));
         Playable playable = Playable.createChord(notes, lyrics);
-        assert playable.getDuration() == .25;
+        assert playable.duration() == .25;
         assert playable.getLyric().equals(new Lyric("hello"));
     }
     
@@ -67,7 +67,7 @@ public class PlayableTest {
         List<Note> notes = Arrays.asList(new Note(Instrument.ACCORDION, .25, Pitch.MIDDLE_C, ""));
         List<Lyric> lyrics = Arrays.asList(new Lyric("hello"), new Lyric("goodbye"));
         Playable playable = Playable.createChord(notes, lyrics);
-        assert playable.getDuration() == .25;
+        assert playable.duration() == .25;
         assert playable.getLyric().equals(new Lyric("hellogoodbye"));
     }
     
@@ -78,7 +78,7 @@ public class PlayableTest {
                 new Note(Instrument.ACCORDION, .25, Pitch.MIDDLE_C.transpose(Pitch.OCTAVE), ""));
         List<Lyric> lyrics = Arrays.asList(new Lyric("good bye"));
         Playable playable = Playable.createChord(notes, lyrics);
-        assert playable.getDuration() == .50;
+        assert playable.duration() == .50;
         assert playable.getLyric().equals(new Lyric("good bye"));
     }
     
@@ -89,7 +89,7 @@ public class PlayableTest {
                 new Note(Instrument.ACCORDION, .25, Pitch.MIDDLE_C.transpose(Pitch.OCTAVE), ""));
         List<Lyric> lyrics = Arrays.asList(new Lyric("hello"), new Lyric("goodbye"));
         Playable playable = Playable.createChord(notes, lyrics);
-        assert playable.getDuration() == .50;
+        assert playable.duration() == .50;
         assert playable.getLyric().equals(new Lyric("hellogoodbye"));
     }
     
@@ -100,7 +100,7 @@ public class PlayableTest {
     @Test
     public void testCreateRestZeroDuration() {
         Playable playable = Playable.createRest(0);
-        assert playable.getDuration() == 0;
+        assert playable.duration() == 0;
         assert playable.getLyric().equals(Lyric.emptyLyric());
     }
     
@@ -108,7 +108,7 @@ public class PlayableTest {
     @Test
     public void testCreateRestNonZeroDuration() {
         Playable playable = Playable.createRest(.5);
-        assert playable.getDuration() == .5;
+        assert playable.duration() == .5;
         assert playable.getLyric().equals(Lyric.emptyLyric());
     }
     
@@ -120,7 +120,7 @@ public class PlayableTest {
     @Test
     public void testGetDurationNonZeroSeconds() {
         Playable playable = Playable.createRest(5);
-        assert playable.getDuration() == 5;
+        assert playable.duration() == 5;
     }
     
     

@@ -3,6 +3,9 @@
  */
 package karaoke.music;
 
+import java.util.Arrays;
+import java.util.List;
+
 import karaoke.sound.SequencePlayer;
 
 /**
@@ -47,7 +50,7 @@ public class Rest implements Playable {
     }
 
     @Override
-    public double getDuration() {
+    public double duration() {
         return this.duration;
     }
     
@@ -68,7 +71,7 @@ public class Rest implements Playable {
     @Override
     public boolean equals(Object that) {
         if (that instanceof Rest) {
-            if (this.getDuration() == ((Rest) that).getDuration()) {
+            if (this.duration() == ((Rest) that).duration()) {
                 return true;
             }
         }
@@ -83,6 +86,11 @@ public class Rest implements Playable {
     @Override
     public String toString() {
         return "z" + this.duration;
+    }
+    
+    @Override
+    public List<Measure> getMusic() {
+        return Arrays.asList(new Measure(Arrays.asList(this)));
     }
 
 }

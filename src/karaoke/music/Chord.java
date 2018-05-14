@@ -5,6 +5,7 @@ package karaoke.music;
 import karaoke.sound.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  * A variant of Playable interface.
  *
  */
-public class Chord implements Playable{ 
+public class Chord implements Playable { 
     
     private final List<Note> notes;
     private final List<Lyric> lyrics;
@@ -63,7 +64,7 @@ public class Chord implements Playable{
     }
     
     @Override
-    public double getDuration() {
+    public double duration() {
         checkRep();
         return this.notes.get(0).getDuration();
     }
@@ -203,4 +204,10 @@ public class Chord implements Playable{
         }
         return chord + "]";
     }
+
+    @Override
+    public List<Measure> getMusic() {
+        return Arrays.asList(new Measure(Arrays.asList(this)));
+    }
+
 }

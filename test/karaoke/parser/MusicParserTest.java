@@ -114,13 +114,13 @@ public class MusicParserTest {
     //covers file does not exist
     @Test(expected=IOException.class)
     public void testNonexistentAbcFile() throws UnableToParseException {
-        Karaoke karaoke = MusicParser.parse("sample-abc/nonexistent.abc");
+        Karaoke karaoke = KaraokeParser.parse("sample-abc/nonexistent.abc");
     }
     
     //covers file is not of ".abc" format
     @Test(expected=IOException.class)
     public void testNotAbcFile() throws UnableToParseException {
-        Karaoke karaoke = MusicParser.parse("sample-abc/piece1.jpg");
+        Karaoke karaoke = KaraokeParser.parse("sample-abc/piece1.jpg");
     }
     
     //covers: header contains additional fields
@@ -133,7 +133,7 @@ public class MusicParserTest {
     @Test
     public void testCorrectPiece3() {
         try {
-            Karaoke karaoke = MusicParser.parse("sample-abc/piece3.jpg");
+            Karaoke karaoke = KaraokeParser.parse("sample-abc/piece3.jpg");
             SequencePlayer player = new MidiSequencePlayer();
             double startBeat = 0;
             karaoke.play(player, startBeat);

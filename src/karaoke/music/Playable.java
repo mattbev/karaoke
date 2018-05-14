@@ -11,7 +11,7 @@ import karaoke.sound.SequencePlayer;
  * An immutable ADT to represent one syllable component in a piece of music that has a lyric syllable
  *
  */
-public interface Playable {
+public interface Playable extends Karaoke {
     
     // Datatype definition:
     //      Playable = Chord(notes: List<Note>, lyric: List<Lyric>)
@@ -45,7 +45,7 @@ public interface Playable {
      * 
      * @return the duration in seconds of this component
      */
-    public double getDuration();
+    public double duration();
     
     
     /**    

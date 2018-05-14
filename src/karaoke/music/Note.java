@@ -31,18 +31,19 @@ public class Note {
     
     /**
      * 
-     * @param i the instrument that plays this note
+     * @param instrument the instrument that plays this note
      * @param duration the duration of this note (i.e. 1/4 = quarter, 1 = whole, etc)
-     * @param p the pitch of this note
+     * @param pitch the pitch of this note
      * @param accidental the accidental of the note
      */
-    public Note(Instrument i, double duration, Pitch p, String accidental) {
-        this.instrument = i;
+    public Note(Instrument instrument, double duration, Pitch pitch, String accidental) {
+        this.instrument = instrument;
         this.duration = duration;
-        this.pitch = p;
+        this.pitch = pitch;
         this.accidental = accidental;
         checkRep();
     }
+    
     
     /**
      * assert stated and implied RI
@@ -102,8 +103,7 @@ public class Note {
      */
     public void play(SequencePlayer player, double startBeat) {
         player.addNote(instrument, pitch, startBeat, duration);
-        checkRep();
-        
+        checkRep();        
     }
     
     /**
