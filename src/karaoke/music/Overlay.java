@@ -1,6 +1,7 @@
 package karaoke.music;
 
 import java.util.HashMap;
+import java.util.List;
 
 import karaoke.sound.SequencePlayer;
 
@@ -24,6 +25,11 @@ public class Overlay implements Karaoke {
     public void play(SequencePlayer player, double startBeat) {
         // TODO Auto-generated method stub
 
+    }
+
+    public List<Measure> getMusic() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
