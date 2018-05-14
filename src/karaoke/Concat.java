@@ -11,14 +11,14 @@ import karaoke.sound.SequencePlayer;
  * Concat is a variant of Karaoke which represents the concatenation of two pieces of Karaoke
  *
  */
-public class Concat implements Karaoke {
+public class Concat implements Music {
 
-    private final Karaoke firstKaraoke;
-    private final Karaoke secondKaraoke;
+    private final Music firstMusic;
+    private final Music secondMusic;
     
-    // AF(firstKaraoke, secondKaraoke): A Karaoke of duration firstKaraoke.duration() + secondKaraoke.duration()
-    //                                  in which firstKaraoke plays first and secondKaraoke follows after, with 
-    //                                  lyrics firstKaraoke.lyrics+secondKaraoke.lyrics streaming with the music.
+    // AF(firstMusic, secondMusic): A Music of duration firstMusic.duration() + secondMusic.duration()
+    //                                  in which firstMusic plays first and secondMusic follows after, with 
+    //                                  lyrics firstMusic.lyrics+secondMusic.lyrics streaming with the music.
     //
     // RI: 
     //      -True
@@ -29,37 +29,37 @@ public class Concat implements Karaoke {
     //
     // Thread safety argument:
     //    This class is threadsafe because it's immutable:
-    //    - firstKaraoke, and secondKaraoke are final
-    //    - neither Karaoke objects are every exposed to the client
+    //    - firstMusic, and secondMusic are final
+    //    - neither Music objects are every exposed to the client
     
 
     
     /**
      * 
-     * @param firstKaraoke the first Karaoke piece in the sequence
-     * @param secondKaraoke the second Karaoke piece in the sequence
+     * @param firstMusic the first Music piece in the sequence
+     * @param secondMusic the second Music piece in the sequence
      */
-    public Concat(Karaoke firstKaraoke, Karaoke secondKaraoke) {
-        this.firstKaraoke = firstKaraoke;
-        this.secondKaraoke = secondKaraoke;
+    public Concat(Music firstMusic, Music secondMusic) {
+        this.firstMusic = firstMusic;
+        this.secondMusic = secondMusic;
     }
 
     @Override
     public double duration() {
-        return firstKaraoke.duration() + secondKaraoke.duration();
+        return firstMusic.duration() + secondMusic.duration();
     }
 
     @Override
     public void play(SequencePlayer player, double startBeat) {
-        firstKaraoke.play(player,startBeat);
-        secondKaraoke.play(player, startBeat + firstKaraoke.duration());
+        firstMusic.play(player,startBeat);
+        secondMusic.play(player, startBeat + firstMusic.duration());
     }
 
     @Override
     public List<Measure> getMusic() {
         List<Measure> measures = new ArrayList<>();
-        measures.addAll(this.firstKaraoke.getMusic());
-        measures.addAll(this.secondKaraoke.getMusic());
+        measures.addAll(this.firstMusic.getMusic());
+        measures.addAll(this.secondMusic.getMusic());
         return measures;
     }
 

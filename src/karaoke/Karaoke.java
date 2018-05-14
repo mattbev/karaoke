@@ -1,63 +1,39 @@
 package karaoke;
-import java.util.List;
-
-import karaoke.sound.*;
 
 
 /**
  * 
  * @author chessa, mattbev, sophias
  * 
- * Karaoke is an immutable ADT representing an piece of music being played on request, with respective lyrics shown as it plays.
+ * Karaoke is an immutable karaoke object that contains all information about the abc file    ????????
  *
  */
-
-public interface Karaoke {
-    
-    // Datatype definition:
-    //    Karaoke = Measure(components: List<Playable>)
-    //              + Concat(firstKaraoke: Karaoke, secondKaraoke: Karaoke)
+public class Karaoke {
+    private final Body body;
+    private final Header header;
+    // Abstraction Function:
+    //   AF(body, header) = a Karaoke object where header holds the details of the music file and body
+    //                      holds the music and lyrics of one or more voices.
+    //      
     //
+    // Rep Invariant:
+    //   true             <<<<<<????????????
+    //
+    // Rep Safety Argument:
+    //   all fields are private final
+    //   all getter methods return Strings which are immutable 
+    //
+    // Thread Safety Argument:
+    //   no rep fields are mutated outside of the constructor, which is a threadsafe method by default
     
     /**
-     * Create a new karaoke measure consisting of the given playable components
-     * 
-     * @param components the ordered components of this measure
-     * @return a new measure of karaoke
+     * creates an instance of a Karaoke object
+     * @param b the body of the Karaoke
+     * @param h the header of the Karaoke
      */
-    public static Karaoke createMeasure(List<Playable> components) {
-        return new Measure(components);
+    public Karaoke(Body b, Header h) {
+        this.body = b;
+        this.header = h;
     }
-    
-    /**
-     * Create a new Karaoke which is the concatenation of two karaokes
-     * 
-     * @param firstKaraoke the first karaoke piece
-     * @param secondKaraoke the second karaoke piece
-     * @return a new karaoke piece which is the concatenation of firstKaraoke then secondKaraoke
-     */
-    public static Karaoke createConcat(Karaoke firstKaraoke, Karaoke secondKaraoke) {
-        return new Concat(firstKaraoke, secondKaraoke);
-    }
-    
-    /**
-     * gets the music of the piece
-     * @return the measures of the music
-     */
-    public List<Measure> getMusic();
-    
-    /**
-     * @return the total duration of this piece in beats
-     */
-    public double duration();
-    
-    /**
-     * Play this piece.
-     * @param player player to play on
-     * @param startBeat when to play
-     */
-    public void play(SequencePlayer player, double startBeat);
-    
-   
-    
+
 }

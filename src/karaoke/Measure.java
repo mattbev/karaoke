@@ -13,7 +13,7 @@ import karaoke.sound.SequencePlayer;
  * Measure is an immutable variant of Karaoke
  *
  */
-public class Measure implements Karaoke {
+public class Measure implements Music {
     
     private final List<Playable> components;
 
