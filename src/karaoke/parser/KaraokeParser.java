@@ -10,8 +10,10 @@ import java.util.Map;
 import edu.mit.eecs.parserlib.ParseTree;
 import edu.mit.eecs.parserlib.Parser;
 import edu.mit.eecs.parserlib.UnableToParseException;
+import karaoke.Body;
 import karaoke.Chord;
 import karaoke.Concat;
+import karaoke.Header;
 import karaoke.Karaoke;
 import karaoke.LyricLine;
 import karaoke.Measure;
@@ -109,204 +111,14 @@ public class KaraokeParser {
      * @return abstract syntax tree corresponding to parseTree
      */
     private static Karaoke makeAbstractSyntaxTree(final ParseTree<ABCGrammar> parseTree) {
-        switch (parseTree.name()) {
+         
         /* highest level */
-        case ABC_TUNE: //abc_tune ::= abc_header abc_body
-            {
-               
-                
-                return karaoke;
-        }
-            
-        /* header */
-        case ABC_HEADER: //abc_header ::= field_number comment* field_title other_fields* field_key
-            {
-                switch(parseTree.name()) {
-            
-                case FIELD_NUMBER: //field_number ::= "X:" digit+ end_of_line
-                    {
-                        final List<ParseTree<ABCGrammar>> children = parseTree.children();
-                        String number = "";
-                        for (int i=1; i<children.size()-1; i++) {
-                            number += children.get(i).text();
-                        }
-                    }
-                case FIELD_TITLE: //field_title ::= "T:" text end_of_line
-                    {
-                        final ParseTree<ABCGrammar> title = parseTree.children().get(1);
-                    }
-                case OTHER_FIELDS: //other_fields ::= field_composer | field_default_length | field_meter | field_tempo | field_voice | comment
-                    {
-                       switch(parseTree.name()) {
-                           case FIELD_COMPOSER: //field_composer ::= "C:" text end_of_line
-                                {
-                                    final String composer = parseTree.children().get(1).text();
-                                }
-                           case FIELD_DEFAULT_LENGTH: //field_default_length ::= "L:" note_length end_of_line
-                                {
-                                    final String noteLength = parseTree.children().get(1).text();
-                                }    
-                           case FIELD_METER: //field_meter ::= "M:" meter end_of_line
-                               {
-                                   final String meter = parseTree.children().get(1).text();
-                               }
-                           case FIELD_TEMPO: //field_tempo ::= "Q:" tempo end_of_line
-                               {
-                                   final String tempo = parseTree.children().get(1).text(); 
-                               }
-                           case FIELD_VOICE: //field_voice ::= "V:" text end_of_line
-                               {
-                                   final String voice = parseTree.children().get(1).text();
-                               }
-                    default:
-                        break;
-                       }
-                    }
-                case FIELD_KEY: //field_key ::= "K:" key end_of_line
-                    {
-                        //TODO 
-                    }
-                case KEY: //key ::= keynote "m"?
-                    {
-                        //TODO 
-                    }
-                case KEYNOTE: //keynote ::= basenote ("#" | "b")?
-                    {
-                        //TODO 
-                    }
-                case METER: //meter ::= "C" | "C|" | meter_fraction
-                    {
-                        //TODO 
-                    }
-                case METER_FRACTION: //meter_fraction ::= digit+ "/" digit+
-                    {
-                        //TODO 
-                    }
-                case TEMPO: //tempo ::= meter_fraction "=" digit+
-                    {
-                        //TODO 
-                    }
-                default:
-                    break;
-                }
-            }
-            
-        /* body */
-        case ABC_BODY: //abc_body ::= abc_line+
-            {
-                //TODO 
-            }
-        case ABC_LINE: //abc_line ::= element+ end_of_line (lyric end_of_line)?  | middle_of_body_field | comment
-            {
-                //TODO 
-            }
-        case ELEMENT: //element ::= note_element | rest_element | tuplet_element | barline | nth_repeat | space_or_tab 
-            {
-                //TODO 
-            }
-        case NOTE_ELEMENT: //note_element ::= note | chord
-            {
-                //TODO 
-            }
-        case NOTE: //note ::= pitch note_length?
-            {
-//                final ParseTree<ABCGrammar> pitch = parseTree.children().get(0);
-//                try {
-//                    final ParseTree<ABCGrammar> noteLength = parseTree.children().get(1);
-//                } catch (IndexOutOfBoundsException e){
-//                    final 
-//                }
-                
-            }
-        case PITCH: //pitch ::= accidental? basenote octave?
-            {
-                //TODO 
-            }
-        case NOTE_LENGTH: //note_length ::= (digit+)? ("/" (digit+)?)?
-            {
-                //TODO 
-            }
-        case NOTE_LENGTH_STRICT: //note_length_strict ::= digit+ "/" digit+
-            {
-                final List<ParseTree<ABCGrammar>> children = parseTree.children();
-                final double numerator = (double) Integer.parseInt(children.get(0).text());
-                final double denominator = (double) Integer.parseInt(children.get(1).text());
-//                return numerator/denominator;
-            }
-        case REST_ELEMENT: //rest_element ::= "z" note_length
-            {
-                final List<ParseTree<ABCGrammar>> children = parseTree.children();
-                final int noteLength = Integer.parseInt(children.get(1).text());
-                return new Rest(noteLength);
-            }
-        case TUPLET_ELEMENT: //tuplet_element ::= tuplet_spec note_element+
-            {
-                final List<ParseTree<ABCGrammar>> children = parseTree.children();
-                List<Chord> chords = new ArrayList<>();
-                for (int i=1; i<children.size(); i++) {
-                    Karaoke karaoke = makeAbstractSyntaxTree(children.get(i));
-                    chords.add((Chord) karaoke.getMusic().get(0).getComponents().get(0));
-                }
-                return new Tuplet(chords);
-            }
-        case TUPLET_SPEC: //tuplet_spec ::= "(" digit 
-            {
-                //TODO 
-            }
-        case CHORD: //chord ::= "[" note+ "]"
-            {
-                final List<ParseTree<ABCGrammar>> children = parseTree.children();
-                final List<Note> notes = new ArrayList<>();
-                final String lyrics = ""; //TODO
-                for (int i=1; i<children.size()-1; i++) {
-                    Karaoke karaoke = makeAbstractSyntaxTree(children.get(i));
-                    Measure measure = karaoke.getMusic().get(0);
-                    Playable playable = measure.getComponents().get(0);
-                    notes.add((Note) playable);
-                }
-                return new Chord(notes, null);
-            }
-        case MIDDLE_OF_BODY_FIELD: //middle_of_body_field ::= voice
-            {
-                //TODO 
-            }
-        case LYRIC: //lyric ::= "w:" lyrical_element*
-            {
-                final List<ParseTree<ABCGrammar>> children = parseTree.children();
-                Karaoke karaoke = makeAbstractSyntaxTree(children.get(0));
-                for (int i=1; i<children.size(); i++) {
-                    karaoke = new Concat(karaoke, makeAbstractSyntaxTree(children.get(i)));
-                }
-                return karaoke;
-            }
-//        case LYRICAL_ELEMENT: //lyrical_element ::= " "+ | "-" | "_" | "*" | "~" | backslash_hyphen | "|" | lyric_text
-//            {
-//                //TODO 
-//            }
+        final List<ParseTree<ABCGrammar>> children = parseTree.children();
+        //abc_tune ::= abc_header abc_body
+
+        Header header = HeaderParser.parse(children.get(0).text());
+        Body body = BodyParser.parse(children.get(1).text());
         
-        /* general */ 
-        case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
-            {
-                //TODO 
-            }
-//        case COMMENT_TEXT: //comment_text ::= [ ^(newline)]*
-//            {
-//                //TODO 
-//            }
-        case END_OF_LINE: //end_of_line ::= comment | newline
-            {
-//                final ParseTree<ABCGrammar> child = parseTree.children().get(0);
-//                // check which alternative (comment or newline) was actually matched
-//                switch(child.name()) {
-//                case COMMENT:
-//                    return makeAbstractSyntaxTree(child);
-//                case NEWLINE:
-//                    
-//                }
-            }
-            
-        default:
-            throw new AssertionError("should never get here");
-        }
+        return Karaoke.createKaraoke(header, body);
     }
 }

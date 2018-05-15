@@ -35,7 +35,7 @@ abc_tune ::= abc_header abc_body
 % spaces and tabs have explicit meaning in the body, dont automatically ignore them
 
 abc_body ::= abc_line+
-abc_line ::= music  | middle_of_body_field | comment
+abc_line ::= field_voice? music | comment
 music ::= element+ end_of_line (lyric end_of_line)?
 element ::= note_element | rest_element | tuplet_element | barline | nth_repeat | space_or_tab 
 
@@ -70,7 +70,6 @@ nth_repeat ::= "[1" | "[2"
 
 % A voice field might reappear in the middle of a piece
 % to indicate the change of a voice
-middle_of_body_field ::= field_voice
 
 lyric ::= "w:" lyrical_element*
 lyrical_element ::= " "+ | "-" | "_" | "*" | "~" | backslash_hyphen | "|" | lyric_text
