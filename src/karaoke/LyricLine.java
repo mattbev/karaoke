@@ -41,6 +41,10 @@ public class LyricLine {
     public LyricLine(List<String> lyrics, int boldedIndex) {
         this.lyrics = new ArrayList<>(lyrics);
         this.boldedIndex = boldedIndex;
+        
+        //find current lyric string that should be bolded, then add bolding syntax
+        String boldedLyric = this.lyrics.get(boldedIndex);
+        this.lyrics.set(boldedIndex, "<b>"+boldedLyric + "</b>");
         checkRep();
     }
 
