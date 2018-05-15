@@ -97,9 +97,13 @@ public class Body implements Music {
         return 0;
     }
 
+    @Override
     public void play(SequencePlayer player, double startBeat) {
-        // TODO Auto-generated method stub
-
+        for(String voice: this.voiceToMusic.keySet()) {
+            Music voiceMusic = this.voiceToMusic.get(voice);
+            voiceMusic.play(player, startBeat);
+            
+        }
     }
 
     public List<Measure> getMusic() {
