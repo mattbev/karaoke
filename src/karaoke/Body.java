@@ -1,5 +1,6 @@
 package karaoke;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,6 +57,18 @@ public class Body implements Music {
     public List<Measure> getMusic() {
         // TODO Auto-generated method stub
         return null;
+    }
+    
+    /**
+     * Get all the voices in this song
+     * 
+     * @return a list of the voices in this piece
+     */
+    public List<String> getVoices() {
+        List<String> voices = new ArrayList<>();
+        for (String s : this.voiceToLyrics.keySet()) {
+            voices.add(s);
+        } return voices;
     }
 
 }

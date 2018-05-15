@@ -1,5 +1,7 @@
 package karaoke;
 
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -46,5 +48,29 @@ public class Karaoke {
     public static Karaoke createKaraoke(Header h, Body b) {
         return new Karaoke(h,b);
     }
+    
+    /**
+     * Get the title of this karaoke song
+     * 
+     * @return the title of this piece
+     */
+    public String getTitle() {
+        return this.header.getTitle();
+    }
 
+    /**
+     * Get the composer of the song being played on karaoke
+     * 
+     * @return the composer of this song
+     */
+    public String getComposer() {
+        return this.header.getComposer();
+    }
+    
+    public List<String> getVoices() {
+        List<String> voices = new ArrayList<>();
+        for (String v : this.body.getVoices()) {
+            voices.add(v);
+        } return voices;
+    }
 }
