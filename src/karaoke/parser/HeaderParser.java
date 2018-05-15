@@ -69,7 +69,7 @@ public class HeaderParser {
        /* header */
        //abc_header ::= field_number comment* field_title other_fields* field_key
    
-       Map<Character,String> headerMap = new HashMap<>();
+       final Map<Character,String> headerMap = new HashMap<>();
        for (ParseTree<HeaderGrammar> childParseTree : parseTree.children()) {
            switch(childParseTree.name()) {   
            case FIELD_NUMBER: //field_number ::= "X:" digit+ end_of_line

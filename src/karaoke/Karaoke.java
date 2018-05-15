@@ -28,23 +28,23 @@ public class Karaoke {
     
     /**
      * creates an instance of a Karaoke object
-     * @param b the body of the Karaoke
-     * @param h the header of the Karaoke
+     * @param body the body of the Karaoke
+     * @param header the header of the Karaoke
      */
-    private Karaoke(Header h, Body b) {
-        this.body = b;
-        this.header = h;
+    private Karaoke(Header header, Body body) {
+        this.body = body;
+        this.header = header;
     }
     
     
     /**
      * creates an new karaoke
-     * @param b the body of the Karaoke
-     * @param h the header of the Karaoke
+     * @param body the body of the Karaoke
+     * @param header the header of the Karaoke
      * @return a new Karaoke object
      */
-    public static Karaoke createKaraoke(Header h, Body b) {
-        return new Karaoke(h,b);
+    public static Karaoke createKaraoke(Header header, Body body) {
+        return new Karaoke(header,body);
     }
 
 }

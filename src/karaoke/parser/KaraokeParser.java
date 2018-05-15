@@ -109,15 +109,16 @@ public class KaraokeParser {
      * 
      * @param parseTree constructed according to the grammar in ABC.g
      * @return abstract syntax tree corresponding to parseTree
+     * @throws UnableToParseException 
      */
-    private static Karaoke makeAbstractSyntaxTree(final ParseTree<ABCGrammar> parseTree) {
+    private static Karaoke makeAbstractSyntaxTree(final ParseTree<ABCGrammar> parseTree) throws UnableToParseException {
          
         /* highest level */
         final List<ParseTree<ABCGrammar>> children = parseTree.children();
         //abc_tune ::= abc_header abc_body
 
         Header header = HeaderParser.parse(children.get(0).text());
-        Body body = BodyParser.parse(children.get(1).text());
+        Body body = BodyParser.parse(children.get(1).text(), header);
         
         return Karaoke.createKaraoke(header, body);
     }
