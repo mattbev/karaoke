@@ -83,4 +83,9 @@ public class Rest implements Playable {
         return Arrays.asList(new Measure(Arrays.asList(this)));
     }
 
+    public List<Double> getDurationList() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
