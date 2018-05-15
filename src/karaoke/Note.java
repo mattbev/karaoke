@@ -103,6 +103,7 @@ public class Note {
      */
     public void play(SequencePlayer player, double startBeat) {
         player.addNote(instrument, pitch, startBeat, duration);
+        
         checkRep();        
     }
     

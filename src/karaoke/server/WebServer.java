@@ -8,12 +8,16 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 
+import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import karaoke.*;
+
 
 /**
  * 
@@ -50,6 +54,28 @@ public class WebServer {
     public WebServer(Karaoke karaoke, int port) throws IOException {
         this.server = HttpServer.create(new InetSocketAddress(port), 0);
         this.karaoke = karaoke;
+        LogFilter log = new LogFilter();
+        HeadersFilter headers = new HeadersFilter();
+        // all responses will be plain-text UTF-8
+        headers.add("Content-Type", "text/plain; charset=utf-8");
+        for(String voice: karaoke.getVoices()) {
+            HttpContext url = this.server.createContext("/"+voice, new HttpHandler(){
+                public void handle(HttpExchange exchange) throws IOException{
+                    htmlStream(exchange , karaoke);
+                }
+            });
+            
+            // -or- use a lambda expression with "->"
+            //HttpContext hello = server.createContext("/hello/", exchange -> handleHello(exchange));
+            // -or- use a method reference with "::"
+            //HttpContext hello = server.createContext("/hello/", this::handleHello);
+            
+            // add logging to the /hello/ handler and set required HTTP headers
+            //   (do this on all your handlers)
+            url.getFilters().addAll(Arrays.asList(log, headers));
+        }
+        
+        
         checkRep();
     }
     
@@ -78,7 +104,7 @@ public class WebServer {
         final String base = exchange.getHttpContext().getPath();     
         assert path.startsWith(base);
         
-        String voice = path.substring(path.length() - base.length());     //create substring of voice
+        String voice = path.substring(base.length());     //create substring of voice
         
         List<Double> voiceDurationList = karaoke.getDurationList(voice);
 
