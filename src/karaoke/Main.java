@@ -23,6 +23,7 @@ import edu.mit.eecs.parserlib.UnableToParseException;
 import karaoke.parser.KaraokeParser;
 import karaoke.server.WebServer;
 import karaoke.sound.MusicPlayer;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Main entry point of the karaoke machine, run to make karaoke song requests and stream lyrics
@@ -66,21 +67,23 @@ public class Main {
             List<String> voices = karaoke.getVoices();
             List<String> urls = new ArrayList<>();
             
-            String mainUrl = "http://" + iPAddress + ":" + port + "/";
+            String mainUrl = "http://" + iPAddress + ":" + port + "/" + "/";
             for (String voice : voices) {
                 urls.add(mainUrl + voice);
             }
             System.out.println("Playing " + karaoke.getTitle() + " by " + karaoke.getComposer());
             WebServer server = new WebServer(karaoke, port);
-            server.start();
+            
             */
+            
             System.out.println("To view the lyrics, navigate in your browser to one of the following urls, where the extension"
                     + " indicates which voice's lyrics will be streaming at that url:");
 //            System.out.println(urls);
             System.out.println("Begin playing the music by typing \"play\" and hitting Enter");
             BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
             if (b.readLine().equals("play")) {
-//                    MusicPlayer.play(karaoke);
+                //server.start();
+                //MusicPlayer.play(karaoke);
                 System.out.println("would play karaoke here");
                 
             }
