@@ -70,7 +70,7 @@ public class Karaoke {
      * @param startBeat when to play
      */
     public void play(SequencePlayer player, double startBeat) {
-        //IMPLEMENT
+        body.play(player, startBeat);
     }
     
     /**

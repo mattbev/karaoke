@@ -97,9 +97,18 @@ public class Body implements Music {
         return 0;
     }
 
+    @Override
     public void play(SequencePlayer player, double startBeat) {
-        // TODO Auto-generated method stub
-
+        double beginBeat = startBeat;
+        for(String voice: this.voiceToMusic.keySet()) {
+            Music voiceMusic = this.voiceToMusic.get(voice);
+            voiceMusic.play(player, beginBeat);
+            
+            //add duration of currentMusic to beginBeat
+            //so the next music starts appropriately after
+            double duration = voiceMusic.duration();
+            beginBeat += duration;
+        }
     }
 
     public List<Measure> getMusic() {
