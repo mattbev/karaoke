@@ -44,6 +44,21 @@ public class Body implements Music {
         this.voiceToMusic = musicMap;
         this.voiceToLyrics = lyricMap;
     }
+    
+   
+    
+    /**
+     * Provides a copy of a certain voice's lyric line list
+     * @param voice voice whose lyric list is returned
+     * @return lyric line list 
+     */
+    public List<String> getVoiceLyricLines(String voice){
+        List<String> lyricLineListCopy= new ArrayList<String>();
+        for(String line: voiceToLyrics.get(voice).getLyricLine()) {
+            lyricLineListCopy.add(line);
+        }
+        return lyricLineListCopy;
+    }
     public double duration() {
         // TODO Auto-generated method stub
         return 0;

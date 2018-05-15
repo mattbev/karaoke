@@ -3,6 +3,8 @@ package karaoke;
 import java.util.ArrayList;
 import java.util.List;
 
+import karaoke.sound.SequencePlayer;
+
 /**
  * 
  * @author chessa, mattbev, sophias
@@ -30,23 +32,45 @@ public class Karaoke {
     
     /**
      * creates an instance of a Karaoke object
-     * @param b the body of the Karaoke
-     * @param h the header of the Karaoke
+     * @param body the body of the Karaoke
+     * @param header the header of the Karaoke
      */
-    private Karaoke(Header h, Body b) {
-        this.body = b;
-        this.header = h;
+    private Karaoke(Header header, Body body) {
+        this.body = body;
+        this.header = header;
     }
     
     
     /**
      * creates an new karaoke
-     * @param b the body of the Karaoke
-     * @param h the header of the Karaoke
+     * @param body the body of the Karaoke
+     * @param header the header of the Karaoke
      * @return a new Karaoke object
      */
-    public static Karaoke createKaraoke(Header h, Body b) {
-        return new Karaoke(h,b);
+    public static Karaoke createKaraoke(Header header, Body body) {
+        return new Karaoke(header,body);
+    }
+    
+    
+    
+    /**
+     * Provides a copy of the lyric lines of a certain voice
+     * @param voice voice whose lyric lines are returned
+     * @return the lyric lines of voice <voice>
+     */
+    public List<String> getVoiceLyricLinesList(String voice){
+        List<String> lyricLines = this.body.getVoiceLyricLines(voice);
+        return lyricLines;
+
+    }
+    
+    /**
+     * Play this karaoke
+     * @param player player to play on
+     * @param startBeat when to play
+     */
+    public void play(SequencePlayer player, double startBeat) {
+        //IMPLEMENT
     }
     
     /**

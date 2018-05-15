@@ -5,7 +5,10 @@ import java.io.PrintWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
@@ -18,7 +21,8 @@ import karaoke.*;
  * An HTTP karaoke server
  */
 public class WebServer {
-
+    public static final int AUTOSCROLL_LETTERS = 10;
+    
     private final HttpServer server;
     private final Karaoke karaoke;
 
@@ -54,6 +58,87 @@ public class WebServer {
      */
     private void checkRep() {
         assert true;
+    }
+    
+    
+    /**
+     * This handler sends a stream of HTML to the web browser,
+     * pausing briefly between each line of output.
+     * Returns after the entire stream has been sent.
+     * 
+     * @param exchange request/reply object
+     * @param karaoke karaoke object to be streamed
+     * @throws IOException if network problem
+     */
+    private static void htmlStream(HttpExchange exchange, Karaoke karaoke) throws IOException {
+        
+        //JUST NEEDS TO BE CALLED FOR EACH VOICE'S URL WHEN MUSIC IS STARTED
+        
+        final String path = exchange.getRequestURI().getPath();
+        final String base = exchange.getHttpContext().getPath();     
+        assert path.startsWith(base);
+        
+        String voice = path.substring(path.length() - base.length());     //create substring of voice
+        
+        //get list of lyricLines that corresponds to voice
+        List<String> voiceLyrics = karaoke.getVoiceLyricLinesList(voice);
+        System.err.println("received request " + path);
+    
+        final boolean autoscroll = true;     //path.endsWith("/autoscroll");
+        
+        // html response
+        exchange.getResponseHeaders().add("Content-Type", "text/html; charset=utf-8");
+        
+        // must call sendResponseHeaders() before calling getResponseBody()
+        final int successCode = 200;
+        final int lengthNotKnownYet = 0;
+        exchange.sendResponseHeaders(successCode, lengthNotKnownYet);
+
+        // get output stream to write to web browser
+        final boolean autoflushOnPrintln = true;
+        PrintWriter out = new PrintWriter(
+                              new OutputStreamWriter(
+                                  exchange.getResponseBody(), 
+                                  StandardCharsets.UTF_8), 
+                              autoflushOnPrintln);
+        
+        try {
+
+            // IMPORTANT: some web browsers don't start displaying a page until at least 2K bytes
+            // have been received.  So we'll send a line containing 2K spaces first.
+            final int enoughBytesToStartStreaming = 2048;
+            for (int i = 0; i < enoughBytesToStartStreaming; ++i) {
+                out.print(' ');
+            }
+            out.println(); // also flushes
+            
+            final int numberOfLinesToSend = voiceLyrics.size();
+            //final int millisecondsBetweenLines = 200;
+            for (int i = 0; i < numberOfLinesToSend; ++i) {
+                
+                // print a line of text
+                
+                out.println(voiceLyrics.get(i) + "<br>"); // also flushes  //print that line of the lyrics list
+                
+                if (autoscroll) {
+                    // send some Javascript to browser that makes it scroll down to the bottom of the page,
+                    // so that the last line sent is always in view
+                    out.println("<script>document.body.scrollIntoView(false)</script>");
+                }
+                long currentNoteDuration = karaoke.getNoteList.get(i).getDuration();
+                
+                // wait a bit
+                try {
+                    Thread.sleep(currentNoteDuration);
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+            
+        } finally {
+            exchange.close();
+        }
+        System.err.println("done streaming request");
     }
     
     /**
@@ -198,6 +283,7 @@ public class WebServer {
     public void start() {
         System.err.println("Server will listen on " + server.getAddress());
         server.start();
+        //htmlString should be called here?
     }
     
     /**
