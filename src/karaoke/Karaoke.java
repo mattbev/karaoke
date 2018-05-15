@@ -1,5 +1,8 @@
 package karaoke;
 
+import java.util.List;
+
+import karaoke.sound.SequencePlayer;
 
 /**
  * 
@@ -45,6 +48,28 @@ public class Karaoke {
      */
     public static Karaoke createKaraoke(Header header, Body body) {
         return new Karaoke(header,body);
+    }
+    
+    
+    
+    /**
+     * Provides a copy of the lyric lines of a certain voice
+     * @param voice voice whose lyric lines are returned
+     * @return the lyric lines of voice <voice>
+     */
+    public List<String> getVoiceLyricLinesList(String voice){
+        List<String> lyricLines = this.body.getVoiceLyricLines(voice);
+        return lyricLines;
+
+    }
+    
+    /**
+     * Play this karaoke
+     * @param player player to play on
+     * @param startBeat when to play
+     */
+    public void play(SequencePlayer player, double startBeat) {
+        //IMPLEMENT
     }
 
 }
