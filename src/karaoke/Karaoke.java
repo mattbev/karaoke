@@ -31,9 +31,20 @@ public class Karaoke {
      * @param b the body of the Karaoke
      * @param h the header of the Karaoke
      */
-    public Karaoke(Body b, Header h) {
+    private Karaoke(Header h, Body b) {
         this.body = b;
         this.header = h;
+    }
+    
+    
+    /**
+     * creates an new karaoke
+     * @param b the body of the Karaoke
+     * @param h the header of the Karaoke
+     * @return a new Karaoke object
+     */
+    public static Karaoke createKaraoke(Header h, Body b) {
+        return new Karaoke(h,b);
     }
 
 }
