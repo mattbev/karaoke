@@ -25,7 +25,7 @@ public interface Karaoke {
      * @param components the ordered components of this measure
      * @return a new measure of karaoke
      */
-    public static Measure createMeasure(List<Playable> components) {
+    public static Karaoke createMeasure(List<Playable> components) {
         return new Measure(components);
     }
     
@@ -36,7 +36,7 @@ public interface Karaoke {
      * @param secondKaraoke the second karaoke piece
      * @return a new karaoke piece which is the concatenation of firstKaraoke then secondKaraoke
      */
-    public static Concat createConcat(Karaoke firstKaraoke, Karaoke secondKaraoke) {
+    public static Karaoke createConcat(Karaoke firstKaraoke, Karaoke secondKaraoke) {
         return new Concat(firstKaraoke, secondKaraoke);
     }
     

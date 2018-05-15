@@ -3,7 +3,9 @@ package karaoke.parser;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.mit.eecs.parserlib.ParseTree;
 import edu.mit.eecs.parserlib.Parser;
@@ -12,6 +14,7 @@ import karaoke.Chord;
 import karaoke.Concat;
 import karaoke.Karaoke;
 import karaoke.Lyric;
+import karaoke.LyricLine;
 import karaoke.Measure;
 import karaoke.Note;
 import karaoke.Playable;
@@ -112,9 +115,21 @@ public class KaraokeParser {
         case ABC_TUNE: //abc_tune ::= abc_header abc_body
             {
                 final List<ParseTree<ABCGrammar>> children = parseTree.children();
-                Karaoke karaoke = makeAbstractSyntaxTree(children.get(0));
-                for (int i=1; i < children.size(); i++) {
-                    karaoke = new Concat(karaoke, makeAbstractSyntaxTree(children.get(i)));
+                Map<String, LyricLine> voicesLyrics = new HashMap<>();
+                Map<String, Karaoke> voicesKaraoke = new HashMap<>();
+                Header header = Header.makeAbstractSyntaxTree(children.get(0));
+                for (int i = 1; i < children.size(); i++) {
+                    ABCGrammar nonterminal = children.get(i).name();
+                    if (nonterminal.equals(ABCGrammar.FIELD_VOICE)) {
+                        int j = 0;
+                        Karaoke karaoke = makeAbstractSyntaxTree(children.get(i + 1).children().get(j));
+                        if (voicesKaraoke.containsKey(nonterminal)) {
+                            while (children.get(i + 1).children().get(j).name() != ABCGrammar.END_OF_LINE) {
+                                karaoke = Karaoke.createConcat(karaoke, makeAbstractSyntaxTree(children.get(i + 1).children().get(j)));
+                            }
+                            voicesKaraoke.put(children.get(i).text(), Karaoke.createConcat(voicesKaraoke.get(children.get(i).text()), karaoke));
+                        } 
+                    } else if (nonterminal.equals(ABCGrammar.LYRIC))
                 }
                 return karaoke;
             }
