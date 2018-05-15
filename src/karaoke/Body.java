@@ -99,15 +99,10 @@ public class Body implements Music {
 
     @Override
     public void play(SequencePlayer player, double startBeat) {
-        double beginBeat = startBeat;
         for(String voice: this.voiceToMusic.keySet()) {
             Music voiceMusic = this.voiceToMusic.get(voice);
-            voiceMusic.play(player, beginBeat);
+            voiceMusic.play(player, startBeat);
             
-            //add duration of currentMusic to beginBeat
-            //so the next music starts appropriately after
-            double duration = voiceMusic.duration();
-            beginBeat += duration;
         }
     }
 

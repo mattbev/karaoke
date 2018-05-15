@@ -1,6 +1,10 @@
 package karaoke;
 
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import karaoke.sound.*;
 
 /**
@@ -11,7 +15,7 @@ import karaoke.sound.*;
  */
 public class Note {
 
-    private final Instrument instrument;
+//    private final Instrument instrument;
     private final double duration;
     private final Pitch pitch;
     private final String accidental;
@@ -31,17 +35,70 @@ public class Note {
     
     /**
      * 
-     * @param instrument the instrument that plays this note
+//     * @param instrument the instrument that plays this note
      * @param duration the duration of this note (i.e. 1/4 = quarter, 1 = whole, etc)
      * @param pitch the pitch of this note
      * @param accidental the accidental of the note
      */
-    public Note(Instrument instrument, double duration, Pitch pitch, String accidental) {
-        this.instrument = instrument;
+    public Note(double duration, Pitch pitch, String accidental) {
+//        this.instrument = instrument;
         this.duration = duration;
         this.pitch = pitch;
         this.accidental = accidental;
         checkRep();
+    }
+    
+    /**
+     * construct a Note object from string input
+     * @param pitch the pitch of the note
+     * @param noteLength the duration of the note
+     */
+    public Note(String pitch, String noteLength) {
+        Set<String> validNotes = new HashSet<>(Arrays.asList("C","D","E","F","G","A","B","c","d","e","f","g","a","b"));
+        String basenote = "";
+        for (String note : validNotes) {
+            if (pitch.contains(note)) {
+                basenote = note;
+                break;
+            }
+        }
+        final String[] pitchParams = pitch.split(basenote);
+        final String noteAccidental = pitchParams[0];
+        final String octave = pitchParams[1];
+        final Pitch notePitch = new Pitch(basenote.toUpperCase().toCharArray()[0]);
+        
+        if (basenote.toLowerCase().equals(basenote)) {
+            notePitch.transpose(Pitch.OCTAVE);
+        }
+        if (octave.contains("'")) {
+            notePitch.transpose(Pitch.OCTAVE*octave.length());
+        }
+        else if(octave.contains(",")) {
+            notePitch.transpose(-Pitch.OCTAVE*octave.length());
+        }
+        if (noteAccidental.contains("^")) {
+            notePitch.transpose(noteAccidental.length());
+        }
+        else if (noteAccidental.contains("_")) {
+            notePitch.transpose(-noteAccidental.length());
+        }
+        
+        final String[] lengthParams = noteLength.split("/");
+        final String numerator = lengthParams[0];
+        final String denominator = lengthParams[1];
+        int numeratorInt = 1;
+        int denominatorInt = 1;
+        if (numerator.length() > 0) {
+            numeratorInt = Integer.parseInt(numerator);
+        }
+        if (denominator.length() > 0) {
+            denominatorInt = Integer.parseInt(denominator);
+        }
+        final double noteDuration = ((double) numeratorInt) / ((double) denominatorInt);
+        
+        this.accidental = noteAccidental;
+        this.duration = noteDuration;
+        this.pitch = notePitch;
     }
     
     
@@ -49,7 +106,7 @@ public class Note {
      * assert stated and implied RI
      */
     private void checkRep() {
-        assert instrument != null : "instrument can't be null";
+//        assert instrument != null : "instrument can't be null";
         assert pitch != null : "pitch can't be null";
         assert accidental != null : "accidental can't be null";
         assert duration > 0;
@@ -85,26 +142,26 @@ public class Note {
         return this.accidental;
     }
     
-    /**
-     * Return the instrument this note is played by
-     * 
-     * @return this note's instrument
-     */
-    public Instrument getInstrument() {
-        checkRep();
-        return this.instrument;
-    }
+//    /**
+//     * Return the instrument this note is played by
+//     * 
+//     * @return this note's instrument
+//     */
+//    public Instrument getInstrument() {
+//        checkRep();
+//        return this.instrument;
+//    }
     
-    
-    /**
-     * Play this note
-     * @param player player producing the note
-     * @param startBeat beat at which the note should play
-     */
-    public void play(SequencePlayer player, double startBeat) {
-        player.addNote(instrument, pitch, startBeat, duration);
-        checkRep();        
-    }
+//    
+//    /**
+//     * Play this note
+//     * @param player player producing the note
+//     * @param startBeat beat at which the note should play
+//     */
+//    public void play(SequencePlayer player, double startBeat) {
+//        player.addNote(instrument, pitch, startBeat, duration);
+//        checkRep();        
+//    }
     
     /**
      * 
@@ -115,7 +172,7 @@ public class Note {
      * @return a new note of the given magnitude, pitch, and accidental played by the instrument i
      */
     public static Note createNote(Instrument i, double magnitude, Pitch p, String accidental) {
-        return new Note(i, magnitude, p, accidental);
+        return new Note(magnitude, p, accidental);
     }
     
     @Override
