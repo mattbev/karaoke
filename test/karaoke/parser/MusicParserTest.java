@@ -105,6 +105,8 @@ public class MusicParserTest {
     //                  fewer notes than lyrics (extra lyrics ignored)
     //                  multiple voices have lyrics
     //                  repeated bar has lyrics
+    //              multiple voices:
+    //                  interleaved, not interleaved
 
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {

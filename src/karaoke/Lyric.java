@@ -3,17 +3,19 @@
  */
 package karaoke;
 
+import java.util.List;
 
 /**
  * @author chessa, mattbev, sophias
  *
- * Lyric is an immutable ADT representing a lyric of one syllable, during one playable component of music.
+ * Lyric is an immutable ADT representing a line of lyrics, where one syllable is bolded.
  */
-public class Lyric {
+public class LyricLine {
     
-    private final String lyric;
+    private final List<String> lyrics;
+    private final String boldedLyric;
     
-    // AF(lyric): A song lyric of one syllable, where lyric is the lyric text to be sung for the one syllable 
+    // AF(lyrics, boldedLyric): A line of lyrics in a song  
     //
     // Rep Invariant:
     //      lyric.size() > 0

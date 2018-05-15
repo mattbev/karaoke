@@ -29,7 +29,7 @@ import karaoke.Tuplet;
 
 public class KaraokeParser {
     /**
-     * Main method. Parses and then reprints an example expression.
+     * Main method. Parses and then reprints an example karaoke.
      * 
      * @param args command line arguments, not used
      * @throws UnableToParseException if example expression can't be parsed
@@ -114,25 +114,10 @@ public class KaraokeParser {
         /* highest level */
         case ABC_TUNE: //abc_tune ::= abc_header abc_body
             {
-                final List<ParseTree<ABCGrammar>> children = parseTree.children();
-                Map<String, LyricLine> voicesLyrics = new HashMap<>();
-                Map<String, Karaoke> voicesKaraoke = new HashMap<>();
-                Header header = Header.makeAbstractSyntaxTree(children.get(0));
-                for (int i = 1; i < children.size(); i++) {
-                    ABCGrammar nonterminal = children.get(i).name();
-                    if (nonterminal.equals(ABCGrammar.FIELD_VOICE)) {
-                        int j = 0;
-                        Karaoke karaoke = makeAbstractSyntaxTree(children.get(i + 1).children().get(j));
-                        if (voicesKaraoke.containsKey(nonterminal)) {
-                            while (children.get(i + 1).children().get(j).name() != ABCGrammar.END_OF_LINE) {
-                                karaoke = Karaoke.createConcat(karaoke, makeAbstractSyntaxTree(children.get(i + 1).children().get(j)));
-                            }
-                            voicesKaraoke.put(children.get(i).text(), Karaoke.createConcat(voicesKaraoke.get(children.get(i).text()), karaoke));
-                        } 
-                    } else if (nonterminal.equals(ABCGrammar.LYRIC))
-                }
+               
+                
                 return karaoke;
-            }
+        }
             
         /* header */
         case ABC_HEADER: //abc_header ::= field_number comment* field_title other_fields* field_key
