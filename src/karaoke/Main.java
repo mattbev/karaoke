@@ -1,6 +1,8 @@
 package karaoke;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
@@ -12,6 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Queue;
+
+import javax.swing.plaf.synth.SynthSpinnerUI;
 
 import com.sun.net.httpserver.HttpServer;
 
@@ -47,7 +51,7 @@ public class Main {
         final String songPath;
         final Karaoke karaoke;
         final int port = 8080;
-        String IP = InetAddress.getLocalHost().getHostAddress();
+        String iPAddress = InetAddress.getLocalHost().getHostAddress();
         try {
             songPath = arguments.remove();
         } catch (NoSuchElementException e) {
@@ -55,26 +59,30 @@ public class Main {
         }
         
         try {
-            String fileContents = new String(Files.readAllBytes(Paths.get(songPath)), StandardCharsets.UTF_8).join("/n");
-            karaoke = KaraokeParser.parse(songPath);
+            /*
+            List<String> s = Files.readAllLines(Paths.get(songPath), StandardCharsets.UTF_8);
+            String contents = String.join("\n", s);
+            karaoke = KaraokeParser.parse(contents);
             List<String> voices = karaoke.getVoices();
             List<String> urls = new ArrayList<>();
-            String mainUrl = "http://" + IP + ":" + port + "/";
+            
+            String mainUrl = "http://" + iPAddress + ":" + port + "/";
             for (String voice : voices) {
                 urls.add(mainUrl + voice);
             }
             System.out.println("Playing " + karaoke.getTitle() + " by " + karaoke.getComposer());
             WebServer server = new WebServer(karaoke, port);
             server.start();
+            */
             System.out.println("To view the lyrics, navigate in your browser to one of the following urls, where the extension"
                     + " indicates which voice's lyrics will be streaming at that url:");
-            System.out.println(urls);
+//            System.out.println(urls);
             System.out.println("Begin playing the music by typing \"play\" and hitting Enter");
-            
-            if (arguments.size() == 1) {
-                if (arguments.remove().equals("play")) {
-                    MusicPlayer.play(karaoke);
-                }
+            BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
+            if (b.readLine().equals("play")) {
+//                    MusicPlayer.play(karaoke);
+                System.out.println("would play karaoke here");
+                
             }
         } catch (Exception e) {
             throw new IllegalArgumentException("error in opening and parsing file");
