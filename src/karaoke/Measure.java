@@ -82,6 +82,27 @@ public class Measure implements Music {
         }
         checkRep();
     }
+    
+  
+    /**
+     * Provides a list of durations for the measure's components
+     * 
+     * @return list of playable durations in the exact
+     *         order they appear in this.components
+     */
+    @Override
+    public List<Double> getDurationList(){
+        List<Double> durationList = new ArrayList<Double>();
+        
+        //will likely be changed when we figure out how to deal w/ lyrics during rests
+        for(int i = 0; i < components.size(); i++) {
+            Playable component = components.get(i);
+            double dur = component.duration();
+            durationList.add(dur);
+        }
+        return durationList;
+    }
+    
 
     @Override
     public List<Measure> getMusic() {

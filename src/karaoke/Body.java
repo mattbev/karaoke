@@ -59,6 +59,39 @@ public class Body implements Music {
         }
         return lyricLineListCopy;
     }
+    
+    /**
+     * Provides a copy of a certain voice's music's duration list
+     * @param voice voice whose music's duration list is returned
+     * @return list of durations for the music of voice <voice>
+     */
+    public List<Double> getVoiceDurationList(String voice){
+        List<Double> durationList = new ArrayList<Double>();
+        Music voiceMusic = this.voiceToMusic.get(voice);
+        List<Double> voiceMusicDurationList = voiceMusic.getDurationList();
+        for(Double duration: voiceMusicDurationList) {
+            durationList.add(duration);
+        }
+        return durationList;
+    }
+    
+    
+    //don't really need this but necessary from interface
+    @Override
+    public List<Double> getDurationList(){
+        List<Double> durationList = new ArrayList<Double>();
+        for(String voice: this.voiceToMusic.keySet()) {
+            Music voiceMusic = this.voiceToMusic.get(voice);
+            List<Double> voiceMusicDurationList = voiceMusic.getDurationList();
+            for(Double duration: voiceMusicDurationList) {
+                durationList.add(duration);
+            }
+        }
+        return durationList;
+
+    }
+    
+    
     public double duration() {
         // TODO Auto-generated method stub
         return 0;

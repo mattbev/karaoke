@@ -62,6 +62,18 @@ public class Concat implements Music {
         measures.addAll(this.secondMusic.getMusic());
         return measures;
     }
+    
+    @Override
+    public List<Double> getDurationList(){
+        List<Double> durationList = new ArrayList<Double>();
+        
+        //extend list with firstMusic's duration list first,
+        //then secondMusic's duration list
+        durationList.addAll(firstMusic.getDurationList());
+        durationList.addAll(secondMusic.getDurationList());
+        
+        return durationList;
+    }
 
    
 

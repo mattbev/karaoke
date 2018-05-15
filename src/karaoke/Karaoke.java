@@ -91,10 +91,28 @@ public class Karaoke {
         return this.header.getComposer();
     }
     
+    
+    /**
+     * Provides all the voice in the karaoke's body
+     * @return list of voices in the body of the karaoke
+     */
     public List<String> getVoices() {
         List<String> voices = new ArrayList<>();
         for (String v : this.body.getVoices()) {
             voices.add(v);
         } return voices;
     }
+    
+    /**
+     * Provides duration list of the music of a certain
+     * voice in the karaoke's body
+     * @param voice voice whose music's duration list
+     *        is returned
+     * @return duration list of voice <voice>'s music
+     */
+    public List<Double> getDurationList(String voice){
+        return this.body.getVoiceDurationList(voice);
+        
+    }
+    
 }

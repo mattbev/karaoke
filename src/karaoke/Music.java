@@ -52,6 +52,14 @@ public interface Music {
     public double duration();
     
     /**
+     * Provides a list of durations for the Music's components
+     * 
+     * @return list of playable durations in the exact
+     *         order they appear in the music
+     */
+    public List<Double> getDurationList();
+    
+    /**
      * Play this piece.
      * @param player player to play on
      * @param startBeat when to play

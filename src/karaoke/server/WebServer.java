@@ -80,6 +80,9 @@ public class WebServer {
         
         String voice = path.substring(path.length() - base.length());     //create substring of voice
         
+        List<Double> voiceDurationList = karaoke.getDurationList(voice);
+
+        
         //get list of lyricLines that corresponds to voice
         List<String> voiceLyrics = karaoke.getVoiceLyricLinesList(voice);
         System.err.println("received request " + path);
@@ -114,6 +117,7 @@ public class WebServer {
             
             final int numberOfLinesToSend = voiceLyrics.size();
             //final int millisecondsBetweenLines = 200;
+            
             for (int i = 0; i < numberOfLinesToSend; ++i) {
                 
                 // print a line of text
@@ -125,7 +129,8 @@ public class WebServer {
                     // so that the last line sent is always in view
                     out.println("<script>document.body.scrollIntoView(false)</script>");
                 }
-                long currentNoteDuration = karaoke.getNoteList.get(i).getDuration();
+                
+                long currentNoteDuration = voiceDurationList.get(i).longValue();    //get the duration at the corresponding index that matches the lyric
                 
                 // wait a bit
                 try {
