@@ -17,11 +17,14 @@ import java.util.List;
  */
 public class Chord implements Playable { 
     
-    private final List<Note> notes;
-    private final List<Lyric> lyrics;
+    private static final int DUPLET_LENGTH = 2;
+    private static final int TRIPLET_LENGTH = 3;
+    private static final int QUADRUPLET_LENGTH = 4;
     
-    // AF(notes, lyric): A chord where notes is a list of the notes of the chord (in the order they were in in the 
-    //                   abc file) and lyrics is the list of lyric(s) to be streamed during this chord
+    private final List<Note> notes;
+    
+    // AF(notes): A chord where notes is a list of the notes of the chord (in the order they were in in the 
+    //                   abc file)
     //
     // RI: notes.size > 0
     //     
@@ -33,19 +36,18 @@ public class Chord implements Playable {
     //
     // Thread Safety Argument:
     //      The class is threadsafe because it is immutable:
-    //          notes and lyrics are final 
-    //          notes and lyrics are mutable, but they are encapsulated in this object, not shared with any other object 
+    //          notes is final 
+    //          notes is mutable, but they are encapsulated in this object, not shared with any other object 
     //              or exposed to the client
+    //          notes is composed of type Note, which is an immutable, threadsafe type
     
     /**
      * Make a chord, which is a combination of one or more notes
      * 
      * @param notes the list of notes that make up this chord
-     * @param lyrics the lyric to be streamed during this chord
      */
-    public Chord(List<Note> notes, List<Lyric> lyrics) {
+    public Chord(List<Note> notes) {
         this.notes = new ArrayList<>(notes); 
-        this.lyrics = new ArrayList<>(lyrics);
         checkRep();
     }
     
@@ -56,10 +58,6 @@ public class Chord implements Playable {
         assert notes.size() > 0 : "a chord must contain at least one note";
         for (Note n : this.notes) {
             assert n != null : "Notes cannot be null";
-        }
-        
-        for (Lyric l : this.lyrics) {
-            assert l != null : "Lyrics cannot be null";
         }
     }
     
@@ -104,20 +102,14 @@ public class Chord implements Playable {
      * @param t the tuplet type
      * @return a new Chord with a different duration depending on the tuplet
      */
-    public Chord copyChordNewDuration(double duration, Tuplet.Type t) {
-        
-        List<Lyric> lyricsCopy = new ArrayList<>();
-        for (Lyric lyric : this.lyrics) {
-            lyricsCopy.add(lyric.createLyricCopy());
-        }
-        
+    public Chord copyChordNewDuration(double duration, Tuplet.Type t) {        
         List<Note> notesCopy = new ArrayList<>();
         for (Note note : this.notes) {
             int denom = getDenominator(t);
             notesCopy.add(Note.createNote(note.getInstrument(), duration/denom, note.getPitch(), note.getAccidental()));
         }
         checkRep();
-        return new Chord(notes, lyrics);
+        return new Chord(notes);
         
     }
     
@@ -130,41 +122,17 @@ public class Chord implements Playable {
         switch (t) {
         
         case DUPLET: {
-            return 2;
+            return DUPLET_LENGTH;
         }
         case TRIPLET: {
-            return 3;
+            return TRIPLET_LENGTH;
         }
         case QUADRUPLET: {
-            return 4;
+            return QUADRUPLET_LENGTH;
         }
         default: throw new AssertionError("should never get here");
         }
     }
-    
-    /**
-     * Create a copy of the lyrics list
-     * 
-     * @return a copy of the lyrics list, with copied lyrics as well
-     */
-    public List<Lyric> getLyrics() {
-        List<Lyric> lyricsCopy = new ArrayList<>();
-        for (Lyric l : this.lyrics) {
-            lyricsCopy.add(l.createLyricCopy());
-        } 
-        checkRep();
-        return lyricsCopy;
-    } 
-    
-    @Override
-    public Lyric getLyric() {
-        String lyric = "";
-        for (Lyric l : this.lyrics) {
-            lyric += l;
-        } 
-        checkRep();
-        return new Lyric(lyric);
-    } 
     
     @Override
     public boolean equals(Object that) {

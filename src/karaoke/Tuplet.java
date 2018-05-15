@@ -2,9 +2,7 @@ package karaoke;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import karaoke.sound.SequencePlayer;
 
@@ -25,28 +23,23 @@ public class Tuplet implements Playable {
     private final List<Chord> newChords = new ArrayList<Chord>();
     private final Type type;
     private final double duration;
-    private final  Map<Chord,List<Lyric>> lyricMap = new HashMap<Chord,List<Lyric>>();
     
-    // AF(newChords, type, duration, lyricMap): A tuplet of type type and time length duration, where newChords are the chords
-    //        in the tuplet, played in the order they appear in the list, and for every chord c in newChords, lyricMap.get(c)
-    //        is the ordered list of lyric(s) to be streamed during that chord.
+    // AF(newChords, type, duration): A tuplet of type type and time length duration, where newChords are the chords
+    //        in the tuplet, played in the order they appear in the list
     //
     // RI: 
     //      newChords.size() = 2, 3, 4
     //      duration > 0
-    //      lyricMap.keySet().size() == newChords.size()
-    //      for all c in newChords: lyricMap.get(c) exists, and != null
     //
     // Safety from rep exposure:
     //      all fields private final, and never mutated after contructor
     //      all return types are immutable, rep is never exposed    
     // Thread safety argument:
     //    This class is threadsafe because it's immutable:
-    //    - newChord, type, duration, and lyricMap are final
+    //    - newChord, type, and duration are final
     //    -The newChords array is never exposed to a client.
-    //    -the lyricMap HashMap is never exposed to a client
-    //    -The mutable reps (newChords and lyricMaps) are only mutated in the constructor
-    //      which is a synchronized, threadsafe method
+    //    -The mutable rep (newChords) is only mutated in the constructor
+    //      which is a synchronized, threadsafe method by default through synchronized locking
     
     /**
      * creates an instance of a Tuplet object
@@ -86,15 +79,6 @@ public class Tuplet implements Playable {
             newChords.add(newChord);
         }
         
-        //create HashMap mapping chords to the list of lyrics associated with them
-        for (Chord chord : this.newChords) {
-            List<Lyric> chordLyricList = new ArrayList<Lyric>();
-            for(Lyric lyric: chord.getLyrics()) {
-                chordLyricList.add(lyric);    
-            }
-            this.lyricMap.put(chord, chordLyricList);
-        }
-        
         this.duration = dur;
     }
     
@@ -102,15 +86,7 @@ public class Tuplet implements Playable {
     public double duration() {
         return this.duration;
     }
-    
-    @Override
-    public Lyric getLyric() {
-        String lyric = "";
-        for (Chord c : this.newChords) {
-            lyric += c.getLyric().getText();
-        } 
-        return new Lyric(lyric);
-    }
+
     
     @Override
     public void play(SequencePlayer player, double startBeat) {
@@ -148,4 +124,5 @@ public class Tuplet implements Playable {
     public List<Measure> getMusic() {
         return Arrays.asList(new Measure(Arrays.asList(this)));
     }
+
 }
