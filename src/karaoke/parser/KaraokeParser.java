@@ -13,7 +13,6 @@ import edu.mit.eecs.parserlib.UnableToParseException;
 import karaoke.Chord;
 import karaoke.Concat;
 import karaoke.Karaoke;
-import karaoke.Lyric;
 import karaoke.LyricLine;
 import karaoke.Measure;
 import karaoke.Note;
@@ -122,63 +121,74 @@ public class KaraokeParser {
         /* header */
         case ABC_HEADER: //abc_header ::= field_number comment* field_title other_fields* field_key
             {
-                //TODO
-             }
-        case FIELD_NUMBER: //field_number ::= "X:" digit+ end_of_line
-            {
-                //TODO
-            }
-        case FIELD_TITLE: //field_title ::= "T:" text end_of_line
-            {
-                //TODO
-            }
-        case OTHER_FIELDS: //other_fields ::= field_composer | field_default_length | field_meter | field_tempo | field_voice | comment
-            {
-               //TODO 
-            }
-        case FIELD_COMPOSER: //field_composer ::= "C:" text end_of_line
-            {
-               //TODO
-            }
-        case FIELD_DEFAULT_LENGTH: //field_default_length ::= "L:" note_length end_of_line
-            {
-                //TODO 
-            }
-        case FIELD_METER: //field_meter ::= "M:" meter end_of_line
-            {
-                //TODO 
-            }
-        case FIELD_TEMPO: //field-tempo ::= "Q:" tempo end_of_line
-            {
-                //TODO 
-            }
-        case FIELD_VOICE: //field_voice ::= "V:" text end_of_line
-            {
-                //TODO 
-            }
-        case FIELD_KEY: //field_key ::= "K:" key end_of_line
-            {
-                //TODO 
-            }
-        case KEY: //key ::= keynote "m"?
-            {
-                //TODO 
-            }
-        case KEYNOTE: //keynote ::= basenote ("#" | "b")?
-            {
-                //TODO 
-            }
-        case METER: //meter ::= "C" | "C|" | meter_fraction
-            {
-                //TODO 
-            }
-        case METER_FRACTION: //meter_fraction ::= digit+ "/" digit+
-            {
-                //TODO 
-            }
-        case TEMPO: //tempo ::= meter_fraction "=" digit+
-            {
-                //TODO 
+                switch(parseTree.name()) {
+            
+                case FIELD_NUMBER: //field_number ::= "X:" digit+ end_of_line
+                    {
+                        final List<ParseTree<ABCGrammar>> children = parseTree.children();
+                        String number = "";
+                        for (int i=1; i<children.size()-1; i++) {
+                            number += children.get(i).text();
+                        }
+                    }
+                case FIELD_TITLE: //field_title ::= "T:" text end_of_line
+                    {
+                        final ParseTree<ABCGrammar> title = parseTree.children().get(1);
+                    }
+                case OTHER_FIELDS: //other_fields ::= field_composer | field_default_length | field_meter | field_tempo | field_voice | comment
+                    {
+                       switch(parseTree.name()) {
+                           case FIELD_COMPOSER: //field_composer ::= "C:" text end_of_line
+                                {
+                                    final String composer = parseTree.children().get(1).text();
+                                }
+                           case FIELD_DEFAULT_LENGTH: //field_default_length ::= "L:" note_length end_of_line
+                                {
+                                    final String noteLength = parseTree.children().get(1).text();
+                                }    
+                           case FIELD_METER: //field_meter ::= "M:" meter end_of_line
+                               {
+                                   final String meter = parseTree.children().get(1).text();
+                               }
+                           case FIELD_TEMPO: //field_tempo ::= "Q:" tempo end_of_line
+                               {
+                                   final String tempo = parseTree.children().get(1).text(); 
+                               }
+                           case FIELD_VOICE: //field_voice ::= "V:" text end_of_line
+                               {
+                                   final String voice = parseTree.children().get(1).text();
+                               }
+                    default:
+                        break;
+                       }
+                    }
+                case FIELD_KEY: //field_key ::= "K:" key end_of_line
+                    {
+                        //TODO 
+                    }
+                case KEY: //key ::= keynote "m"?
+                    {
+                        //TODO 
+                    }
+                case KEYNOTE: //keynote ::= basenote ("#" | "b")?
+                    {
+                        //TODO 
+                    }
+                case METER: //meter ::= "C" | "C|" | meter_fraction
+                    {
+                        //TODO 
+                    }
+                case METER_FRACTION: //meter_fraction ::= digit+ "/" digit+
+                    {
+                        //TODO 
+                    }
+                case TEMPO: //tempo ::= meter_fraction "=" digit+
+                    {
+                        //TODO 
+                    }
+                default:
+                    break;
+                }
             }
             
         /* body */
