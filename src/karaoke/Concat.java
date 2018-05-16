@@ -2,6 +2,7 @@ package karaoke;
 import java.util.ArrayList;
 import java.util.List;
 
+import karaoke.server.WebServer;
 import karaoke.sound.SequencePlayer;
 
 /**
@@ -50,9 +51,9 @@ public class Concat implements Music {
     }
 
     @Override
-    public void play(SequencePlayer player, double startBeat) {
-        firstMusic.play(player,startBeat);
-        secondMusic.play(player, startBeat + firstMusic.duration());
+    public void play(SequencePlayer player, double startBeat, WebServer server) {
+        firstMusic.play(player,startBeat, server);
+        secondMusic.play(player, startBeat + firstMusic.duration(), server);
     }
     
     @Override
