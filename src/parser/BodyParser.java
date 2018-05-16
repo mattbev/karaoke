@@ -283,7 +283,7 @@ public class BodyParser {
                 return musicMap;  
             }
             case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
-                continue;
+                return musicMap; //make no changes to ADTs
             
             default:
                 throw new AssertionError("should never get here");        
@@ -332,6 +332,7 @@ public class BodyParser {
                     try {
                         voicesToLines = evaluateLine(child, header, voicesToLines, voice);
                     } catch(AssertionError e) {
+                        System.out.println(e.toString());
                         throw new AssertionError("should never get here");
                     }
             }
