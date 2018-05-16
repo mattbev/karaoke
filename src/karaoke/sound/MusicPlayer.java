@@ -28,6 +28,7 @@ public class MusicPlayer {
         final double delay = 0.1;
         karaoke.play(player, delay);
         
+        //recurses all the way down to note class which is added to player in addNote(), then play the player
         player.play();
         
     }

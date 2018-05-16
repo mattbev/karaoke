@@ -19,6 +19,7 @@ public class Note {
     private final double duration;
     private final Pitch pitch;
     private final String accidental;
+    private final Instrument instrument = Instrument.PIANO;
     
     // AF(instrument, duration, pitch, accidental): A musical note of pitch pitch, with accidental accidental, played on 
     //      instrument for the amoutn of time held in duration
@@ -152,16 +153,18 @@ public class Note {
 //        return this.instrument;
 //    }
     
-//    
-//    /**
-//     * Play this note
-//     * @param player player producing the note
-//     * @param startBeat beat at which the note should play
-//     */
-//    public void play(SequencePlayer player, double startBeat) {
-//        player.addNote(instrument, pitch, startBeat, duration);
-//        checkRep();        
-//    }
+
+    /**
+     * Play this note
+     * @param player player producing the note
+     * @param startBeat beat at which the note should play
+     */
+    public void play(SequencePlayer player, double startBeat) {
+        player.addNote(instrument, pitch, startBeat, duration);
+        
+        checkRep();        
+    }
+
     
     /**
      * 

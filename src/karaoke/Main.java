@@ -60,7 +60,7 @@ public class Main {
         }
         
         try {
-            /*
+            
             List<String> s = Files.readAllLines(Paths.get(songPath), StandardCharsets.UTF_8);
             String contents = String.join("\n", s);
             karaoke = KaraokeParser.parse(contents);
@@ -74,18 +74,21 @@ public class Main {
             System.out.println("Playing " + karaoke.getTitle() + " by " + karaoke.getComposer());
             WebServer server = new WebServer(karaoke, port);
             
-            */
+            
             LyricLine fakeLyricLine = new LyricLine(Arrays.asList("hello ", "goodbye"), 0);
             LyricLine fakeNextLine = new LyricLine(Arrays.asList("hello ", "goodbye"), 1);
-//            System.out.println("Playing " + karaoke.getTitle() + " by " + karaoke.getComposer());
-            WebServer server = new WebServer(port);
+           
             server.start();
-            
-            System.out.println("To view the lyrics, navigate in your browser to one of the following urls, where the extension"
+            System.out.println("Ready to play " + karaoke.getTitle() + " by " + karaoke.getComposer());
+            System.out.println(" ");
+            System.out.println("To get ready to view the lyrics, navigate in your browser to one of the following urls, where the extension"
                     + " indicates which voice's lyrics will be streaming at that url:");
-//            System.out.println(urls);
-            System.out.println("http://" + iPAddress + ":" + port + "/hello/");
+            System.out.println(" ");
+            System.out.println(urls);
+            System.out.println(" ");
+            //System.out.println("http://" + iPAddress + ":" + port + "/hello/");
             System.out.println("Begin playing the music and streaming the lyrics by typing \"play\" and hitting Enter");
+            System.out.println(" ");
             BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
             if (b.readLine().equals("play")) {
                 //server.start();
