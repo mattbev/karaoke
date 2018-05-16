@@ -54,7 +54,7 @@ public class Note {
      * @param pitch the pitch of the note
      * @param noteLength the duration of the note
      */
-    public Note(String pitch, String noteLength) {
+    public Note(String pitch, String noteLength, Header header) {
 
         Set<String> validNotes = new HashSet<>(Arrays.asList("C","D","E","F","G","A","B","c","d","e","f","g","a","b"));
         String basenote = "";
@@ -112,7 +112,7 @@ public class Note {
         if (denominator.length() > 0) {
             denominatorInt = Integer.parseInt(denominator);
         }
-        final double noteDuration = ((double) numeratorInt) / ((double) denominatorInt);
+        final double noteDuration = ((double) numeratorInt) / ((double) denominatorInt) * header.getDefaultLengthDouble();
         
         this.accidental = noteAccidental;
         this.duration = noteDuration;
@@ -177,7 +177,6 @@ public class Note {
      * @param startBeat beat at which the note should play
      */
     public void play(SequencePlayer player, double startBeat) {
-//        System.out.println("startBeat: "+startBeat);
 
         player.addNote(instrument, pitch, startBeat, duration);
 //        System.out.println("duration: "+duration);

@@ -117,9 +117,9 @@ public class BodyParser {
                         if (noteChild.children().get(1).text().length() > 0) {
                             noteLength = noteChild.children().get(1).text();
                         } else {
-                            noteLength = header.getDefaultLength();
+                            noteLength = "1";
                         }
-                        final Note note = new Note(pitch, noteLength);    
+                        final Note note = new Note(pitch, noteLength, header);    
                         final Chord noteChord = Playable.createChord(Arrays.asList(note), LyricLine.emptyLyricLine());
                         line.add(noteChord);
                         continue;
@@ -135,9 +135,9 @@ public class BodyParser {
                             if (noteChild.children().get(1).text().length() > 0) {
                                 noteLength = noteTree.children().get(1).text();
                             } else {
-                                noteLength = header.getDefaultLength();
+                                noteLength = "1";
                             }
-                            final Note note = new Note(pitch, noteLength);  
+                            final Note note = new Note(pitch, noteLength, header);  
                             notes.add(note);
                         }   
                         final Chord chord = Playable.createChord(notes, LyricLine.emptyLyricLine());
@@ -153,9 +153,9 @@ public class BodyParser {
                     final List<ParseTree<BodyGrammar>> restChildren = child.children();
                     String restLength = restChildren.get(0).children().get(0).text();
                     if (restLength.length() == 0) {
-                        restLength = header.getDefaultLength();
+                        restLength = "1";
                     }
-                    final Rest rest = Playable.createRestFromString(restLength, LyricLine.emptyLyricLine());
+                    final Rest rest = Playable.createRestFromString(restLength, LyricLine.emptyLyricLine(), header);
                     line.add(rest);
                     continue;
                 }
@@ -177,9 +177,9 @@ public class BodyParser {
                                 if (noteType.children().get(1).text().length() > 0) {
                                     noteLength = noteType.children().get(1).text();
                                 } else {
-                                    noteLength = header.getDefaultLength();
+                                    noteLength = "1";
                                 }
-                                final Note note = new Note(pitch, noteLength);    
+                                final Note note = new Note(pitch, noteLength, header);    
                                 final Chord noteChord = Playable.createChord(Arrays.asList(note), LyricLine.emptyLyricLine());
                                 tupletPlayables.add(noteChord);
                                 continue;
@@ -195,9 +195,9 @@ public class BodyParser {
                                     if (noteType.children().get(1).text().length() > 0) {
                                         noteLength = noteTree.children().get(1).text();
                                     } else {
-                                        noteLength = header.getDefaultLength();
+                                        noteLength = "1";
                                     }
-                                    final Note note = new Note(pitch, noteLength);  
+                                    final Note note = new Note(pitch, noteLength, header);  
                                     notes.add(note);
                                 }   
                                 final Chord chord = Playable.createChord(notes, LyricLine.emptyLyricLine());
@@ -283,7 +283,7 @@ public class BodyParser {
                 return musicMap;  
             }
             case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
-                continue;
+                return musicMap; //make no changes to ADTs
             
             default:
                 throw new AssertionError("should never get here");        
@@ -332,6 +332,7 @@ public class BodyParser {
                     try {
                         voicesToLines = evaluateLine(child, header, voicesToLines, voice);
                     } catch(AssertionError e) {
+                        System.out.println(e.toString());
                         throw new AssertionError("should never get here");
                     }
             }

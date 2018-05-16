@@ -28,9 +28,9 @@ public class KaraokeParser {
      * @throws IOException 
      */
     public static void main(final String[] args) throws UnableToParseException, IOException {
-        File f = new File("samples/piece2.abc");
+        File f = new File("samples/piece1.abc");
         List<String> s = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8);
-        String contents = String.join("\n", s);
+        String contents = String.join("\n", s) +"\n";
         Karaoke karaoke = KaraokeParser.parse(contents);
         System.out.println(karaoke.getHeader().toString());
         System.out.println(karaoke.getBody().getVoicesToMusics().get("1").getComponents());
