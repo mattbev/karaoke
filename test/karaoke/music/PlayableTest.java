@@ -1,14 +1,14 @@
 package karaoke.music;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
 
-import karaoke.Lyric;
+import karaoke.LyricLine;
 import karaoke.Note;
 import karaoke.Playable;
-import karaoke.sound.Instrument;
 import karaoke.sound.Pitch;
 
 /**
@@ -57,43 +57,54 @@ public class PlayableTest {
     //tests that a correct chord was created for a single note chord and single lyric
     @Test
     public void testCreateChordOneNoteOneLyric() {
-        List<Note> notes = Arrays.asList(new Note(Instrument.ACCORDION, .25, Pitch.MIDDLE_C, ""));
-        List<Lyric> lyrics = Arrays.asList(new Lyric("hello"));
+        List<Note> notes = Arrays.asList(new Note( .25, Pitch.MIDDLE_C, ""));
+        LyricLine lyrics =  new LyricLine(Arrays.asList("Hello"), 0, "main");  //no lyrics
+        
         Playable playable = Playable.createChord(notes, lyrics);
         assert playable.duration() == .25;
-        assert playable.getLyric().equals(new Lyric("hello"));
+        assert playable.getLyricLine().equals(new LyricLine(Arrays.asList("Hello"), 0, "main"));
     }
     
     //tests that a correct chord was created for a single note chord and multiple lyrics
     @Test
     public void testCreateChordOneNoteMultipleLyrics() {
-        List<Note> notes = Arrays.asList(new Note(Instrument.ACCORDION, .25, Pitch.MIDDLE_C, ""));
-        List<Lyric> lyrics = Arrays.asList(new Lyric("hello"), new Lyric("goodbye"));
+        List<Note> notes = Arrays.asList(new Note(.25, Pitch.MIDDLE_C, ""));
+        List<String> lyr = new ArrayList<String>();
+        lyr.add("hello");
+        lyr.add("goodbye");
+        LyricLine lyrics =  new LyricLine(lyr, 0, "main");  //no lyrics
         Playable playable = Playable.createChord(notes, lyrics);
         assert playable.duration() == .25;
-        assert playable.getLyric().equals(new Lyric("hellogoodbye"));
+        List<String> lyrTest = new ArrayList<String>();
+        lyrTest.add("hellogoodbye");
+        assert playable.getLyricLine().equals(new LyricLine(lyrTest, 0, "main"));
     }
     
     //tests that a correct chord was created for a multiple note chord and single lyric
     @Test
     public void testCreateChordMultipleNotesOneLyric() {
-        List<Note> notes = Arrays.asList(new Note(Instrument.ACCORDION, .50, Pitch.MIDDLE_C, ""),
-                new Note(Instrument.ACCORDION, .25, Pitch.MIDDLE_C.transpose(Pitch.OCTAVE), ""));
-        List<Lyric> lyrics = Arrays.asList(new Lyric("good bye"));
+        List<Note> notes = Arrays.asList(new Note(.50, Pitch.MIDDLE_C, ""),
+                new Note(.25, Pitch.MIDDLE_C.transpose(Pitch.OCTAVE), ""));
+        LyricLine lyrics =  new LyricLine(Arrays.asList("good bye"), 0, "main");  //no lyrics
         Playable playable = Playable.createChord(notes, lyrics);
         assert playable.duration() == .50;
-        assert playable.getLyric().equals(new Lyric("good bye"));
+        assert playable.getLyricLine().equals(new LyricLine(Arrays.asList("good bye"), 0, "main"));
     }
     
     //tests that a correct chord was created for a multiple note chord and multiple lyrics
     @Test
     public void testCreateChordMultipleNotesMultipleLyrics() {
-        List<Note> notes = Arrays.asList(new Note(Instrument.ACCORDION, .50, Pitch.MIDDLE_C, ""),
-                new Note(Instrument.ACCORDION, .25, Pitch.MIDDLE_C.transpose(Pitch.OCTAVE), ""));
-        List<Lyric> lyrics = Arrays.asList(new Lyric("hello"), new Lyric("goodbye"));
+        List<Note> notes = Arrays.asList(new Note(.50, Pitch.MIDDLE_C, ""),
+                new Note(.25, Pitch.MIDDLE_C.transpose(Pitch.OCTAVE), ""));
+        List<String> lyr = new ArrayList<String>();
+        lyr.add("hello");
+        lyr.add("goodbye");
+        LyricLine lyrics =  new LyricLine(lyr, 0, "main");  //no lyrics
         Playable playable = Playable.createChord(notes, lyrics);
+        List<String> lyrTest = new ArrayList<String>();
         assert playable.duration() == .50;
-        assert playable.getLyric().equals(new Lyric("hellogoodbye"));
+        lyrTest.add("hellogoodbye");
+        assert playable.getLyricLine().equals(new LyricLine(lyrTest, 0, "main"));
     }
     
     
@@ -102,17 +113,17 @@ public class PlayableTest {
     //tests that a correct rest was made for a rest of duration 0
     @Test
     public void testCreateRestZeroDuration() {
-        Playable playable = Playable.createRest(0);
+        Playable playable = Playable.createRest(0, LyricLine.emptyLyricLine());
         assert playable.duration() == 0;
-        assert playable.getLyric().equals(Lyric.emptyLyric());
+        assert playable.getLyricLine().equals(LyricLine.emptyLyricLine());
     }
     
     //tests that a correct rest was made for a rest of duration >0
     @Test
     public void testCreateRestNonZeroDuration() {
-        Playable playable = Playable.createRest(.5);
+        Playable playable = Playable.createRest(.5 , LyricLine.emptyLyricLine());
         assert playable.duration() == .5;
-        assert playable.getLyric().equals(Lyric.emptyLyric());
+        assert playable.getLyricLine().equals(LyricLine.emptyLyricLine());
     }
     
     
@@ -122,7 +133,7 @@ public class PlayableTest {
     //tests that a duration of 0 was returned for a playable with non zero magnitude
     @Test
     public void testGetDurationNonZeroSeconds() {
-        Playable playable = Playable.createRest(5);
+        Playable playable = Playable.createRest(5 , LyricLine.emptyLyricLine());
         assert playable.duration() == 5;
     }
     
