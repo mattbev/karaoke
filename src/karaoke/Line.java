@@ -69,6 +69,16 @@ public class Line implements Music {
         return d;
     }
 
+    @Override
+    public void play(SequencePlayer player, double startBeat, WebServer server) {
+        
+        double beginBeat = startBeat;
+        for(Playable component: components) {
+            component.play(player, beginBeat,  server);
+            beginBeat += component.duration();
+        }
+        checkRep();
+    }
     
   
     /**
@@ -89,11 +99,4 @@ public class Line implements Music {
         }
         return durationList;
     }
-
-    @Override
-    public void play(SequencePlayer player, double startBeat, WebServer server) {
-        // TODO Auto-generated method stub
-        
-    }
-    
 }

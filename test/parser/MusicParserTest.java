@@ -1,9 +1,8 @@
-package karaoke.parser;
+package parser;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.junit.Test;
@@ -12,7 +11,6 @@ import edu.mit.eecs.parserlib.UnableToParseException;
 import karaoke.Karaoke;
 import karaoke.sound.MidiSequencePlayer;
 import karaoke.sound.SequencePlayer;
-import parser.KaraokeParser;
 
 /**
  * Tests for the 

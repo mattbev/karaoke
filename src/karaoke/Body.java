@@ -64,12 +64,13 @@ public class Body {
     /**
      * plays the body's music
      * @param player the player to play the music
-     * @param startBeat the beat to start the music on
+     * @param server the server on which the body's
+     *        music is played
      */
-    public void play(SequencePlayer player, double startBeat, WebServer server) {
+    public void play(SequencePlayer player, WebServer server) {
         for (String voice : this.voiceToMusic.keySet()) {
             final Music voiceMusic = this.voiceToMusic.get(voice);
-            voiceMusic.play(player, startBeat, server);
+            voiceMusic.play(player, 0, server);
         }
     }
 
