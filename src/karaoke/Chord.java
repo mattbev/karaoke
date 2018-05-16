@@ -22,6 +22,7 @@ public class Chord implements Playable {
     private static final int QUADRUPLET_LENGTH = 4;
     
     private final List<Note> notes;
+    private final LyricLine lyricLine;
     
     // AF(notes): A chord where notes is a list of the notes of the chord (in the order they were in in the 
     //                   abc file)
@@ -45,9 +46,12 @@ public class Chord implements Playable {
      * Make a chord, which is a combination of one or more notes
      * 
      * @param notes the list of notes that make up this chord
+     * @param lyricLine line of lyrics for the chord the line 
+     *        falls on with the chord's lyric bolded
      */
-    public Chord(List<Note> notes) {
+    public Chord(List<Note> notes, LyricLine lyricLine) {
         this.notes = new ArrayList<>(notes); 
+        this.lyricLine = lyricLine;
         checkRep();
     }
     

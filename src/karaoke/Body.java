@@ -40,25 +40,25 @@ public class Body implements Music {
      * @param musicMap map from voices Music
      * @param lyricMap map from voices to LyricLines
      */
-    public Body(HashMap<String,Music> musicMap, HashMap<String,LyricLine> lyricMap) {
+    public Body(HashMap<String,Music> musicMap, HashMap<String,List<LyricLine>> lyricMap) {
         this.voiceToMusic = musicMap;
         this.voiceToLyrics = lyricMap;
     }
     
    
     
-    /**
-     * Provides a copy of a certain voice's lyric line list
-     * @param voice voice whose lyric list is returned
-     * @return lyric line list 
-     */
-    public List<String> getVoiceLyricLines(String voice){
-        List<String> lyricLineListCopy= new ArrayList<String>();
-        for(String line: voiceToLyrics.get(voice).getLyricLine()) {
-            lyricLineListCopy.add(line);
-        }
-        return lyricLineListCopy;
-    }
+//    /**
+//     * Provides a copy of a certain voice's lyric line list
+//     * @param voice voice whose lyric list is returned
+//     * @return lyric line list 
+//     */
+//    public List<String> getVoiceLyricLines(String voice){
+//        List<String> lyricLineListCopy= new ArrayList<String>();
+//        for(String line: voiceToLyrics.get(voice).getLyricLine()) {
+//            lyricLineListCopy.add(line);
+//        }
+//        return lyricLineListCopy;
+//    }
     
     /**
      * Provides a copy of a certain voice's music's duration list

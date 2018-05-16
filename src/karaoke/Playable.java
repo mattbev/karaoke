@@ -46,6 +46,18 @@ public interface Playable extends Music {
      */
     public double duration();
     
+    
+    
+    /**
+     * Creates a copy of a playable with a new LyricLine
+     * 
+     * @param p playable to be copied with a lyric added
+     * @param l lyric to add to the playable
+     * @return new playable with lyric l 
+     */
+    public Playable copyWithNewLyric(LyricLine l);
+        
+    
         
 
     /**

@@ -68,6 +68,13 @@ public class Rest implements Playable {
         return false;
     }
     
+    @Override
+    public Playable copyWithNewLyric(LyricLine l) {
+        
+        double d = this.duration();
+        return new Rest(d, l);
+    }
+    
     @Override 
     public int hashCode() {
         return (int) (this.duration*ONE_HUNDRED);
