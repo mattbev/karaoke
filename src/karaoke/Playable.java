@@ -12,7 +12,7 @@ import karaoke.sound.SequencePlayer;
  *
  */
 public interface Playable extends Music {
-    
+
     // Datatype definition:
     //      Playable = Chord(notes: List<Note>, lyric: List<Lyric>)
     //                 + Rest(duration: double)
@@ -23,6 +23,7 @@ public interface Playable extends Music {
      * Create a new playable chord with lyric lyric
      * 
      * @param notes the notes to be in this chord
+     * @param l the line of lyrics, with the current one bolded, corresponding to this chord
      * @return a new chord 
      */
     public static Chord createChord(List<Note> notes, LyricLine l) {
@@ -33,10 +34,11 @@ public interface Playable extends Music {
      * Create a new music rest with lyric lyric of duration duration
      * 
      * @param duration the length of this rest
+     * @param lyricLine the line of lyrics, with nothing bolded, corresponding to this rest
      * @return a new rest in music with length duration and lyric lyric
      */
-    public static Rest createRest(double duration) {
-        return new Rest(duration);
+    public static Rest createRest(double duration,LyricLine lyricLine) {
+        return new Rest(duration, lyricLine);
     }
 
     /**
@@ -46,19 +48,31 @@ public interface Playable extends Music {
      */
     public double duration();
     
-    
-    
-    /**s
+
+    /**
      * Creates a copy of a playable with a new LyricLine
      * 
-     * @param p playable to be copied with a lyric added
      * @param l lyric to add to the playable
      * @return new playable with lyric l 
      */
     public Playable copyWithNewLyric(LyricLine l);
-        
     
-        
+    /**
+     * Make a new playable which consists of the same contents and lyrics, but has a different duration depending on the Tuplet type t
+     * 
+     * @param duration  the new duration
+     * @param t the tuplet type
+     * @return a new Chord with a different duration depending on the tuplet
+     */
+    public Playable copyPlayableNewDuration(double duration, Tuplet.Type t);
+    
+
+    /**
+     * Return the lyric and rest of the line of this playable
+     * 
+     * @return the line of lyrics, with the current one bolded, corresponding to this playable
+     */
+    public LyricLine getLyricLine();
 
     /**
      * Play this playable
@@ -75,4 +89,6 @@ public interface Playable extends Music {
     
     @Override
     public String toString();
+
+    
 }

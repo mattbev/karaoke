@@ -131,9 +131,9 @@ public class Tuplet implements Playable {
         return hash;
     }
     
-    @Override
-    public List<Measure> getMusic() {
-        return Arrays.asList(new Measure(Arrays.asList(this)));
+    
+    public List<Line> getMusic() {
+        return Arrays.asList(new Line(Arrays.asList(this)));
     }
     
     public List<Chord> getChordListCopy(){

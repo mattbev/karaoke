@@ -106,7 +106,7 @@ public class Body implements Music {
         }
     }
 
-    public List<Measure> getMusic() {
+    public List<Line> getMusic() {
         // TODO Auto-generated method stub
         return null;
     }

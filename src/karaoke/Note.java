@@ -167,14 +167,14 @@ public class Note {
 
     
     /**
-     * 
-     * @param i the instrument the note is played by
+     * Create note of magnitude <magnitude>, pitch <pitch>,
+     * with accidental <accidental>
      * @param magnitude the duration of the note
      * @param p the pitch of the note
      * @param accidental the accidental of the note
      * @return a new note of the given magnitude, pitch, and accidental played by the instrument i
      */
-    public static Note createNote(Instrument i, double magnitude, Pitch p, String accidental) {
+    public static Note createNote(double magnitude, Pitch p, String accidental) {
         return new Note(magnitude, p, accidental);
     }
     

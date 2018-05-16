@@ -5,7 +5,6 @@ package karaoke;
 import karaoke.sound.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,9 +16,10 @@ import java.util.List;
  */
 public class Chord implements Playable { 
     
-    private static final int DUPLET_LENGTH = 2;
-    private static final int TRIPLET_LENGTH = 3;
-    private static final int QUADRUPLET_LENGTH = 4;
+    private static final double DUPLET_LENGTH = 2.0/3;
+    private static final double TRIPLET_LENGTH = 3.0/2;
+    private static final double QUADRUPLET_LENGTH = 3.0/4;
+    
     
     private final List<Note> notes;
     private final LyricLine lyricLine;
@@ -99,30 +99,26 @@ public class Chord implements Playable {
         checkRep();
     }
     
-    /**
-     * Make a new chord which consists of the same notes and lyrics, but has a different duration depending on the Tuplet type t
-     * 
-     * @param duration  the new duration
-     * @param t the tuplet type
-     * @return a new Chord with a different duration depending on the tuplet
-     */
-    public Chord copyChordNewDuration(double duration, Tuplet.Type t) {        
+    @Override
+    public Chord copyPlayableNewDuration(double duration, Tuplet.Type t) { 
+        LyricLine l = this.getLyricLine();
         List<Note> notesCopy = new ArrayList<>();
         for (Note note : this.notes) {
-            int denom = getDenominator(t);
-            notesCopy.add(Note.createNote(duration/denom, note.getPitch(), note.getAccidental()));
+            double mult = getMultiplier(t);
+            notesCopy.add(Note.createNote(duration * mult, note.getPitch(), note.getAccidental()));
         }
         checkRep();
-        return new Chord(notes);
+        return new Chord(notes, l);
         
     }
+    
     
     /**
      * 
      * @param t the tuplet type
      * @return the number to divide the total duration by
      */
-    private static int getDenominator(Tuplet.Type t) {
+    private static double getMultiplier(Tuplet.Type t) {
         switch (t) {
         
         case DUPLET: {
@@ -137,6 +133,13 @@ public class Chord implements Playable {
         default: throw new AssertionError("should never get here");
         }
     }
+    
+    @Override
+    public LyricLine getLyricLine() {
+        LyricLine l = this.lyricLine;
+        return l;
+    }
+
     
     @Override
     public boolean equals(Object that) {
@@ -189,11 +192,6 @@ public class Chord implements Playable {
             notesCopy.add(n.createNote(n.getDuration(), n.getPitch(), n.getAccidental()));
         }
         return Playable.createChord(notesCopy, l);
-    }
-
-    public List<Double> getDurationList() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }
