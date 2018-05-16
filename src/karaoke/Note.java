@@ -65,7 +65,7 @@ public class Note {
             }
         }
         
-        final Pitch notePitch = new Pitch(basenote.toUpperCase().toCharArray()[0]);
+        final Pitch notePitch = new Pitch(basenote.toCharArray()[0]);
       
         final String[] pitchParams = pitch.split(basenote);
         String noteAccidental = "";

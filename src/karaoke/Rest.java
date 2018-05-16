@@ -54,7 +54,7 @@ public class Rest implements Playable {
      * @param duration the duration of the pause
      * @param lyricLine a line of lyrics tied to the rest
      */
-    public Rest(String duration, LyricLine lyricLine) {
+    public Rest(String duration, LyricLine lyricLine, Header header) {
         this.lyricLine = lyricLine;
         
         String numerator;
@@ -76,7 +76,7 @@ public class Rest implements Playable {
         if (denominator.length() > 0) {
             denominatorInt = Integer.parseInt(denominator);
         }
-        this.duration = ((double) numeratorInt) / ((double) denominatorInt);
+        this.duration = ((double) numeratorInt) / ((double) denominatorInt) * header.getDefaultLengthDouble();
     }
 
     @Override
