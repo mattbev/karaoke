@@ -86,11 +86,5 @@ public class Rest implements Playable {
     public String toString() {
         return "z" + this.duration;
     }
-    
-
-    public List<Double> getDurationList() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
 }

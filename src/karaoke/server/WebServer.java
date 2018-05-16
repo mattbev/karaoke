@@ -1,13 +1,9 @@
 package karaoke.server;
-import java.lang.Object;
-import java.io.Writer;
-import java.io.PrintWriter;
-
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -18,7 +14,8 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
-import karaoke.*;
+import karaoke.Karaoke;
+import karaoke.LyricLine;
 
 
 /**
@@ -60,10 +57,10 @@ public class WebServer {
         this.server = HttpServer.create(new InetSocketAddress(port), 0);
         this.karaoke = karaoke;
 
-        LogFilter log = new LogFilter();
-        HeadersFilter headers = new HeadersFilter();
+//        LogFilter log = new LogFilter();
+//        HeadersFilter headers = new HeadersFilter();
         // all responses will be plain-text UTF-8
-        headers.add("Content-Type", "text/plain; charset=utf-8");
+//        headers.add("Content-Type", "text/plain; charset=utf-8");
         for(String voice: karaoke.getVoices()) {
             HttpContext url = this.server.createContext("/"+voice, new HttpHandler(){
                 public void handle(HttpExchange exchange) throws IOException{
@@ -78,7 +75,7 @@ public class WebServer {
             
             // add logging to the /hello/ handler and set required HTTP headers
             //   (do this on all your handlers)
-            url.getFilters().addAll(Arrays.asList(log, headers));
+//            url.getFilters().addAll(Arrays.asList(log, headers));
         }
         
         

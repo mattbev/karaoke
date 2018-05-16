@@ -56,19 +56,6 @@ public class LyricLine {
         assert this.boldedIndex >= 0 && this.boldedIndex < this.lyrics.size();
     }
     
-    /**
-     * Return the lyric line text of this component
-     * 
-     * @return the lyric line text
-     */
-    public String getText() {
-        checkRep();
-        String lyricString = "";
-        for (String lyric : this.lyrics) {
-            lyricString += lyric;
-        }
-        return lyricString;
-    }
     
     /**
      * gets all of the individual lyrics of a line in order
@@ -109,7 +96,7 @@ public class LyricLine {
     public boolean equals(Object that) {
         checkRep();
         if (that instanceof LyricLine) {
-            if (this.getText().equals(((LyricLine) that).getText())
+            if (this.toString().equals(((LyricLine) that).toString())
                     && this.boldedIndex == ((LyricLine) that).boldedIndex) {
                 return true;
             }
@@ -121,12 +108,17 @@ public class LyricLine {
     @Override 
     public int hashCode() {
         checkRep();
-        return this.getText().hashCode() + this.boldedIndex;
+        return this.toString().hashCode() + this.boldedIndex;
     }
     
     @Override
     public String toString() {
-        return this.getText() + " %%% bolded index: " + this.boldedIndex;
+        checkRep();
+        String lyricString = "";
+        for (String lyric : this.lyrics) {
+            lyricString += lyric;
+        }
+        return lyricString;
     }
     
 }

@@ -3,6 +3,7 @@ package karaoke.parser;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,8 +16,11 @@ import karaoke.Chord;
 import karaoke.Header;
 import karaoke.Karaoke;
 import karaoke.LyricLine;
+import karaoke.Music;
 import karaoke.Note;
+import karaoke.Playable;
 import karaoke.Rest;
+import karaoke.Tuplet;
 
 public class BodyParser {
     
@@ -72,6 +76,137 @@ public class BodyParser {
         return body;
     }
     
+    
+    /**
+     * helper function for makeAbstractSyntaxTree
+     * @param parseTree some tree representing when abc_line ::= element+ end_of_line (lyric end_of_line)?
+     * @param header the header to the music piece
+     * @return a list of playables to represent the line
+     */
+    private static List<Playable> evaluateLine(ParseTree<BodyGrammar> parseTree, Header header) {
+        
+        final List<Playable> line = new ArrayList<>();
+        
+        for (ParseTree<BodyGrammar> child : parseTree.children()) {
+            switch(child.name()) {
+            case ELEMENT: //element ::= note_element | rest_element | tuplet_element | barline | nth_repeat | space_or_tab 
+            {
+                ParseTree<BodyGrammar> elementChild = child.children().get(0);
+                switch(elementChild.name()) {
+                case NOTE_ELEMENT: //note_element ::= note | chord
+                {
+                    ParseTree<BodyGrammar> noteChild = elementChild.children().get(0);
+                    switch(noteChild.name()) {
+                    case NOTE: //note ::= pitch note_length?
+                    {
+                        final String pitch = noteChild.children().get(0).text();
+                        String noteLength;
+                        try {
+                            noteLength = noteChild.children().get(1).text();
+                        } catch (IndexOutOfBoundsException e) {
+                            noteLength = header.getDefaultLength();
+                        }
+                        final Note note = new Note(pitch, noteLength);        
+                        final Chord noteChord = new Chord(Arrays.asList(note));
+                        line.add(noteChord);
+                    }
+                    case CHORD: //chord ::= "[" note+ "]"
+                    {
+                        final List<Note> notes = new ArrayList<>();
+                        List<ParseTree<BodyGrammar>> noteChildren = noteChild.children();
+                        for (int i=1; i < noteChildren.size()-1; i++) {
+                            ParseTree<BodyGrammar> noteTree = noteChildren.get(i);
+                            final String pitch = noteTree.children().get(0).text();
+                            String noteLength;
+                            try {
+                                noteLength = noteTree.children().get(1).text();
+                            } catch (IndexOutOfBoundsException e) {
+                                noteLength = header.getDefaultLength();
+                            }
+                            final Note note = new Note(pitch, noteLength);  
+                            notes.add(note);
+                        }   
+                        final Chord chord = new Chord(notes);
+                        line.add(chord);
+                    }
+                    default:
+                        throw new AssertionError("should never get here");
+                    }
+                }
+                case REST_ELEMENT: //rest_element ::= "z" note_length
+                {
+                    final List<ParseTree<BodyGrammar>> restChildren = child.children();
+                    final int restLength = Integer.parseInt(restChildren.get(1).text());
+                    final Rest rest = new Rest(restLength);
+                    line.add(rest);
+                }
+                case TUPLET_ELEMENT: //tuplet_element ::= tuplet_spec note_element+
+                {
+                    final List<Playable> tupletPlayables = evaluateLine(child, header);
+                    final List<Chord> tupletChords = new ArrayList<>();
+                    for (Playable playable : tupletPlayables) {
+                        tupletChords.add((Chord) playable);
+                    }
+                    final Tuplet tuplet = new Tuplet(tupletChords);
+                    line.add(tuplet);
+                    
+                }
+                case BARLINE: //barline ::= "|" | "||" | "[|" | "|]" | ":|" | "|:"
+                {
+                    continue;
+                }
+                case NTH_REPEAT: //nth_repeat ::= "[1" | "[2"
+                {
+                    continue;
+                }
+                case SPACE_OR_TAB: //space_or_tab ::= " " | "\t"
+                {
+                    continue;
+                }
+                default:
+                    throw new AssertionError("should never get here");
+        
+                }
+            }
+            case END_OF_LINE: //end_of_line ::= comment | newline
+            {
+                ParseTree<BodyGrammar> endOfLineChild = child.children().get(0);
+                switch(endOfLineChild.name()) {
+                case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
+                {
+                    continue;
+                }
+                case NEWLINE: //newline ::= "\n" | "\r" "\n"?
+                {
+                    return line;
+                }
+                default:
+                    throw new AssertionError("should never get here");
+                }
+            }
+            case TUPLET_SPEC:
+            {
+                continue;
+            }
+            case LYRIC: //lyric ::= "w:" lyrical_element*
+            {
+                final List<ParseTree<BodyGrammar>> lyricChildren = child.children();
+                final List<String> lyricElements = new ArrayList<>();
+                for (int i=1; i < lyricChildren.size(); i++) {
+                    lyricElements.add(lyricChildren.get(i).text());
+                }
+                final LyricLine lyricLine = new LyricLine(lyricElements, 0);
+            }
+            default:
+                throw new AssertionError("should never get here");                    
+            }
+            
+        }
+        return line; // if there is no new line at the end, return line after evaluating all children
+            
+    }
+    
+    
     /**
      * Convert a parse tree into an abstract syntax tree.
      * 
@@ -83,190 +218,36 @@ public class BodyParser {
         //abc_body ::= abc_line+
  
         final List<ParseTree<BodyGrammar>> children = parseTree.children();
-        Map<String, LyricLine> voicesLyrics = new HashMap<>();
-        Map<String, Karaoke> voicesKaraoke = new HashMap<>();
+//        Map<String, LyricLine> voicesLyrics = new HashMap<>();
+        Map<String, Music> voicesToMusic = new HashMap<>();
         
-        switch(parseTree.name()) {
-        case ABC_LINE: //abc_line ::= element+ end_of_line (lyric end_of_line)?  | middle_of_body_field | comment
-        {
-            ParseTree<BodyGrammar> lineChild = parseTree.children().get(0);
-            switch(lineChild.name()) {
-            case MIDDLE_OF_BODY_FIELD: //middle_of_body_field ::= field_voice
-            {
-                final String voice = lineChild.children().get(0).text();
-            }
-            case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
-            {
-                final String comment = lineChild.children().get(0).text(); //do nothing with this
-            }
-            default: // when abc_line ::= element+ end_of_line (lyric end_of_line)?
-                makeAbstractSyntaxTree(lineChild, header);
-            }
-        }
-        case ELEMENT: //element ::= note_element | rest_element | tuplet_element | barline | nth_repeat | space_or_tab 
-        {
-            ParseTree<BodyGrammar> elementChild = parseTree.children().get(0);
-            switch(elementChild.name()) {
-            case NOTE_ELEMENT: //note_element ::= note | chord
-            {
-                ParseTree<BodyGrammar> noteChild = elementChild.children().get(0);
-                switch(noteChild.name()) {
-                case NOTE: //note ::= pitch note_length?
+        //case ABC_LINE: // abc_line ::= element+ end_of_line (lyric end_of_line)?  | middle_of_body_field | comment
+        for (ParseTree<BodyGrammar> child : children) {   // for each line
+            String voice = "1";
+            switch(child.name()) {
+                case MIDDLE_OF_BODY_FIELD: //middle_of_body_field ::= field_voice
                 {
-                    final String pitch = noteChild.children().get(0).text();
-                    String noteLength;
+                    voice = child.children().get(0).text();
+                }
+                case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
+                {
+                    continue; //do nothing with this
+                }
+                default: // when abc_line ::= element+ end_of_line (lyric end_of_line)?
                     try {
-                        noteLength = noteChild.children().get(1).text();
-                    } catch (IndexOutOfBoundsException e) {
-                        noteLength = header.getDefaultLength();
-                    }
-                    final Note note = new Note(pitch, noteLength);        
-                    
-                }
-                case CHORD: //chord ::= "[" note+ "]"
-                {
-                    final List<Note> notes = new ArrayList<>();
-                    List<ParseTree<BodyGrammar>> noteChildren = noteChild.children();
-                    for (int i=1; i < noteChildren.size()-1; i++) {
-                        ParseTree<BodyGrammar> noteTree = noteChildren.get(i);
-                        final String pitch = noteTree.children().get(0).text();
-                        String noteLength;
-                        try {
-                            noteLength = noteTree.children().get(1).text();
-                        } catch (IndexOutOfBoundsException e) {
-                            noteLength = header.getDefaultLength();
+                        final Music line = Music.createLine(evaluateLine(child, header));
+                        if (voicesToMusic.containsKey(voice)) {
+                            final Music currentMusic = voicesToMusic.get(voice);
+                            final Music newMusic = Music.createConcat(currentMusic, line);
+                            voicesToMusic.put(voice, newMusic);
+                        } else {
+                            voicesToMusic.put(voice, line);
                         }
-                        final Note note = new Note(pitch, noteLength);  
-                        notes.add(note);
-                    }   
-                    final Chord chord = new Chord(notes); 
-                }
-                default:
-                    break;
-                }
-            }
-            case REST_ELEMENT: //rest_element ::= "z" note_length
-            {
-                final List<ParseTree<BodyGrammar>> restChildren = parseTree.children();
-                final int restLength = Integer.parseInt(restChildren.get(1).text());
-                final Rest rest = new Rest(restLength);
-            }
-            case TUPLET_ELEMENT: //tuplet_element ::= tuplet_spec note_element+
-            {
-                final List<ParseTree<BodyGrammar>> tupletChildren = parseTree.children();
-                final List<Chord> chords = new ArrayList<>();
-                for (int i=1; i < tupletChildren.size(); i++) {
-                    ParseTree<BodyGrammar> subChild = tupletChildren.get(i);
-                    
-                }
-                
-            }
-            case BARLINE: //barline ::= "|" | "||" | "[|" | "|]" | ":|" | "|:"
-            {
-                //TODO
-            }
-            case NTH_REPEAT: //nth_repeat ::= "[1" | "[2"
-            {
-                //TODO
-            }
-            case SPACE_OR_TAB: //space_or_tab ::= " " | "\t"
-            {
-                //TODO
-            }
-            default:
-                break;
-
+                    } catch(AssertionError e) {
+                        throw new AssertionError("should never get here");
+                    }
             }
         }
-        case END_OF_LINE: //end_of_line ::= comment | newline
-        {
-            ParseTree<BodyGrammar> endOfLineChild = parseTree.children().get(0);
-            switch(endOfLineChild.name()) {
-            case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
-            {
-                final String comment = endOfLineChild.children().get(0).text(); //do nothing with this
-            }
-            case NEWLINE: //newline ::= "\n" | "\r" "\n"?
-            {
-                //TODO;
-            }
-            default:
-                throw new AssertionError("should never get here");
-            }
-        }
-        case LYRIC: //lyric ::= "w:" lyrical_element*
-        {
-            final List<ParseTree<BodyGrammar>> lyricChildren = parseTree.children();
-            final List<String> lyricElements = new ArrayList<>();
-            for (int i=1; i < lyricChildren.size(); i++) {
-                lyricElements.add(lyricChildren.get(i).text());
-            }
-            final LyricLine lyricLine = new LyricLine(lyricElements, 0);
-        }
-        default:
-            makeAbstractSyntaxTree(parseTree, header);                    
-        }
+        return new Body(voicesToMusic);
     }
 }
-    
-    
-    
-    
-    
-    
-    
-    
-//    BodyGrammar name = children.get(i).children().get(0).name();
-//    if (name.equals(FIELD_VOICE)) {
-//        String voice = children.get(i).text();
-//        
-//    } else if (name.equals(MUSIC)) {
-//        String voice = "main";
-//    } 
-//        int j = 0;
-//        Karaoke karaoke = makeAbstractSyntaxTree(children.get(1).children().get(j));
-//        if (children.get(1).children().size() > 1) {
-//            while (children.get(1).children().get(j).name() != ABCGrammar.END_OF_LINE) {
-//                karaoke = Karaoke.createConcat(karaoke, makeAbstractSyntaxTree(children.get(1).children().get(j)));
-//                j += 1;
-//            }
-//        }
-//        
-//        if (voicesKaraoke.containsKey(children.get(0).text())) {
-//            voicesKaraoke.put(children.get(0).text(), Karaoke.createConcat(voicesKaraoke.get(children.get(0).text()), karaoke));
-//        } else {
-//            voicesKaraoke.put(children.get(0).text(), karaoke);
-//        }
-//    case MUSIC:
-//        break;
-//    case ABC_LINE:
-//        break;
-//    case CHORD:
-//        break;
-//    case ELEMENT:
-//        break;
-//    case LYRIC:
-//        break;
-//    case LYRICAL_ELEMENT:
-//        break;
-//    case MIDDLE_OF_BODY_FIELD:
-//        break;
-//    case NOTE:
-//        break;
-//    case NOTE_ELEMENT:
-//        break;
-//    case NOTE_LENGTH:
-//        break;
-//    case NOTE_LENGTH_STRICT:
-//        break;
-//    case PITCH:
-//        break;
-//    case REST_ELEMENT:
-//        break;
-//    case TUPLET_ELEMENT:
-//        break;
-//    case TUPLET_SPEC:
-//        break;
-//    default:
-//        break;   
-//    }
