@@ -3,8 +3,6 @@ package karaoke;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.net.httpserver.HttpServer;
-
 import karaoke.server.WebServer;
 import karaoke.sound.SequencePlayer;
 
@@ -101,5 +99,4 @@ public class Line implements Music {
         }
         return durationList;
     }
-    
 }
