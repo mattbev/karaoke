@@ -3,6 +3,9 @@ package karaoke;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.net.httpserver.HttpServer;
+
+import karaoke.server.WebServer;
 import karaoke.sound.SequencePlayer;
 
 /**
@@ -69,11 +72,11 @@ public class Line implements Music {
     }
 
     @Override
-    public void play(SequencePlayer player, double startBeat) {
+    public void play(SequencePlayer player, double startBeat, WebServer server) {
         
         double beginBeat = startBeat;
         for(Playable component: components) {
-            component.play(player, beginBeat);
+            component.play(player, beginBeat,  server);
             beginBeat += component.duration();
         }
         checkRep();
