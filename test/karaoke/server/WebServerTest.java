@@ -10,7 +10,7 @@ public class WebServerTest {
     
     // testing strategy
     //
-    // testing handleWatch(HttpExchange exchange, Karaoke karaoke)
+    // testing html2(HttpExchange exchange, Karaoke karaoke)
     // partition the inputs as follows:
     //   exchange path is empty 
     //   exchange path has a invalid command

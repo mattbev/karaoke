@@ -25,7 +25,8 @@ public class Rest implements Playable {
     private final double duration;
     private final LyricLine lyricLine;
     
-    // AF(duration): a pause in the music of length duration
+    // AF(duration, lyricLine): a pause in the music of length duration during 
+    //                          which an empty lyric is displayed
     //
     // RI: 
     //      duration > 0
