@@ -1,5 +1,9 @@
 package parser;
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -7,7 +11,6 @@ import edu.mit.eecs.parserlib.UnableToParseException;
 import karaoke.Karaoke;
 import karaoke.sound.MidiSequencePlayer;
 import karaoke.sound.SequencePlayer;
-import parser.KaraokeParser;
 
 /**
  * Tests for the 
@@ -134,6 +137,10 @@ public class MusicParserTest {
     @Test
     public void testCorrectPiece3() {
         try {
+            File f = new File("samples/piece3.abc");
+            List<String> s = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8);
+            System.out.println("a");
+            String contents = String.join("\n", s);
             Karaoke karaoke = KaraokeParser.parse("sample-abc/piece3.jpg");
             SequencePlayer player = new MidiSequencePlayer();
             double startBeat = 0;

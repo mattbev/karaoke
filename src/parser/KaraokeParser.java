@@ -2,6 +2,8 @@ package parser;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.List;
 
 import edu.mit.eecs.parserlib.ParseTree;
@@ -23,13 +25,18 @@ public class KaraokeParser {
      * 
      * @param args command line arguments, not used
      * @throws UnableToParseException if example expression can't be parsed
+     * @throws IOException 
      */
-    public static void main(final String[] args) throws UnableToParseException {
+    public static void main(final String[] args) throws UnableToParseException, IOException {
 //        final String input1 = "img/black.png --- img/tech3.png";
 //        System.out.println(input1);
 //        final Expression expression1 = ExpressionParser.parse(input1);
 //        System.out.println(expression1);
-        
+        File f = new File("samples/piece3.abc");
+        List<String> s = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8);
+        String contents = String.join("\n", s);
+        System.out.println(contents);
+        Karaoke karaoke = KaraokeParser.parse(contents);
     }
     
     // the nonterminals of the grammar

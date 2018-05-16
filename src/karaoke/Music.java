@@ -64,6 +64,7 @@ public interface Music {
      * Play this piece.
      * @param player player to play on
      * @param startBeat when to play
+     * 
      */
     public void play(SequencePlayer player, double startBeat, WebServer server);
     
