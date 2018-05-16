@@ -48,7 +48,7 @@ public interface Playable extends Music {
     
     
     
-    /**
+    /**s
      * Creates a copy of a playable with a new LyricLine
      * 
      * @param p playable to be copied with a lyric added
