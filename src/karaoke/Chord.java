@@ -122,11 +122,11 @@ public class Chord implements Playable {
         LyricLine l = this.getLyricLine();
         List<Note> notesCopy = new ArrayList<>();
         for (Note note : this.notes) {
-            double mult = getMultiplier(t);
-            notesCopy.add(new Note(duration * mult, note.getPitch(), note.getAccidental()));
+            //double mult = getMultiplier(t);
+            notesCopy.add(new Note(duration, note.getPitch(), note.getAccidental()));
         }
         checkRep();
-        return new Chord(notes, l);
+        return new Chord(notesCopy, l);
         
     }
     
