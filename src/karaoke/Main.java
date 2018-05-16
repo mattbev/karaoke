@@ -53,9 +53,8 @@ public class Main {
         }
         
         try {
-            
             List<String> s = Files.readAllLines(Paths.get(songPath), StandardCharsets.UTF_8);
-            String contents = String.join("",s);
+            String contents = String.join("\n",s);
             karaoke = KaraokeParser.parse(contents);
             List<String> voices = karaoke.getVoices();
             List<String> urls = new ArrayList<>();
@@ -81,10 +80,9 @@ public class Main {
             BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
             if (b.readLine().equals("play")) {
                 MusicPlayer.play(karaoke,server);
-                System.out.println("would play karaoke now");
-                
             }
         } catch (Exception e) {
+            e.printStackTrace();
             throw new IllegalArgumentException("error in opening and parsing file");
         }
        
