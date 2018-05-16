@@ -40,7 +40,7 @@ public class Body {
      * @param musicMap map from voices Music
      * @param lyricMap map from voices to LyricLines
      */
-    public Body(HashMap<String,Music> musicMap, HashMap<String,LyricLine> lyricMap) {
+    public Body(HashMap<String,Music> musicMap, HashMap<String,List<LyricLine>> lyricMap) {
         this.voiceToMusic = musicMap;
 //        this.voiceToLyrics = lyricMap;
     }

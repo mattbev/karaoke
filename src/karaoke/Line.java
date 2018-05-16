@@ -13,7 +13,7 @@ import karaoke.sound.SequencePlayer;
  * Measure is an immutable variant of Karaoke
  *
  */
-public class Measure implements Music {
+public class Line implements Music {
     
     private final List<Playable> components;
 
@@ -39,7 +39,7 @@ public class Measure implements Music {
      * 
      * @param components the ordered playable components that make up this measure
      */
-    public Measure(List<Playable> components) {
+    public Line(List<Playable> components) {
         this.components = new ArrayList<>(components);
         checkRep();
     }
@@ -103,13 +103,4 @@ public class Measure implements Music {
         return durationList;
     }
     
-
-    @Override
-    public List<Measure> getMusic() {
-        return Arrays.asList(this);
-    }
-
-   
-    
-
 }

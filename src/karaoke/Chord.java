@@ -22,6 +22,7 @@ public class Chord implements Playable {
     private static final int QUADRUPLET_LENGTH = 4;
     
     private final List<Note> notes;
+    private final LyricLine lyricLine;
     
     // AF(notes): A chord where notes is a list of the notes of the chord (in the order they were in in the 
     //                   abc file)
@@ -45,9 +46,12 @@ public class Chord implements Playable {
      * Make a chord, which is a combination of one or more notes
      * 
      * @param notes the list of notes that make up this chord
+     * @param lyricLine line of lyrics for the chord the line 
+     *        falls on with the chord's lyric bolded
      */
-    public Chord(List<Note> notes) {
+    public Chord(List<Note> notes, LyricLine lyricLine) {
         this.notes = new ArrayList<>(notes); 
+        this.lyricLine = lyricLine;
         checkRep();
     }
     
@@ -106,7 +110,7 @@ public class Chord implements Playable {
         List<Note> notesCopy = new ArrayList<>();
         for (Note note : this.notes) {
             int denom = getDenominator(t);
-            notesCopy.add(Note.createNote(note.getInstrument(), duration/denom, note.getPitch(), note.getAccidental()));
+            notesCopy.add(Note.createNote(duration/denom, note.getPitch(), note.getAccidental()));
         }
         checkRep();
         return new Chord(notes);
@@ -172,15 +176,20 @@ public class Chord implements Playable {
         }
         return chord + "]";
     }
-
-//    @Override
-//    public List<Measure> getMusic() {
-//        return Arrays.asList(new Measure(Arrays.asList(this)));
-//    }
-
-    public List<Double> getDurationList() {
-        // TODO Auto-generated method stub
-        return null;
+    
+    /**
+     * 
+     * 
+     * @param l the line of lyrics, plus specified bolded lyric, to assign to the chord
+     * @return a new chord with this lyric line and respective bolded lyric as its corresponding lyric
+     */
+    public Chord copyWithNewLyric(LyricLine l) {
+        List<Note> notesCopy = new ArrayList<>();
+        for (Note n : this.notes) {
+            notesCopy.add(n.createNote(n.getDuration(), n.getPitch(), n.getAccidental()));
+        }
+        return Playable.createChord(notesCopy, l);
     }
+
 
 }

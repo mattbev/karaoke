@@ -23,6 +23,8 @@ public class Tuplet implements Playable {
     private final List<Chord> newChords = new ArrayList<Chord>();
     private final Type type;
     private final double duration;
+    private final LyricLine lyricLine;
+
     
     // AF(newChords, type, duration): A tuplet of type type and time length duration, where newChords are the chords
     //        in the tuplet, played in the order they appear in the list
@@ -44,8 +46,11 @@ public class Tuplet implements Playable {
     /**
      * creates an instance of a Tuplet object
      * @param chords the notes in the tuplet
+     * @param lyricLine line of lyrics for the tuplet the line 
+     *        falls on with the tuplet's lyric bolded
      */
-    public Tuplet(List<Chord> chords) {
+    public Tuplet(List<Chord> chords, LyricLine lyricLine) {
+        this.lyricLine = lyricLine;
         double dur = 0;
         double multiplier;
         //determine type of tuplet {duplet, triplet, quadruplet}
@@ -86,6 +91,12 @@ public class Tuplet implements Playable {
     public double duration() {
         return this.duration;
     }
+    
+    @Override
+    public Playable copyWithNewLyric( LyricLine l) {
+        List<Chord> chords = this.getChordListCopy();
+        return new Tuplet(chords, l);
+    }
 
     
     @Override
@@ -120,14 +131,17 @@ public class Tuplet implements Playable {
         return hash;
     }
     
-//    @Override
-//    public List<Measure> getMusic() {
-//        return Arrays.asList(new Measure(Arrays.asList(this)));
-//    }
-//
-//    public List<Double> getDurationList() {
-//        // TODO Auto-generated method stub
-//        return null;
-//    }
+    public List<Chord> getChordListCopy(){
+        List<Chord> chordList = new ArrayList<Chord>();
+        for(Chord chord: this.newChords) {
+            chordList.add(chord);
+        }
+        return chordList;
+    }
+
+    public List<Double> getDurationList() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

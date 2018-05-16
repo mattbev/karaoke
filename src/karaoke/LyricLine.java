@@ -26,7 +26,7 @@ public class LyricLine {
     // Safety from rep exposure:
     //      fields are private and final and immutable
     //      all return types are immutable
-    //      defensive copying when returning rep values
+    //      defensive copying, so no returning rep values
     // Thread safety argument:
     //    This class is threadsafe because it's immutable:
     //    - lyrics and boldedIndex are final and only mutated in the class constructor which is a threadsafe (synchronized) method by default

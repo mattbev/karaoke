@@ -25,8 +25,8 @@ public interface Playable {
      * @param notes the notes to be in this chord
      * @return a new chord 
      */
-    public static Chord createChord(List<Note> notes) {
-        return new Chord(notes);
+    public static Chord createChord(List<Note> notes, LyricLine l) {
+        return new Chord(notes, l);
     }
     
     /**
@@ -45,6 +45,18 @@ public interface Playable {
      * @return the duration in seconds of this component
      */
     public double duration();
+    
+    
+    
+    /**s
+     * Creates a copy of a playable with a new LyricLine
+     * 
+     * @param p playable to be copied with a lyric added
+     * @param l lyric to add to the playable
+     * @return new playable with lyric l 
+     */
+    public Playable copyWithNewLyric(LyricLine l);
+        
     
         
 
