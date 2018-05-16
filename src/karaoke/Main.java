@@ -54,7 +54,7 @@ public class Main {
         try {
             
             List<String> s = Files.readAllLines(Paths.get(songPath), StandardCharsets.UTF_8);
-            String contents = String.join("\n", s);
+            String contents = String.join("",s);
             karaoke = KaraokeParser.parse(contents);
             List<String> voices = karaoke.getVoices();
             List<String> urls = new ArrayList<>();
