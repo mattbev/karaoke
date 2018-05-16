@@ -177,6 +177,8 @@ public class Note {
      * @param startBeat beat at which the note should play
      */
     public void play(SequencePlayer player, double startBeat) {
+        System.out.println("pitch: "+pitch);
+
         System.out.println("startBeat: "+startBeat);
 
         player.addNote(instrument, pitch, startBeat, duration);
