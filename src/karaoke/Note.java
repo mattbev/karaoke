@@ -54,7 +54,7 @@ public class Note {
      * @param pitch the pitch of the note
      * @param noteLength the duration of the note
      */
-    public Note(String pitch, String noteLength, Header header) {
+    public Note(String pitch, String noteLength) {
 
         Set<String> validNotes = new HashSet<>(Arrays.asList("C","D","E","F","G","A","B","c","d","e","f","g","a","b"));
         String basenote = "";
@@ -112,7 +112,7 @@ public class Note {
         if (denominator.length() > 0) {
             denominatorInt = Integer.parseInt(denominator);
         }
-        final double noteDuration = ((double) numeratorInt) / ((double) denominatorInt) / header.getDefaultLengthDouble();
+        final double noteDuration = ((double) numeratorInt) / ((double) denominatorInt);
         
         this.accidental = noteAccidental;
         this.duration = noteDuration;

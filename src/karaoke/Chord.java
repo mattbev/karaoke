@@ -2,14 +2,12 @@
  * 
  */
 package karaoke;
-import karaoke.server.WebServer;
-import karaoke.sound.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.sun.net.httpserver.HttpServer;
+import karaoke.server.WebServer;
+import karaoke.sound.SequencePlayer;
 
 /**
  * @author chessa, mattbev, sophias
