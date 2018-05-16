@@ -85,7 +85,6 @@ public class BodyParser {
      * @return a list of playables to represent the line
      */
     private static Map<String,List<Music>> evaluateLine(ParseTree<BodyGrammar> parseTree, Header header, Map<String, List<Music>> currentMap, String voice) {
-        
         final List<Playable> line = new ArrayList<>();
         final Map<String, List<Music>> musicMap = new HashMap<>(currentMap);
         
@@ -156,17 +155,11 @@ public class BodyParser {
                     
                 }
                 case BARLINE: //barline ::= "|" | "||" | "[|" | "|]" | ":|" | "|:"
-                {
                     continue;
-                }
                 case NTH_REPEAT: //nth_repeat ::= "[1" | "[2"
-                {
                     continue;
-                }
                 case SPACE_OR_TAB: //space_or_tab ::= " " | "\t"
-                {
                     continue;
-                }
                 default:
                     throw new AssertionError("should never get here");
         
@@ -177,29 +170,30 @@ public class BodyParser {
                 ParseTree<BodyGrammar> endOfLineChild = child.children().get(0);
                 switch(endOfLineChild.name()) {
                 case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
-                {
                     continue;
-                }
                 case NEWLINE: //newline ::= "\n" | "\r" "\n"?
                 {
-                    final List<Music> musicList = musicMap.get(voice);
-                    musicList.add(Music.createLine(line));
-                    
+                    if (musicMap.containsKey(voice)) { // if there, add it to current list
+                        final List<Music> musicList = musicMap.get(voice);
+                        musicList.add(Music.createLine(line));
+                        musicMap.put(voice, musicList);
+                    } else { // if not there, create new entry
+                        musicMap.put(voice, Arrays.asList(Music.createLine(line)));
+                    }
+                    return musicMap;                   
                 }
                 default:
                     throw new AssertionError("should never get here");
                 }
             }
             case TUPLET_SPEC:
-            {
                 continue; //ignore the spec of the tuplet
-            }
             case LYRIC: //lyric ::= "w:" lyrical_element*
             {
                 final Music mostRecentLine = musicMap.get(voice).get(-1);
+                musicMap.get(voice).remove(-1);
                 final List<ParseTree<BodyGrammar>> lyricChildren = child.children();
                 final List<String> lyricElements = new ArrayList<>();
-                final List<Playable> elements = new ArrayList<>();
                 
                 for (int i=1; i < lyricChildren.size(); i++) {
                     if (mostRecentLine.getComponents().get(i-1) instanceof Rest) {
@@ -213,19 +207,29 @@ public class BodyParser {
                     
                     try {
                         final LyricLine lyricLine = new LyricLine(lyricElements, i, voice);
-                        elements.add(mostRecentLine.getComponents().get(i).copyWithNewLyric(lyricLine));
+                        line.add(mostRecentLine.getComponents().get(i).copyWithNewLyric(lyricLine));
                     } catch(IndexOutOfBoundsException e) {
-                        elements.add(mostRecentLine.getComponents().get(i).copyWithNewLyric(LyricLine.emptyLyricLine()));
+                        line.add(mostRecentLine.getComponents().get(i).copyWithNewLyric(LyricLine.emptyLyricLine()));
                     }
                 }
-                return elements;
+                final List<Music> musicList = musicMap.get(voice); 
+                musicList.add(Music.createLine(line));
+                musicMap.put(voice, musicList);
+                return musicMap;  
             }
             default:
                 throw new AssertionError("should never get here");                    
             }
             
         }
-        return line; // if there is no new line at the end, return line after evaluating all children
+        if (musicMap.containsKey(voice)) { // if there, add it to current list
+            final List<Music> musicList = musicMap.get(voice);
+            musicList.add(Music.createLine(line));
+            musicMap.put(voice, musicList);
+        } else { // if not there, create new entry
+            musicMap.put(voice, Arrays.asList(Music.createLine(line)));
+        }
+        return musicMap;   // if there is no new line at the end, return line after evaluating all children
             
     }
     
@@ -241,8 +245,8 @@ public class BodyParser {
         //abc_body ::= abc_line+
  
         final List<ParseTree<BodyGrammar>> children = parseTree.children();
-//        Map<String, LyricLine> voicesLyrics = new HashMap<>();
-        Map<String, List<Music>> voicesToMusic = new HashMap<>();
+
+        Map<String, List<Music>> voicesToLines = new HashMap<>();
         String voice = "1"; //default voice of 1
         
         //case ABC_LINE: // abc_line ::= element+ end_of_line (lyric end_of_line)?  | middle_of_body_field | comment
@@ -252,24 +256,27 @@ public class BodyParser {
                 {
                     voice = child.children().get(0).text(); //should always be declared before hitting default case if there are voices in the abc file
                 }
-                case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
+                case COMMENT: //comment ::= space_or_tab* "%" text newline
                 {
                     continue; //do nothing with this
                 }
                 default: // when abc_line ::= element+ end_of_line (lyric end_of_line)?
                     try {
-                        final Music line = Music.createLine(evaluateLine(child, header, voicesToMusic, voice));
-                        if (voicesToMusic.containsKey(voice)) {
-                            final Music currentMusic = voicesToMusic.get(voice);
-                            final Music newMusic = Music.createConcat(currentMusic, line);
-                            voicesToMusic.put(voice, newMusic);
-                        } else {
-                            voicesToMusic.put(voice, line);
-                        }
+                        voicesToLines = evaluateLine(child, header, voicesToLines, voice);
                     } catch(AssertionError e) {
                         throw new AssertionError("should never get here");
                     }
             }
+        }
+        
+        final Map<String, Music> voicesToMusic = new HashMap<>(); 
+        for (String v : voicesToLines.keySet()) {
+            final List<Music> lines = voicesToLines.get(v);
+            Music currentMusic = lines.get(0);
+            for (int i=1; i < lines.size(); i++) {
+                currentMusic = Music.createConcat(currentMusic, lines.get(i));
+            }
+            voicesToMusic.put(v, currentMusic);
         }
         return new Body(voicesToMusic);
     }

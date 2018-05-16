@@ -1,13 +1,13 @@
-/*
- * Grammar for ABC music notation 
- */
+
+%% Grammar for ABC music notation 
+ 
  
 abc_tune ::= abc_header abc_body
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Header
 
-% ignore space-or-tab between terminals in the header
+% ignore space_or_tab between terminals in the header
 @skip space_or_tab {
     abc_header ::= field_number comment* field_title other_fields* field_key
     
@@ -15,7 +15,7 @@ abc_tune ::= abc_header abc_body
 	field_title ::= "T:" text end_of_line
 	other_fields ::= field_composer | field_default_length | field_meter | field_tempo | field_voice | comment
 	field_composer ::= "C:" text end_of_line
-	field_default_length ::= "L:" note_length end_of_line
+	field_default_length ::= "L:" note_length_strict end_of_line
 	field_meter ::= "M:" meter end_of_line
 	field_tempo ::= "Q:" tempo end_of_line
 	field_voice ::= "V:" text end_of_line
@@ -35,9 +35,7 @@ abc_tune ::= abc_header abc_body
 % spaces and tabs have explicit meaning in the body, dont automatically ignore them
 
 abc_body ::= abc_line+
-%% abc_line ::= field_voice? music | comment
 abc_line ::= element+ end_of_line (lyric end_of_line)?  | middle_of_body_field | comment
-%% music ::= element+ end_of_line (lyric end_of_line)?
 element ::= note_element | rest_element | tuplet_element | barline | nth_repeat | space_or_tab 
 
 
@@ -83,12 +81,11 @@ backslash_hyphen = "\\" "-"
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% General
 
-comment ::= space_or_tab* "%" comment_text newline
-comment_text ::= [ ^(newline)]*
+comment ::= space_or_tab* "%" text newline
+text ::= [ ^(newline)]*
 
 end_of_line ::= comment | newline
 
 digit ::= [0-9]
 newline ::= "\n" | "\r" "\n"?
 space_or_tab ::= " " | "\t"
-whitespace ::= [ \t\r\n]+;

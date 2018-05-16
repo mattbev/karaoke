@@ -82,7 +82,9 @@ public class KaraokeParser {
      */
     public static Karaoke parse(final String string) throws UnableToParseException {
         // parse the example into a parse tree
+        System.out.println(1);
         final ParseTree<ABCGrammar> parseTree = parser.parse(string);
+        System.out.println(2);
         
         //for visuals
 //        System.out.println("parse tree " + parseTree);

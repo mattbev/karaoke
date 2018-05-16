@@ -1,14 +1,12 @@
 package karaoke.parser;
-import karaoke.*;
-import karaoke.sound.*;
-
-import static org.junit.Assert.*;
-
 import java.io.IOException;
 
 import org.junit.Test;
 
 import edu.mit.eecs.parserlib.UnableToParseException;
+import karaoke.Karaoke;
+import karaoke.sound.MidiSequencePlayer;
+import karaoke.sound.SequencePlayer;
 
 /**
  * Tests for the 
