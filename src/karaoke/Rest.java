@@ -21,6 +21,7 @@ public class Rest implements Playable {
     
     private static final double ONE_HUNDRED = 100;
     private final double duration;
+    private final LyricLine lyricLine;
     
     // AF(duration): a pause in the music of length duration
     //
@@ -40,8 +41,9 @@ public class Rest implements Playable {
      * 
      * @param duration the duration of the pause
      */
-    public Rest(double duration) { 
+    public Rest(double duration, LyricLine lyricLine) { 
         this.duration = duration;
+        this.lyricLine = lyricLine;
     }
 
     @Override
@@ -78,10 +80,6 @@ public class Rest implements Playable {
         return "z" + this.duration;
     }
     
-    @Override
-    public List<Measure> getMusic() {
-        return Arrays.asList(new Measure(Arrays.asList(this)));
-    }
 
     public List<Double> getDurationList() {
         // TODO Auto-generated method stub

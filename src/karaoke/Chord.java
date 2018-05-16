@@ -106,7 +106,7 @@ public class Chord implements Playable {
         List<Note> notesCopy = new ArrayList<>();
         for (Note note : this.notes) {
             int denom = getDenominator(t);
-            notesCopy.add(Note.createNote(note.getInstrument(), duration/denom, note.getPitch(), note.getAccidental()));
+            notesCopy.add(Note.createNote(duration/denom, note.getPitch(), note.getAccidental()));
         }
         checkRep();
         return new Chord(notes);
@@ -172,10 +172,24 @@ public class Chord implements Playable {
         }
         return chord + "]";
     }
+    
+    /**
+     * 
+     * 
+     * @param l the line of lyrics, plus specified bolded lyric, to assign to the chord
+     * @return a new chord with this lyric line and respective bolded lyric as its corresponding lyric
+     */
+    public Chord copyWithNewLyric(LyricLine l) {
+        List<Note> notesCopy = new ArrayList<>();
+        for (Note n : this.notes) {
+            notesCopy.add(n.createNote(n.getDuration(), n.getPitch(), n.getAccidental()));
+        }
+        return Playable.createChord(notesCopy, l);
+    }
 
-    @Override
-    public List<Measure> getMusic() {
-        return Arrays.asList(new Measure(Arrays.asList(this)));
+    public List<Double> getDurationList() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
