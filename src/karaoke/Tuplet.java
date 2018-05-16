@@ -29,7 +29,7 @@ public class Tuplet implements Playable {
     private final LyricLine lyricLine;
 
     
-    // AF(newChords, type, duration, lyricLine): A tuplet of type type and time length duration, where newChords are the chords
+    // AF(newChords, type, duration, lyricLine): A tuplet of type <type> and time length <duration>, where newChords are the chords
     //                                           in the tuplet, played in the order they appear in the list, and the line of lyrics
     //                                           shown while the tuplet plays is lyricLine with the lyric corresponding to the tuplet
     //                                           bolded.

@@ -18,7 +18,7 @@ public class LyricLine {
     private final int boldedIndex;
     private final String voice;
     
-    // AF(lyrics, boldedIndex, voice): A line of lyrics in a song with lyric at index boldedIndex bolded w
+    // AF(lyrics, boldedIndex, voice): A line of lyrics in a song with lyric at index boldedIndex bolded and
     //                                 sung with voice <voice>
     //
     // Rep Invariant:

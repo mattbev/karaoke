@@ -20,13 +20,12 @@ public class Body {
     private Map<String,Music> voiceToMusic = new HashMap<String,Music>();
     
     // Abstraction Function:
-    //   AF(voiceToMusic, voiceToLyrics) = one or more musics played at the same time by different voices
+    //   AF(voiceToMusic) = one or more musics played at the same time by different voices
     //                                     with zero or more lyrics where the music for voice <voice> is
-    //                                     at voiceToMusic.get(<voice>) and the lyrics are at voiceToLyrics.get(<voice>)
+    //                                     at voiceToMusic.get(<voice>).
     //      
     //
     // Rep Invariant:
-    //      voiceToMusic.size() > 0
     //      voiceToMusic.size() > 0
     //   
     //
