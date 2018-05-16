@@ -29,11 +29,12 @@ public class KaraokeParser {
      * @throws IOException 
      */
     public static void main(final String[] args) throws UnableToParseException, IOException {
-        File f = new File("samples/piece1.abc");
+        File f = new File("samples/piece2.abc");
         List<String> s = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8);
         String contents = String.join("\n", s);
         Karaoke karaoke = KaraokeParser.parse(contents);
-//        karaoke.
+        System.out.println(karaoke.getHeader().toString());
+        System.out.println(karaoke.getBody().getVoicesToMusics().get("1").getComponents());
     }
     
     // the nonterminals of the grammar

@@ -42,7 +42,18 @@ public interface Playable {
      * @param lyricLine the line of lyrics, with nothing bolded, corresponding to this rest
      * @return a new rest in music with length duration and lyric lyric
      */
-    public static Rest createRest(double duration,LyricLine lyricLine) {
+    public static Rest createRestFromDouble(double duration,LyricLine lyricLine) {
+        return new Rest(duration, lyricLine);
+    }
+    
+    /**
+     * Create a new music rest with lyric lyric of duration duration
+     * 
+     * @param duration the length of this rest
+     * @param lyricLine the line of lyrics, with nothing bolded, corresponding to this rest
+     * @return a new rest in music with length duration and lyric lyric
+     */
+    public static Rest createRestFromString(String duration,LyricLine lyricLine) {
         return new Rest(duration, lyricLine);
     }
     

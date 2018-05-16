@@ -169,6 +169,28 @@ public class Header {
         return this.index;
     }
     
+    public double getDefaultLengthDouble() {
+        String numerator;
+        String denominator;
+        if (this.defaultLength.length() == 1) {
+            numerator = this.defaultLength;
+            denominator = "1";
+        } else {
+            final String[] lengthParams = this.defaultLength.split("/");
+            numerator = lengthParams[0];
+            denominator = lengthParams[1];
+        }
+        int numeratorInt = 1;
+        int denominatorInt = 1;
+        if (numerator.length() > 0) {
+            numeratorInt = Integer.parseInt(numerator);
+        }
+        if (denominator.length() > 0) {
+            denominatorInt = Integer.parseInt(denominator);
+        }
+        return ((double) numeratorInt) / ((double) denominatorInt);
+    }
+    
     @Override
     public boolean equals(Object that) {
         if (that instanceof Header) {

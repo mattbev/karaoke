@@ -93,6 +93,10 @@ public class Tuplet implements Playable {
         this.duration = dur;
     }
     
+    public List<Chord> getComponents() {
+        return new ArrayList<>(this.newChords);
+    }
+    
     @Override
     public double duration() {
         return this.duration;
