@@ -76,7 +76,7 @@ public class Rest implements Playable {
         if (denominator.length() > 0) {
             denominatorInt = Integer.parseInt(denominator);
         }
-        this.duration = ((double) numeratorInt) / ((double) denominatorInt) * header.getDefaultLengthDouble();
+        this.duration = ((double) numeratorInt) / ((double) denominatorInt) * header.getDefaultLengthDouble() * 4.;
     }
 
     @Override

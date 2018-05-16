@@ -65,31 +65,31 @@ public class Note {
             }
         }
         
-        final Pitch notePitch = new Pitch(basenote.toUpperCase().toCharArray()[0]);
+        Pitch notePitch = new Pitch(basenote.toUpperCase().toCharArray()[0]);
       
         final String[] pitchParams = pitch.split(basenote);
         String noteAccidental = "";
         if (pitchParams.length == 2) {
             noteAccidental = pitchParams[0];
             final String octave = pitchParams[1];
+            final String basenoteCopy = basenote;
             
-            if (basenote.toLowerCase().equals(basenote)) {
-                notePitch.transpose(Pitch.OCTAVE);
+            if (basenoteCopy.toLowerCase().equals(basenote)) {
+                notePitch = notePitch.transpose(Pitch.OCTAVE);
             }
             if (octave.contains("'")) {
-                notePitch.transpose(Pitch.OCTAVE*octave.length());
+                notePitch = notePitch.transpose(Pitch.OCTAVE*octave.length());
             }
             else if(octave.contains(",")) {
-                notePitch.transpose(-Pitch.OCTAVE*octave.length());
+                notePitch = notePitch.transpose(-Pitch.OCTAVE*octave.length());
             }
             if (noteAccidental.contains("^")) {
-                notePitch.transpose(noteAccidental.length());
+                notePitch = notePitch.transpose(noteAccidental.length());
             }
             else if (noteAccidental.contains("_")) {
-                notePitch.transpose(-noteAccidental.length());
+                notePitch = notePitch.transpose(-noteAccidental.length());
             }
         }
-        
         String numerator;
         String denominator;
         if (noteLength.length() == 0) {
@@ -112,7 +112,7 @@ public class Note {
         if (denominator.length() > 0) {
             denominatorInt = Integer.parseInt(denominator);
         }
-        final double noteDuration = ((double) numeratorInt) / ((double) denominatorInt) * header.getDefaultLengthDouble();
+        final double noteDuration = ((double) numeratorInt) / ((double) denominatorInt) * header.getDefaultLengthDouble() * 4.;
         
         this.accidental = noteAccidental;
         this.duration = noteDuration;
