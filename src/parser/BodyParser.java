@@ -271,7 +271,9 @@ public class BodyParser {
                 for (int i=0; i < mostRecentLine.getComponents().size(); i++) {
                     
                     try {
+                        
                         final LyricLine lyricLine = new LyricLine(lyricElements, i, voice);
+                        
                         line.add(mostRecentLine.getComponents().get(i).copyWithNewLyric(lyricLine));
                     } catch(IndexOutOfBoundsException e) {
                         line.add(mostRecentLine.getComponents().get(i).copyWithNewLyric(LyricLine.emptyLyricLine()));

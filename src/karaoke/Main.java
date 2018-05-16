@@ -74,7 +74,7 @@ public class Main {
             System.out.println("\nBegin playing the music and streaming the lyrics by typing \"play\" and hitting Enter");
 
             System.out.println("\nTo exit at any time, press Ctrl-C");
-            System.out.println(karaoke.getLyrics("1"));
+            //System.out.println(karaoke.getLyrics("1"));
             BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
             if (b.readLine().equals("play")) {
                 MusicPlayer.play(karaoke,server);
