@@ -25,8 +25,8 @@ public interface Playable extends Music {
      * @param notes the notes to be in this chord
      * @return a new chord 
      */
-    public static Chord createChord(List<Note> notes) {
-        return new Chord(notes);
+    public static Chord createChord(List<Note> notes, LyricLine l) {
+        return new Chord(notes, l);
     }
     
     /**

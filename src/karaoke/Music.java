@@ -44,7 +44,7 @@ public interface Music {
      * gets the music of the piece
      * @return the measures of the music
      */
-    public List<Measure> getMusic();
+//    public List<Measure> getMusic();
     
     /**
      * @return the total duration of this piece in beats
