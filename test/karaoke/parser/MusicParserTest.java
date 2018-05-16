@@ -5,9 +5,9 @@ import org.junit.Test;
 
 import edu.mit.eecs.parserlib.UnableToParseException;
 import karaoke.Karaoke;
-import karaoke.parser.KaraokeParser;
 import karaoke.sound.MidiSequencePlayer;
 import karaoke.sound.SequencePlayer;
+import parser.KaraokeParser;
 
 /**
  * Tests for the 

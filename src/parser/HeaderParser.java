@@ -1,4 +1,4 @@
-package karaoke.parser;
+package parser;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,10 +14,25 @@ import karaoke.Header;
 public class HeaderParser {
 
     private static enum HeaderGrammar {
+     // end product
+        ABC_TUNE, 
+        
         // header
         ABC_HEADER, FIELD_NUMBER, FIELD_TITLE, OTHER_FIELDS, FIELD_COMPOSER, 
         FIELD_DEFAULT_LENGTH, FIELD_METER, FIELD_TEMPO, FIELD_VOICE, FIELD_KEY, 
         KEY, KEYNOTE, METER, METER_FRACTION, TEMPO, 
+        
+     // body
+        ABC_BODY, ABC_LINE, ELEMENT, COMMENT, // spaces and tabs
+        NOTE_ELEMENT, NOTE, PITCH, NOTE_LENGTH, NOTE_LENGTH_STRICT, ACCIDENTAL, BASENOTE, OCTAVE, // notes
+        REST_ELEMENT, // rests
+        TUPLET_ELEMENT, TUPLET_SPEC, // tuplets
+        CHORD, BARLINE, NTH_REPEAT,// chords
+         
+        BACKSLASH_HYPHEN, LYRIC_TEXT, //lyric
+        
+        LYRIC, LYRICAL_ELEMENT, MIDDLE_OF_BODY_FIELD, // voice
+        SPACE_OR_TAB, END_OF_LINE, NEWLINE, DIGIT, TEXT, // general   
     }
     
     private static Parser<HeaderGrammar> parser = makeParser();
@@ -31,7 +46,7 @@ public class HeaderParser {
     private static Parser<HeaderGrammar> makeParser() {
         try {
             // read the grammar as a file, relative to the project root.
-            final File grammarFile = new File("src/karaoke.parser/Abc.g");
+            final File grammarFile = new File("src/parser/Abc.g");
             return Parser.compile(grammarFile, HeaderGrammar.ABC_HEADER);
         } catch (IOException e) {
             throw new RuntimeException("can't read the grammar file", e);

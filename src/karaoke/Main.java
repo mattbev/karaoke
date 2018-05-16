@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 
-import karaoke.parser.KaraokeParser;
 import karaoke.server.WebServer;
+import parser.KaraokeParser;
 
 /**
  * Main entry point of the karaoke machine, run to make karaoke song requests and stream lyrics
