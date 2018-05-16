@@ -22,7 +22,7 @@ public class Note {
     private final Instrument instrument = Instrument.PIANO;
     
     // AF(instrument, duration, pitch, accidental): A musical note of pitch pitch, with accidental accidental, played on 
-    //      instrument for the amoutn of time held in duration
+    //      instrument for the amount of time held in duration
     //
     // Rep invariant:
     //      duration > 0

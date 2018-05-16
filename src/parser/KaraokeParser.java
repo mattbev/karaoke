@@ -9,6 +9,7 @@ import java.util.List;
 import edu.mit.eecs.parserlib.ParseTree;
 import edu.mit.eecs.parserlib.Parser;
 import edu.mit.eecs.parserlib.UnableToParseException;
+import edu.mit.eecs.parserlib.Visualizer;
 import karaoke.Body;
 import karaoke.Header;
 import karaoke.Karaoke;
@@ -34,9 +35,7 @@ public class KaraokeParser {
 //        System.out.println(expression1);
         File f = new File("samples/piece1.abc");
         List<String> s = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8);
-        String contents = String.join("\n", s);
-        contents += "\n";
-        System.out.println(contents);
+        String contents = String.join("\n", s) + "\n";
         Karaoke karaoke = KaraokeParser.parse(contents);
     }
     
@@ -94,8 +93,8 @@ public class KaraokeParser {
         final ParseTree<ABCGrammar> parseTree = parser.parse(string);
         
         //for visuals
-//        System.out.println("parse tree " + parseTree);
-//        Visualizer.showInBrowser(parseTree);
+        System.out.println("parse tree " + parseTree);
+        Visualizer.showInBrowser(parseTree);
         
         //make AST from parse tree
         final Karaoke karaoke = makeAbstractSyntaxTree(parseTree);

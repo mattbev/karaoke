@@ -5,6 +5,7 @@ import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
 import karaoke.Karaoke;
+import karaoke.server.WebServer;
 
 
 
@@ -20,13 +21,13 @@ public class MusicPlayer {
     /**
      * play a Karaoke 
      * @param karaoke Karaoke expression to play
+     * @param server server on which the MusicPlayer is played
      * @throws MidiUnavailableException thrown if the Midi synthesizer is unavailable
      * @throws InvalidMidiDataException thrown if Midi cannot play the Karaoke file
      */
-    public static void play(Karaoke karaoke) throws MidiUnavailableException, InvalidMidiDataException{
+    public static void play(Karaoke karaoke, WebServer server) throws MidiUnavailableException, InvalidMidiDataException{
         SequencePlayer player = new MidiSequencePlayer();
-        final double delay = 0.1;
-        karaoke.play(player, delay);
+        karaoke.play(player, server);
         
         //recurses all the way down to note class which is added to player in addNote(), then play the player
         player.play();

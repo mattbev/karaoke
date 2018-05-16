@@ -15,8 +15,9 @@ import org.junit.Test;
 import karaoke.Chord;
 import karaoke.Concat;
 import karaoke.Karaoke;
-import karaoke.Lyric;
-import karaoke.Measure;
+import karaoke.Line;
+import karaoke.LyricLine;
+import karaoke.Music;
 import karaoke.Note;
 import karaoke.Playable;
 import karaoke.Rest;
@@ -31,9 +32,9 @@ import karaoke.sound.SequencePlayer;
  * Tests for instance methods of Karaoke
  *
  */
-public class KaraokeTest {
+public class MusicTest {
     /**
-     * Testing Strategy for createMeasure():
+     * Testing Strategy for createLine():
      * 
      * Partition the input as follows:
      * Components: size = 1, > 1
@@ -73,21 +74,21 @@ public class KaraokeTest {
     //Components size = 1
     
     @Test
-    public void testCreateMeasureComponentsSizeOne() {
+    public void testCreateLineComponentsSizeOne() {
         
         //create components list
         List<Playable> components = new ArrayList<Playable>();
         
         //create new note to add to a chord to add to components
-        Note componentNote = new Note(Instrument.BRIGHT_PIANO, 4.0, Pitch.MIDDLE_C, "=");
+        Note componentNote = new Note(4.0, Pitch.MIDDLE_C, "=");
         List<Note> notes = new ArrayList<Note>();
         notes.add(componentNote);
-        List<Lyric> lyrics = new ArrayList<Lyric>();   //no lyrics
+        LyricLine lyrics =  LyricLine.emptyLyricLine();  //no lyrics
         Chord testChord = new Chord(notes, lyrics);
         
         components.add(testChord);
         
-        Measure newMeasure = Karaoke.createMeasure(components);
+        Line newMeasure = new Line(components);
         double expectedDuration = 4.0;
         assertEquals("expect Measure duration to be one",expectedDuration, newMeasure.duration(), .0001);
     }
@@ -102,18 +103,18 @@ public class KaraokeTest {
         List<Playable> components = new ArrayList<Playable>();
         
         //create new note to add to a chord to add to components
-        Note componentNote = new Note(Instrument.BRIGHT_PIANO, 4.0, Pitch.MIDDLE_C, "=");
+        Note componentNote = new Note( 4.0, Pitch.MIDDLE_C, "=");
         List<Note> notes = new ArrayList<Note>();
         notes.add(componentNote);
-        List<Lyric> lyrics = new ArrayList<Lyric>();   //no lyrics
+        LyricLine lyrics =  LyricLine.emptyLyricLine();  //no lyrics
         Chord testChord = new Chord(notes, lyrics);
         
-        Rest componentRest = new Rest(2.0);
+        Rest componentRest = new Rest(2.0, lyrics);
         
         components.add(testChord);
         components.add(componentRest);
         
-        Measure newMeasure = Karaoke.createMeasure(components);
+        Line newMeasure = new Line(components);
         double expectedDuration = 6.0;
         assertEquals("expect Measure duration to be one",expectedDuration, newMeasure.duration(), .0001);
     }
@@ -132,15 +133,15 @@ public class KaraokeTest {
         List<Playable> components = new ArrayList<Playable>();
         
         //create new note to add to a chord to add to components
-        Note componentNote = new Note(Instrument.PIANO, 1.0, Pitch.MIDDLE_C, "=");
+        Note componentNote = new Note(1.0, Pitch.MIDDLE_C, "=");
         List<Note> notes = new ArrayList<Note>();
         notes.add(componentNote);
-        List<Lyric> lyrics = new ArrayList<Lyric>();   //no lyrics
+        LyricLine lyrics =  LyricLine.emptyLyricLine();  //no lyrics
         Chord testChord = new Chord(notes, lyrics);
         
         components.add(testChord);
         
-        Measure newMeasure = Karaoke.createMeasure(components);
+        Line newMeasure = new Line(components);
         double expectedDuration = 1.0;
         assertEquals("expect duration to be one",expectedDuration, newMeasure.duration(), .0001);
     }
@@ -155,18 +156,18 @@ public class KaraokeTest {
         List<Playable> components = new ArrayList<Playable>();
         
         //create new note to add to a chord to add to components
-        Note componentNote = new Note(Instrument.BRIGHT_PIANO, 2.0, Pitch.MIDDLE_C, "=");
+        Note componentNote = new Note(2.0, Pitch.MIDDLE_C, "=");
         List<Note> notes = new ArrayList<Note>();
         notes.add(componentNote);
-        List<Lyric> lyrics = new ArrayList<Lyric>();   //no lyrics
+        LyricLine lyrics =  LyricLine.emptyLyricLine();  //no lyrics
         Chord testChord = new Chord(notes, lyrics);
         
-        Rest componentRest = new Rest(2.0);
+        Rest componentRest = new Rest(2.0, lyrics);
         
         components.add(testChord);
         components.add(componentRest);
         
-        Measure newMeasure = Karaoke.createMeasure(components);
+        Line newMeasure = new Line(components);
         double expectedDuration = 4.0;
         assertEquals("expect duration to be four",expectedDuration, newMeasure.duration(), .0001);
     }
@@ -236,32 +237,32 @@ public class KaraokeTest {
         List<Playable> components1 = new ArrayList<Playable>();
         
         //create new note to add to a chord to add to components
-        Note componentNote1 = new Note(Instrument.BRIGHT_PIANO, 2.0, Pitch.MIDDLE_C, "=");
+        Note componentNote1 = new Note(2.0, Pitch.MIDDLE_C, "=");
         List<Note> notes1 = new ArrayList<Note>();
         notes1.add(componentNote1);
-        List<Lyric> lyrics1 = new ArrayList<Lyric>();   //no lyrics
+        LyricLine lyrics1 =  LyricLine.emptyLyricLine();  //no lyrics
         Chord testChord1 = new Chord(notes1, lyrics1);
         
-        Rest componentRest = new Rest(2.0);
+        Rest componentRest = new Rest(2.0, lyrics1);
         
         components1.add(testChord1);
         components1.add(componentRest);
         
-        Measure newMeasure1 = Karaoke.createMeasure(components1);
+        Line newMeasure1 = new Line(components1);
         
       //create components list
         List<Playable> components2 = new ArrayList<Playable>();
         
         //create new note to add to a chord to add to components
-        Note componentNote2 = new Note(Instrument.PIANO, 1.0, Pitch.MIDDLE_C, "=");
+        Note componentNote2 = new Note(1.0, Pitch.MIDDLE_C, "=");
         List<Note> notes2 = new ArrayList<Note>();
         notes2.add(componentNote2);
-        List<Lyric> lyrics2 = new ArrayList<Lyric>();   //no lyrics
+        LyricLine lyrics2 =  LyricLine.emptyLyricLine();  //no lyrics
         Chord testChord2 = new Chord(notes2, lyrics2);
         
         components2.add(testChord2);
         
-        Measure newMeasure2 = Karaoke.createMeasure(components2);
+        Line newMeasure2 = new Line(components2);
         
         Concat concatTest = new Concat(newMeasure1, newMeasure2);
         

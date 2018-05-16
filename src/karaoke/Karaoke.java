@@ -11,7 +11,7 @@ import karaoke.sound.SequencePlayer;
  * 
  * @author chessa, mattbev, sophias
  * 
- * Karaoke is an immutable karaoke object that contains all information about the abc file    ????????
+ * Karaoke is an immutable ADT representing a piece of music of a karaoke machine
  *
  */
 public class Karaoke {
@@ -23,7 +23,7 @@ public class Karaoke {
     //      
     //
     // Rep Invariant:
-    //   true             <<<<<<????????????
+    //   true             
     //
     // Rep Safety Argument:
     //   all fields are private final
@@ -59,7 +59,7 @@ public class Karaoke {
      * @param server the server the karaoke is being played on
      */
     public void play(SequencePlayer player, WebServer server) {
-        body.play(player, 0, server);
+        body.play(player, server);
     }
     
     /**

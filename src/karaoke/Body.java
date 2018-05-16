@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.sun.net.httpserver.HttpServer;
 
 import karaoke.server.WebServer;
 import karaoke.sound.SequencePlayer;
@@ -20,13 +19,12 @@ public class Body {
     private Map<String,Music> voiceToMusic = new HashMap<String,Music>();
     
     // Abstraction Function:
-    //   AF(voiceToMusic, voiceToLyrics) = one or more musics played at the same time by different voices
+    //   AF(voiceToMusic) = one or more musics played at the same time by different voices
     //                                     with zero or more lyrics where the music for voice <voice> is
-    //                                     at voiceToMusic.get(<voice>) and the lyrics are at voiceToLyrics.get(<voice>)
+    //                                     at voiceToMusic.get(<voice>).
     //      
     //
     // Rep Invariant:
-    //      voiceToMusic.size() > 0
     //      voiceToMusic.size() > 0
     //   
     //
@@ -64,12 +62,13 @@ public class Body {
     /**
      * plays the body's music
      * @param player the player to play the music
-     * @param startBeat the beat to start the music on
+     * @param server the server on which the body's
+     *        music is played
      */
-    public void play(SequencePlayer player, double startBeat, WebServer server) {
+    public void play(SequencePlayer player, WebServer server) {
         for (String voice : this.voiceToMusic.keySet()) {
             final Music voiceMusic = this.voiceToMusic.get(voice);
-            voiceMusic.play(player, startBeat, server);
+            voiceMusic.play(player, 0, server);
         }
     }
 

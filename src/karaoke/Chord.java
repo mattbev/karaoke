@@ -28,8 +28,9 @@ public class Chord implements Playable {
     private final List<Note> notes;
     private final LyricLine lyricLine;
     
-    // AF(notes): A chord where notes is a list of the notes of the chord (in the order they were in in the 
-    //                   abc file)
+    // AF(notes, lyricLine): A chord where notes is a list of the notes of the chord (in the order they were in in the 
+    //                       abc file), and the line of lyrics shown while the chord plays is lyricLine with the lyric
+    //                       corresponding to the chord bolded.
     //
     // RI: notes.size > 0
     //     

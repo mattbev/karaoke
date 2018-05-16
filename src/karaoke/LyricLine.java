@@ -4,8 +4,6 @@
 package karaoke;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,7 +17,8 @@ public class LyricLine {
     private final int boldedIndex;
     private final String voice;
     
-    // AF(lyrics, boldedIndex): A line of lyrics in a song with lyric at index boldedIndex bolded 
+    // AF(lyrics, boldedIndex, voice): A line of lyrics in a song with lyric at index boldedIndex bolded and
+    //                                 sung with voice <voice>
     //
     // Rep Invariant:
     //      boldedIndex >= 0
@@ -100,7 +99,10 @@ public class LyricLine {
      * @return a new LyricLine instance representing the absence of a lyric
      */
     public static LyricLine emptyLyricLine() {
-        return new LyricLine(Arrays.asList(" "), 0, "");
+        List<String> lyr = new ArrayList<String>();
+        lyr.add("");
+        LyricLine lyrics =  new LyricLine(lyr, 0, "main");  //no lyrics
+        return lyrics;
     }
     
 
