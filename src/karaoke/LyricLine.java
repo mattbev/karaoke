@@ -100,7 +100,10 @@ public class LyricLine {
      * @return a new LyricLine instance representing the absence of a lyric
      */
     public static LyricLine emptyLyricLine() {
-        return new LyricLine(Collections.emptyList(), 0, "");
+        List<String> lyr = new ArrayList<String>();
+        lyr.add("");
+        LyricLine lyrics =  new LyricLine(lyr, 0, "main");  //no lyrics
+        return lyrics;
     }
     
 

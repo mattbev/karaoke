@@ -36,7 +36,8 @@ public class Concat implements Music {
 
     
     /**
-     * 
+     * Combines two pieces of music, firstMusic and secondMusic
+     * tail to head so that secondMusic plays right after firstMusic
      * @param firstMusic the first Music piece in the sequence
      * @param secondMusic the second Music piece in the sequence
      */
