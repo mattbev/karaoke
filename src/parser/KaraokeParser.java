@@ -32,9 +32,10 @@ public class KaraokeParser {
 //        System.out.println(input1);
 //        final Expression expression1 = ExpressionParser.parse(input1);
 //        System.out.println(expression1);
-        File f = new File("samples/piece3.abc");
+        File f = new File("samples/piece1.abc");
         List<String> s = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8);
         String contents = String.join("\n", s);
+        contents += "\n";
         System.out.println(contents);
         Karaoke karaoke = KaraokeParser.parse(contents);
     }
@@ -90,9 +91,7 @@ public class KaraokeParser {
      */
     public static Karaoke parse(final String string) throws UnableToParseException {
         // parse the example into a parse tree
-        System.out.println(1);
         final ParseTree<ABCGrammar> parseTree = parser.parse(string);
-        System.out.println(2);
         
         //for visuals
 //        System.out.println("parse tree " + parseTree);

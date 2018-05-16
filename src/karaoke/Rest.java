@@ -48,6 +48,7 @@ public class Rest implements Playable {
         this.duration = duration;
         this.lyricLine = lyricLine;
     }
+    
 
     @Override
     public double duration() {

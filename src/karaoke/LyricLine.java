@@ -4,6 +4,7 @@
 package karaoke;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -99,7 +100,7 @@ public class LyricLine {
      * @return a new LyricLine instance representing the absence of a lyric
      */
     public static LyricLine emptyLyricLine() {
-        return new LyricLine(Collections.emptyList(), 0, "");
+        return new LyricLine(Arrays.asList(" "), 0, "");
     }
     
 

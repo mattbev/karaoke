@@ -195,4 +195,16 @@ public class Header {
                 this.title.hashCode() +
                 this.voices.hashCode();
     }
+    
+    @Override
+    public String toString() {
+        return this.composer + "\n" +
+                this.defaultLength + "\n" +
+                this.index + "\n" +
+                this.key + "\n" +
+                this.meter + "\n" +
+                this.tempo + "\n" +
+                this.title + "\n" +
+                this.voices;
+    }
 }

@@ -99,6 +99,8 @@ public class BodyParser {
         final Map<String, List<Music>> musicMap = new HashMap<>(currentMap);
         
         for (ParseTree<BodyGrammar> child : parseTree.children()) {
+//            System.out.println(line);
+//            System.out.println(child);
             switch(child.name()) {
             case ELEMENT: //element ::= note_element | rest_element | tuplet_element | barline | nth_repeat | space_or_tab 
             {
@@ -112,26 +114,27 @@ public class BodyParser {
                     {
                         final String pitch = noteChild.children().get(0).text();
                         String noteLength;
-                        try {
+                        if (noteChild.children().get(1).text().length() > 0) {
                             noteLength = noteChild.children().get(1).text();
-                        } catch (IndexOutOfBoundsException e) {
+                        } else {
                             noteLength = header.getDefaultLength();
                         }
-                        final Note note = new Note(pitch, noteLength);        
+                        final Note note = new Note(pitch, noteLength);    
                         final Chord noteChord = Playable.createChord(Arrays.asList(note), LyricLine.emptyLyricLine());
                         line.add(noteChord);
+                        continue;
                     }
                     case CHORD: //chord ::= "[" note+ "]"
                     {
                         final List<Note> notes = new ArrayList<>();
                         List<ParseTree<BodyGrammar>> noteChildren = noteChild.children();
-                        for (int i=1; i < noteChildren.size()-1; i++) {
+                        for (int i=0; i < noteChildren.size(); i++) {
                             ParseTree<BodyGrammar> noteTree = noteChildren.get(i);
                             final String pitch = noteTree.children().get(0).text();
                             String noteLength;
-                            try {
+                            if (noteChild.children().get(1).text().length() > 0) {
                                 noteLength = noteTree.children().get(1).text();
-                            } catch (IndexOutOfBoundsException e) {
+                            } else {
                                 noteLength = header.getDefaultLength();
                             }
                             final Note note = new Note(pitch, noteLength);  
@@ -139,30 +142,96 @@ public class BodyParser {
                         }   
                         final Chord chord = Playable.createChord(notes, LyricLine.emptyLyricLine());
                         line.add(chord);
+                        continue;
                     }
                     default:
+                        System.out.println(1);
                         throw new AssertionError("should never get here");
+//                        continue;
                     }
                 }
                 case REST_ELEMENT: //rest_element ::= "z" note_length
                 {
                     final List<ParseTree<BodyGrammar>> restChildren = child.children();
-                    final int restLength = Integer.parseInt(restChildren.get(1).text());
-                    final Rest rest = Playable.createRest(restLength, LyricLine.emptyLyricLine());
+                    System.out.println(restChildren.get(0).children().get(0));
+                    String restLength = restChildren.get(0).children().get(0).text();
+//                    if (restLength.length() == 0) {
+//                        restLength = header.getDefaultLength();
+//                    }
+//                    int numerator;
+//                    int denominator;
+//                    if (restLength.length() == 1) {
+//                        numerator = Integer.parseInt(restLength);
+//                        denominator = 1;
+//                    }
+//                    else if (restLength.length())
+////                    System.out.println(restLength);
+                    final Rest rest = Playable.createRest(Integer.parseInt(restLength), LyricLine.emptyLyricLine());
                     line.add(rest);
+                    continue;
                 }
                 case TUPLET_ELEMENT: //tuplet_element ::= tuplet_spec note_element+
                 {
-                    final Map<String, List<Music>> newMap = evaluateLine(child, header, musicMap, voice);
-                    final List<Playable> tupletPlayables = newMap.get(voice).get(-1).getComponents();
-                    newMap.get(voice).remove(-1);
+                    final List<ParseTree<BodyGrammar>> tupletElements = child.children().get(0).children();
+                    List<Playable> tupletPlayables = new ArrayList<>();
+                    for (int i=1; i < tupletElements.size(); i++) {
+                        final ParseTree<BodyGrammar> element = tupletElements.get(i);
+                        switch(element.name()) {
+                        case NOTE_ELEMENT:
+                        {
+                            ParseTree<BodyGrammar> noteType = element.children().get(0);
+                            switch(noteType.name()) {
+                            case NOTE:
+                            {
+                                final String pitch = noteType.children().get(0).text();
+                                String noteLength;
+                                if (noteType.children().get(1).text().length() > 0) {
+                                    noteLength = noteType.children().get(1).text();
+                                } else {
+                                    noteLength = header.getDefaultLength();
+                                }
+                                final Note note = new Note(pitch, noteLength);    
+                                final Chord noteChord = Playable.createChord(Arrays.asList(note), LyricLine.emptyLyricLine());
+                                tupletPlayables.add(noteChord);
+                                continue;
+                            }
+                            case CHORD:
+                            {
+                                final List<Note> notes = new ArrayList<>();
+                                List<ParseTree<BodyGrammar>> noteChildren = noteType.children();
+                                for (int j=0; j < noteChildren.size(); j++) {
+                                    ParseTree<BodyGrammar> noteTree = noteChildren.get(j);
+                                    final String pitch = noteTree.children().get(0).text();
+                                    String noteLength;
+                                    if (noteType.children().get(1).text().length() > 0) {
+                                        noteLength = noteTree.children().get(1).text();
+                                    } else {
+                                        noteLength = header.getDefaultLength();
+                                    }
+                                    final Note note = new Note(pitch, noteLength);  
+                                    notes.add(note);
+                                }   
+                                final Chord chord = Playable.createChord(notes, LyricLine.emptyLyricLine());
+                                tupletPlayables.add(chord);
+                                continue;
+                            }
+                            default:
+                                throw new AssertionError("should never get here");
+                            }
+                        }
+                        case TUPLET_SPEC:
+                            continue;
+                        default:
+                            throw new AssertionError("should never get here");
+                        }
+                    }
                     final List<Chord> tupletChords = new ArrayList<>();
                     for (Playable playable : tupletPlayables) {
                         tupletChords.add((Chord) playable);
                     }
                     final Tuplet tuplet = Playable.createTuplet(tupletChords, LyricLine.emptyLyricLine());
                     line.add(tuplet);
-                    
+                    continue;                    
                 }
                 case BARLINE: //barline ::= "|" | "||" | "[|" | "|]" | ":|" | "|:"
                     continue;
@@ -171,7 +240,9 @@ public class BodyParser {
                 case SPACE_OR_TAB: //space_or_tab ::= " " | "\t"
                     continue;
                 default:
+                    System.out.println(2);
                     throw new AssertionError("should never get here");
+//                    continue;
         
                 }
             }
@@ -193,11 +264,11 @@ public class BodyParser {
                     return musicMap;                   
                 }
                 default:
+                    System.out.println(3);
                     throw new AssertionError("should never get here");
+//                    continue;
                 }
             }
-            case TUPLET_SPEC:
-                continue; //ignore the spec of the tuplet
             case LYRIC: //lyric ::= "w:" lyrical_element*
             {
                 final Music mostRecentLine = musicMap.get(voice).get(-1);
@@ -227,8 +298,11 @@ public class BodyParser {
                 musicMap.put(voice, musicList);
                 return musicMap;  
             }
+            
             default:
-                throw new AssertionError("should never get here");                    
+                System.out.println(4);
+                throw new AssertionError("should never get here");        
+//                continue;
             }
             
         }
@@ -260,7 +334,7 @@ public class BodyParser {
         String voice = "1"; //default voice of 1
         
         //case ABC_LINE: // abc_line ::= element+ end_of_line (lyric end_of_line)?  | middle_of_body_field | comment
-        for (ParseTree<BodyGrammar> child : children) {   // for each line            
+        for (ParseTree<BodyGrammar> child : children) {   // for each line
             switch(child.name()) {
                 case MIDDLE_OF_BODY_FIELD: //middle_of_body_field ::= field_voice
                 {

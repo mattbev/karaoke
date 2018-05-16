@@ -76,7 +76,8 @@ backslash_hyphen ::= "\\" "-";
 /* General */
 
 comment ::= space_or_tab* "%" text newline;
-text ::= [ ^(newline)]*;
+text ::= [^"\r""\n")]*;
+
 
 end_of_line ::= comment | newline;
 

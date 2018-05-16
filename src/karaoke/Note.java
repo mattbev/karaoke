@@ -54,6 +54,8 @@ public class Note {
      * @param noteLength the duration of the note
      */
     public Note(String pitch, String noteLength) {
+//        System.out.println(pitch);
+//        System.out.println(noteLength);
         Set<String> validNotes = new HashSet<>(Arrays.asList("C","D","E","F","G","A","B","c","d","e","f","g","a","b"));
         String basenote = "";
         for (String note : validNotes) {
@@ -62,30 +64,46 @@ public class Note {
                 break;
             }
         }
-        final String[] pitchParams = pitch.split(basenote);
-        final String noteAccidental = pitchParams[0];
-        final String octave = pitchParams[1];
+        
         final Pitch notePitch = new Pitch(basenote.toUpperCase().toCharArray()[0]);
+      
+        final String[] pitchParams = pitch.split(basenote);
+        String noteAccidental = "";
+        if (pitchParams.length == 2) {
+            noteAccidental = pitchParams[0];
+            final String octave = pitchParams[1];
+            
+            if (basenote.toLowerCase().equals(basenote)) {
+                notePitch.transpose(Pitch.OCTAVE);
+            }
+            if (octave.contains("'")) {
+                notePitch.transpose(Pitch.OCTAVE*octave.length());
+            }
+            else if(octave.contains(",")) {
+                notePitch.transpose(-Pitch.OCTAVE*octave.length());
+            }
+            if (noteAccidental.contains("^")) {
+                notePitch.transpose(noteAccidental.length());
+            }
+            else if (noteAccidental.contains("_")) {
+                notePitch.transpose(-noteAccidental.length());
+            }
+        }
         
-        if (basenote.toLowerCase().equals(basenote)) {
-            notePitch.transpose(Pitch.OCTAVE);
+        String numerator;
+        String denominator;
+        if (noteLength.length() == 0) {
+            numerator = "0";
+            denominator = "0";
         }
-        if (octave.contains("'")) {
-            notePitch.transpose(Pitch.OCTAVE*octave.length());
+        else if (noteLength.length() == 1) {
+            numerator = noteLength;
+            denominator = "1";
+        } else {
+            final String[] lengthParams = noteLength.split("/");
+            numerator = lengthParams[0];
+            denominator = lengthParams[1];
         }
-        else if(octave.contains(",")) {
-            notePitch.transpose(-Pitch.OCTAVE*octave.length());
-        }
-        if (noteAccidental.contains("^")) {
-            notePitch.transpose(noteAccidental.length());
-        }
-        else if (noteAccidental.contains("_")) {
-            notePitch.transpose(-noteAccidental.length());
-        }
-        
-        final String[] lengthParams = noteLength.split("/");
-        final String numerator = lengthParams[0];
-        final String denominator = lengthParams[1];
         int numeratorInt = 1;
         int denominatorInt = 1;
         if (numerator.length() > 0) {

@@ -89,22 +89,25 @@ public class HeaderParser {
            switch(childParseTree.name()) {   
            case FIELD_NUMBER: //field_number ::= "X:" digit+ end_of_line
                {
-                   final List<ParseTree<HeaderGrammar>> children = parseTree.children();
+                   final List<ParseTree<HeaderGrammar>> children = childParseTree.children();
                    String index = "";
-                   for (int i=1; i<children.size()-1; i++) {
+                   for (int i=0; i<children.size()-1; i++) {
                        index += children.get(i).text();
                    }
                    headerMap.put('X', index);
+                   continue;
                }
            case FIELD_TITLE: //field_title ::= "T:" text end_of_line
                {
-                   final String title = parseTree.children().get(1).text();
+                   final String title = childParseTree.children().get(0).text();
                    headerMap.put('T', title);
+                   continue;
                }
            case FIELD_KEY: //field_key ::= "K:" key end_of_line
                {
-                   final String key = parseTree.children().get(1).text();
+                   final String key = childParseTree.children().get(0).text();
                    headerMap.put('K', key);
+                   continue;
                }
            case OTHER_FIELDS: //other_fields ::= field_composer | field_default_length | field_meter | field_tempo | field_voice | comment
                {
@@ -112,28 +115,33 @@ public class HeaderParser {
                   switch(subParseTree.name()) {
                   case FIELD_COMPOSER: //field_composer ::= "C:" text end_of_line
                        {
-                           final String composer = parseTree.children().get(1).text();
+                           final String composer = subParseTree.children().get(0).text();
                            headerMap.put('C', composer);
+                           continue;
                        }
                   case FIELD_DEFAULT_LENGTH: //field_default_length ::= "L:" note_length end_of_line
                        {
-                           final String noteLength = parseTree.children().get(1).text();
+                           final String noteLength = subParseTree.children().get(0).text();
                            headerMap.put('L', noteLength);
+                           continue;
                        }    
                   case FIELD_METER: //field_meter ::= "M:" meter end_of_line
                       {
-                          final String meter = parseTree.children().get(1).text();
+                          final String meter = subParseTree.children().get(0).text();
                           headerMap.put('M', meter);
+                          continue;
                       }
                   case FIELD_TEMPO: //field_tempo ::= "Q:" tempo end_of_line
                       {
-                          final String tempo = parseTree.children().get(1).text(); 
+                          final String tempo = subParseTree.children().get(0).text(); 
                           headerMap.put('Q', tempo);
+                          continue;
                       }
                   case FIELD_VOICE: //field_voice ::= "V:" text end_of_line
                       {
-                          final String voices = parseTree.children().get(1).text();
+                          final String voices = subParseTree.children().get(0).text();
                           headerMap.put('V', voices);
+                          continue;
                       }
                   default:
                       throw new AssertionError("should never get here");
@@ -147,36 +155,3 @@ public class HeaderParser {
        return new Header(headerMap);
    }  
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-//       case KEY: //key ::= keynote "m"?
-//           {
-//               //do something
-//           }
-//       case KEYNOTE: //keynote ::= basenote ("#" | "b")?
-//           {
-//               //do something
-//           }
-//       case METER: //meter ::= "C" | "C|" | meter_fraction
-//           {
-//               //do something
-//           }
-//       case METER_FRACTION: //meter_fraction ::= digit+ "/" digit+
-//           {
-//               //so something
-//           }
-//       case TEMPO: //tempo ::= meter_fraction "=" digit+
-//           {
-//               //do something
-//           }
