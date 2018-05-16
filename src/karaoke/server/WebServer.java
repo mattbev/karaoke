@@ -29,7 +29,7 @@ public class WebServer {
     
     private final HttpServer server;
     private final Karaoke karaoke;
-    private final Map<String, BlockingQueue<LyricLine>> bq = new HashMap<>();
+    public final Map<String, BlockingQueue<LyricLine>> bq = new HashMap<>();
     
     // Abstraction function:
     //   AF(server, karaoke, bq) = a new WebServer instance, where the lyrics for karaoke are streamed on server, where
@@ -66,15 +66,15 @@ public class WebServer {
             HttpContext url = this.server.createContext("/"+voice, new HttpHandler(){
                 public void handle(HttpExchange exchange) throws IOException{
                     html2(exchange);
-                    bq.put(voice, new LinkedBlockingQueue<>());
+                    
                 }
             });
+            bq.put(voice, new LinkedBlockingQueue<>());
         
             // add logging to the /hello/ handler and set required HTTP headers
             //   (do this on all your handlers)
             url.getFilters().addAll(Arrays.asList(log, headers));
         }
-        
         
         checkRep();
     }
@@ -88,92 +88,7 @@ public class WebServer {
         assert bq != null;
     }
     
-    
-    /**
-     * This handler sends a stream of HTML to the web browser,
-     * pausing briefly between each line of output.
-     * Returns after the entire stream has been sent.
-     * 
-     * @param exchange request/reply object
-     * @param karaoke karaoke object to be streamed
-     * @throws IOException if network problem
-     */
-//    private static void htmlStream(HttpExchange exchange, Karaoke karaoke) throws IOException {
-//        
-//        //JUST NEEDS TO BE CALLED FOR EACH VOICE'S URL WHEN MUSIC IS STARTED
-//        
-//        final String path = exchange.getRequestURI().getPath();
-//        final String base = exchange.getHttpContext().getPath();     
-//        assert path.startsWith(base);
-//        
-//        String voice = path.substring(base.length());     //create substring of voice
-//        
-//        List<Double> voiceDurationList = karaoke.getDurationList(voice);
-//
-//        
-//        //get list of lyricLines that corresponds to voice
-//        List<String> voiceLyrics = karaoke.getVoiceLyricLinesList(voice);
-//        System.err.println("received request " + path);
-//    
-//        final boolean autoscroll = true;     //path.endsWith("/autoscroll");
-//        
-//        // html response
-//        exchange.getResponseHeaders().add("Content-Type", "text/html; charset=utf-8");
-//        
-//        // must call sendResponseHeaders() before calling getResponseBody()
-//        final int successCode = 200;
-//        final int lengthNotKnownYet = 0;
-//        exchange.sendResponseHeaders(successCode, lengthNotKnownYet);
-//
-//        // get output stream to write to web browser
-//        final boolean autoflushOnPrintln = true;
-//        PrintWriter out = new PrintWriter(
-//                              new OutputStreamWriter(
-//                                  exchange.getResponseBody(), 
-//                                  StandardCharsets.UTF_8), 
-//                              autoflushOnPrintln);
-//        
-//        try {
-//
-//            // IMPORTANT: some web browsers don't start displaying a page until at least 2K bytes
-//            // have been received.  So we'll send a line containing 2K spaces first.
-//            final int enoughBytesToStartStreaming = 2048;
-//            for (int i = 0; i < enoughBytesToStartStreaming; ++i) {
-//                out.print(' ');
-//            }
-//            out.println(); // also flushes
-//            
-//            final int numberOfLinesToSend = voiceLyrics.size();
-//            //final int millisecondsBetweenLines = 200;
-//            
-//            for (int i = 0; i < numberOfLinesToSend; ++i) {
-//                
-//                // print a line of text
-//                
-//                out.println(voiceLyrics.get(i) + "<br>"); // also flushes  //print that line of the lyrics list
-//                
-//                if (autoscroll) {
-//                    // send some Javascript to browser that makes it scroll down to the bottom of the page,
-//                    // so that the last line sent is always in view
-//                    out.println("<script>document.body.scrollIntoView(false)</script>");
-//                }
-//                
-//                long currentNoteDuration = voiceDurationList.get(i).longValue();    //get the duration at the corresponding index that matches the lyric
-//                
-//                // wait a bit
-//                try {
-//                    Thread.sleep(currentNoteDuration);
-//                } catch (InterruptedException e) {
-//                    return;
-//                }
-//            }
-//            
-//        } finally {
-//            exchange.close();
-//        }
-//        System.err.println("done streaming request");
-//    }
-
+   
     
     /**
      * @return the port on which this server is listening for connections
@@ -187,7 +102,6 @@ public class WebServer {
      * Start this server in a new background thread.
      */
     public void start() {
-        System.err.println("Server will listen on " + server.getAddress());
         server.start();
         checkRep();
     }
@@ -196,7 +110,6 @@ public class WebServer {
      * Stop this server. Once stopped, this server cannot be restarted.
      */
     public void stop() {
-        System.err.println("Server will stop");
         server.stop(0);
         checkRep();
     }

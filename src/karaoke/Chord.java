@@ -103,6 +103,7 @@ public class Chord implements Playable {
                 try {
                     server.putInBlockingQueue(lyricLine);
                 } catch (InterruptedException e) {
+                    System.out.println("hey");
                     e.printStackTrace();
                 }
             };

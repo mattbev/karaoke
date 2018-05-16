@@ -6,6 +6,10 @@ import java.util.List;
 
 import org.junit.Test;
 
+import karaoke.Karaoke;
+import karaoke.server.WebServer;
+import karaoke.sound.MusicPlayer;
+
 
 /**
  * Tests for the 
@@ -97,10 +101,13 @@ public class MusicParserTest {
     public void testCorrectPiece1() {
         try {
             File f = new File("samples/piece1.abc");
+            
             List<String> s = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8);
             String contents = String.join("\n", s);
             KaraokeParser.parse(contents);
+            
         } catch (Exception e) {
+            e.printStackTrace();
             assert false: "file should have parsed correctly";
         }
     }

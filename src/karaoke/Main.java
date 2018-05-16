@@ -59,24 +59,22 @@ public class Main {
             List<String> voices = karaoke.getVoices();
             List<String> urls = new ArrayList<>();
             
-            String mainUrl = "http://" + iPAddress + ":" + port + "/" + "/";
+            String mainUrl =  iPAddress + ":" + port + "/";
             for (String voice : voices) {
-                urls.add(mainUrl + voice);
+                urls.add(mainUrl + voice + "/");
             }
-            System.out.println("Playing " + karaoke.getTitle() + " by " + karaoke.getComposer());
             WebServer server = new WebServer(karaoke, port);
-            
             server.start();
-            System.out.println("Ready to play " + karaoke.getTitle() + " by " + karaoke.getComposer());
-            System.out.println(" ");
-            System.out.println("To get ready to view the lyrics, navigate in your browser to one of the following urls, where the extension"
-                    + " indicates which voice's lyrics will be streaming at that url:");
-            System.out.println(" ");
-            System.out.println(urls);
-            System.out.println(" ");
-            //System.out.println("http://" + iPAddress + ":" + port + "/hello/");
-            System.out.println("Begin playing the music and streaming the lyrics by typing \"play\" and hitting Enter");
-            System.out.println(" ");
+            
+            System.out.println("\nReady to play " + karaoke.getTitle() + " by " + karaoke.getComposer());
+            System.out.println("\nTo get ready to view the lyrics, navigate in your browser to one of the following urls, where the extension"
+                    + " indicates which voice's lyrics will be streaming at that url, where voice \"1\" is the default if your file specified no voice:");
+            System.out.println("\n"+String.join("\n", urls));
+
+            System.out.println("\nBegin playing the music and streaming the lyrics by typing \"play\" and hitting Enter");
+
+            System.out.println("\nTo exit at any time, press Ctrl-C");
+            System.out.println(karaoke.getLyrics("1"));
             BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
             if (b.readLine().equals("play")) {
                 MusicPlayer.play(karaoke,server);
