@@ -25,8 +25,8 @@ public interface Music {
      * @param components the ordered components of this measure
      * @return a new measure of karaoke
      */
-    public static Music createMeasure(List<Playable> components) {
-        return new Measure(components);
+    public static Music createLine(List<Playable> components) {
+        return new Line(components);
     }
     
     /**
@@ -41,10 +41,10 @@ public interface Music {
     }
     
     /**
-     * gets the music of the piece
-     * @return the measures of the music
+     * gets the components of the music
+     * @return the playables in the music in order
      */
-//    public List<Measure> getMusic();
+    public List<Playable> getComponents();
     
     /**
      * @return the total duration of this piece in beats

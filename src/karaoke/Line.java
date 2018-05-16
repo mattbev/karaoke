@@ -1,7 +1,6 @@
 package karaoke;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import karaoke.sound.SequencePlayer;
@@ -54,10 +53,7 @@ public class Line implements Music {
         }
     }
     
-    /**
-     * gets the components of a measure
-     * @return a list of the measure components
-     */
+    @Override
     public List<Playable> getComponents() {
         return new ArrayList<>(this.components);
     }

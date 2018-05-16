@@ -2,25 +2,14 @@ package karaoke.parser;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import edu.mit.eecs.parserlib.ParseTree;
 import edu.mit.eecs.parserlib.Parser;
 import edu.mit.eecs.parserlib.UnableToParseException;
 import karaoke.Body;
-import karaoke.Chord;
-import karaoke.Concat;
 import karaoke.Header;
 import karaoke.Karaoke;
-import karaoke.LyricLine;
-import karaoke.Measure;
-import karaoke.Note;
-import karaoke.Playable;
-import karaoke.Rest;
-import karaoke.Tuplet;
 
 /**
  * 

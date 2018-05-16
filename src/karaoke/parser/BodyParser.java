@@ -14,7 +14,6 @@ import edu.mit.eecs.parserlib.UnableToParseException;
 import karaoke.Body;
 import karaoke.Chord;
 import karaoke.Header;
-import karaoke.Karaoke;
 import karaoke.LyricLine;
 import karaoke.Music;
 import karaoke.Note;
@@ -81,11 +80,14 @@ public class BodyParser {
      * helper function for makeAbstractSyntaxTree
      * @param parseTree some tree representing when abc_line ::= element+ end_of_line (lyric end_of_line)?
      * @param header the header to the music piece
+     * @param musicMap the map of voices to their musics
+     * @param voice the current voice of the line
      * @return a list of playables to represent the line
      */
-    private static List<Playable> evaluateLine(ParseTree<BodyGrammar> parseTree, Header header) {
+    private static Map<String,List<Music>> evaluateLine(ParseTree<BodyGrammar> parseTree, Header header, Map<String, List<Music>> currentMap, String voice) {
         
         final List<Playable> line = new ArrayList<>();
+        final Map<String, List<Music>> musicMap = new HashMap<>(currentMap);
         
         for (ParseTree<BodyGrammar> child : parseTree.children()) {
             switch(child.name()) {
@@ -107,7 +109,7 @@ public class BodyParser {
                             noteLength = header.getDefaultLength();
                         }
                         final Note note = new Note(pitch, noteLength);        
-                        final Chord noteChord = new Chord(Arrays.asList(note));
+                        final Chord noteChord = Playable.createChord(Arrays.asList(note), LyricLine.emptyLyricLine());
                         line.add(noteChord);
                     }
                     case CHORD: //chord ::= "[" note+ "]"
@@ -126,7 +128,7 @@ public class BodyParser {
                             final Note note = new Note(pitch, noteLength);  
                             notes.add(note);
                         }   
-                        final Chord chord = new Chord(notes);
+                        final Chord chord = Playable.createChord(notes, LyricLine.emptyLyricLine());
                         line.add(chord);
                     }
                     default:
@@ -137,17 +139,19 @@ public class BodyParser {
                 {
                     final List<ParseTree<BodyGrammar>> restChildren = child.children();
                     final int restLength = Integer.parseInt(restChildren.get(1).text());
-                    final Rest rest = new Rest(restLength);
+                    final Rest rest = Playable.createRest(restLength, LyricLine.emptyLyricLine());
                     line.add(rest);
                 }
                 case TUPLET_ELEMENT: //tuplet_element ::= tuplet_spec note_element+
                 {
-                    final List<Playable> tupletPlayables = evaluateLine(child, header);
+                    final Map<String, List<Music>> newMap = evaluateLine(child, header, musicMap, voice);
+                    final List<Playable> tupletPlayables = newMap.get(voice).get(-1).getComponents();
+                    newMap.get(voice).remove(-1);
                     final List<Chord> tupletChords = new ArrayList<>();
                     for (Playable playable : tupletPlayables) {
                         tupletChords.add((Chord) playable);
                     }
-                    final Tuplet tuplet = new Tuplet(tupletChords);
+                    final Tuplet tuplet = Playable.createTuplet(tupletChords, LyricLine.emptyLyricLine());
                     line.add(tuplet);
                     
                 }
@@ -178,7 +182,9 @@ public class BodyParser {
                 }
                 case NEWLINE: //newline ::= "\n" | "\r" "\n"?
                 {
-                    return line;
+                    final List<Music> musicList = musicMap.get(voice);
+                    musicList.add(Music.createLine(line));
+                    
                 }
                 default:
                     throw new AssertionError("should never get here");
@@ -186,16 +192,33 @@ public class BodyParser {
             }
             case TUPLET_SPEC:
             {
-                continue;
+                continue; //ignore the spec of the tuplet
             }
             case LYRIC: //lyric ::= "w:" lyrical_element*
             {
+                final Music mostRecentLine = musicMap.get(voice).get(-1);
                 final List<ParseTree<BodyGrammar>> lyricChildren = child.children();
                 final List<String> lyricElements = new ArrayList<>();
+                final List<Playable> elements = new ArrayList<>();
+                
                 for (int i=1; i < lyricChildren.size(); i++) {
-                    lyricElements.add(lyricChildren.get(i).text());
+                    if (mostRecentLine.getComponents().get(i-1) instanceof Rest) {
+                        lyricElements.add("");
+                    } else {
+                        lyricElements.add(lyricChildren.get(i).text());
+                    }
+                }                
+      
+                for (int i=0; i < mostRecentLine.getComponents().size(); i++) {
+                    
+                    try {
+                        final LyricLine lyricLine = new LyricLine(lyricElements, i, voice);
+                        elements.add(mostRecentLine.getComponents().get(i).copyWithNewLyric(lyricLine));
+                    } catch(IndexOutOfBoundsException e) {
+                        elements.add(mostRecentLine.getComponents().get(i).copyWithNewLyric(LyricLine.emptyLyricLine()));
+                    }
                 }
-                final LyricLine lyricLine = new LyricLine(lyricElements, 0);
+                return elements;
             }
             default:
                 throw new AssertionError("should never get here");                    
@@ -219,15 +242,15 @@ public class BodyParser {
  
         final List<ParseTree<BodyGrammar>> children = parseTree.children();
 //        Map<String, LyricLine> voicesLyrics = new HashMap<>();
-        Map<String, Music> voicesToMusic = new HashMap<>();
+        Map<String, List<Music>> voicesToMusic = new HashMap<>();
+        String voice = "1"; //default voice of 1
         
         //case ABC_LINE: // abc_line ::= element+ end_of_line (lyric end_of_line)?  | middle_of_body_field | comment
-        for (ParseTree<BodyGrammar> child : children) {   // for each line
-            String voice = "1";
+        for (ParseTree<BodyGrammar> child : children) {   // for each line            
             switch(child.name()) {
                 case MIDDLE_OF_BODY_FIELD: //middle_of_body_field ::= field_voice
                 {
-                    voice = child.children().get(0).text();
+                    voice = child.children().get(0).text(); //should always be declared before hitting default case if there are voices in the abc file
                 }
                 case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
                 {
@@ -235,7 +258,7 @@ public class BodyParser {
                 }
                 default: // when abc_line ::= element+ end_of_line (lyric end_of_line)?
                     try {
-                        final Music line = Music.createLine(evaluateLine(child, header));
+                        final Music line = Music.createLine(evaluateLine(child, header, voicesToMusic, voice));
                         if (voicesToMusic.containsKey(voice)) {
                             final Music currentMusic = voicesToMusic.get(voice);
                             final Music newMusic = Music.createConcat(currentMusic, line);

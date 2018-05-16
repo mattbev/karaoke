@@ -54,13 +54,13 @@ public class Concat implements Music {
         firstMusic.play(player,startBeat);
         secondMusic.play(player, startBeat + firstMusic.duration());
     }
-
+    
     @Override
-    public List<Measure> getMusic() {
-        List<Measure> measures = new ArrayList<>();
-        measures.addAll(this.firstMusic.getMusic());
-        measures.addAll(this.secondMusic.getMusic());
-        return measures;
+    public List<Playable> getComponents() {
+        final List<Playable> firstComponents = new ArrayList<>(this.firstMusic.getComponents());
+        final List<Playable> secondComponents = new ArrayList<>(this.secondMusic.getComponents());
+        firstComponents.addAll(secondComponents);
+        return new ArrayList<Playable>(firstComponents);
     }
     
     @Override

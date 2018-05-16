@@ -16,6 +16,7 @@ public class LyricLine {
     
     private final List<String> lyrics;
     private final int boldedIndex;
+    private final String voice;
     
     // AF(lyrics, boldedIndex): A line of lyrics in a song with lyric at index boldedIndex bolded 
     //
@@ -37,10 +38,12 @@ public class LyricLine {
      * 
      * @param lyrics the lyrics to add to the line
      * @param boldedIndex the index of the lyric in the line that should be bolded
+     * @param voice the voice that is associated with this lyric line
      */
-    public LyricLine(List<String> lyrics, int boldedIndex) {
+    public LyricLine(List<String> lyrics, int boldedIndex, String voice) {
         this.lyrics = new ArrayList<>(lyrics);
         this.boldedIndex = boldedIndex;
+        this.voice = voice;
         
         //find current lyric string that should be bolded, then add bolding syntax
         String boldedLyric = this.lyrics.get(boldedIndex);
@@ -66,6 +69,14 @@ public class LyricLine {
     }
     
     /**
+     * gets the voice associated with this lyric line
+     * @return the voice
+     */
+    public String getVoice() {
+        return this.voice;
+    }
+    
+    /**
      * gets the index that is bolded
      * @return the index from 0 to number of lyrics in line -1 that is bolded
      */
@@ -80,7 +91,7 @@ public class LyricLine {
      */
     public LyricLine copy() {
         checkRep();
-        return new LyricLine(this.getLyricLine(), this.getBoldedIndex());
+        return new LyricLine(this.getLyricLine(), this.getBoldedIndex(), this.voice);
     }
     
     /**
@@ -88,7 +99,7 @@ public class LyricLine {
      * @return a new LyricLine instance representing the absence of a lyric
      */
     public static LyricLine emptyLyricLine() {
-        return new LyricLine(Collections.emptyList(), 0);
+        return new LyricLine(Collections.emptyList(), 0, "");
     }
     
 

@@ -42,6 +42,17 @@ public interface Playable {
     public static Rest createRest(double duration,LyricLine lyricLine) {
         return new Rest(duration, lyricLine);
     }
+    
+    /**
+     * create a new music tuplet composed of chords and with lyrics lyricLine
+     * 
+     * @param elements the chords in the tuplet
+     * @param lyricLine the line of lyrics, with the current one bolded, corresponding to this tuplet
+     * @return a new Tuplet
+     */
+    public static Tuplet createTuplet(List<Chord> elements, LyricLine lyricLine) {
+        return new Tuplet(elements, lyricLine);
+    }
 
     /**
      * Get the duration of this playable component
@@ -58,15 +69,6 @@ public interface Playable {
      * @return new playable with lyric l 
      */
     public Playable copyWithNewLyric(LyricLine l);
-    
-    /**
-     * Make a new playable which consists of the same contents and lyrics, but has a different duration depending on the Tuplet type t
-     * 
-     * @param duration  the new duration
-     * @param t the tuplet type
-     * @return a new Chord with a different duration depending on the tuplet
-     */
-    public Playable copyPlayableNewDuration(double duration, Tuplet.Type t);
     
 
     /**

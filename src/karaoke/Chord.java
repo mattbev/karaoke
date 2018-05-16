@@ -99,13 +99,19 @@ public class Chord implements Playable {
         checkRep();
     }
     
-    @Override
-    public Chord copyPlayableNewDuration(double duration, Tuplet.Type t) { 
+    /**
+     * Make a new playable which consists of the same contents and lyrics, but has a different duration depending on the Tuplet type t
+     * 
+     * @param duration  the new duration
+     * @param t the tuplet type
+     * @return a new Chord with a different duration depending on the tuplet
+     */
+    public Chord copyChordNewDuration(double duration, Tuplet.Type t) { 
         LyricLine l = this.getLyricLine();
         List<Note> notesCopy = new ArrayList<>();
         for (Note note : this.notes) {
             double mult = getMultiplier(t);
-            notesCopy.add(Note.createNote(duration * mult, note.getPitch(), note.getAccidental()));
+            notesCopy.add(new Note(duration * mult, note.getPitch(), note.getAccidental()));
         }
         checkRep();
         return new Chord(notes, l);
@@ -189,7 +195,7 @@ public class Chord implements Playable {
     public Chord copyWithNewLyric(LyricLine l) {
         List<Note> notesCopy = new ArrayList<>();
         for (Note n : this.notes) {
-            notesCopy.add(n.createNote(n.getDuration(), n.getPitch(), n.getAccidental()));
+            notesCopy.add(new Note(n.getDuration(), n.getPitch(), n.getAccidental()));
         }
         return Playable.createChord(notesCopy, l);
     }

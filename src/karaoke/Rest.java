@@ -3,9 +3,6 @@
  */
 package karaoke;
 
-import java.util.Arrays;
-import java.util.List;
-
 import karaoke.sound.SequencePlayer;
 
 /**
@@ -40,6 +37,7 @@ public class Rest implements Playable {
      * Make a component to represent a pause in a piece of music
      * 
      * @param duration the duration of the pause
+     * @param lyricLine a line of lyrics tied to the rest
      */
     public Rest(double duration, LyricLine lyricLine) { 
         this.duration = duration;
@@ -85,6 +83,11 @@ public class Rest implements Playable {
     @Override
     public String toString() {
         return "z" + this.duration;
+    }
+
+    @Override
+    public LyricLine getLyricLine() {
+        return this.lyricLine;
     }
 
 }

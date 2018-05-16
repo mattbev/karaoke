@@ -1,7 +1,6 @@
 package karaoke;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import karaoke.sound.SequencePlayer;
@@ -131,7 +130,10 @@ public class Tuplet implements Playable {
         return hash;
     }
     
-
+    /**
+     * gets the chords that make up the tuplet
+     * @return a list of the chords in the tuplet
+     */
     public List<Chord> getChordListCopy(){
         List<Chord> chordList = new ArrayList<Chord>();
         for(Chord chord: this.newChords) {
@@ -140,9 +142,9 @@ public class Tuplet implements Playable {
         return chordList;
     }
 
-    public List<Double> getDurationList() {
-        // TODO Auto-generated method stub
-        return null;
+    @Override
+    public LyricLine getLyricLine() {
+        return this.lyricLine.copy();
     }
 
 }

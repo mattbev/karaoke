@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -15,15 +14,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 
-import javax.swing.plaf.synth.SynthSpinnerUI;
-
-import com.sun.net.httpserver.HttpServer;
-
-import edu.mit.eecs.parserlib.UnableToParseException;
 import karaoke.parser.KaraokeParser;
 import karaoke.server.WebServer;
-import karaoke.sound.MusicPlayer;
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Main entry point of the karaoke machine, run to make karaoke song requests and stream lyrics
@@ -75,8 +67,8 @@ public class Main {
             WebServer server = new WebServer(karaoke, port);
             
             
-            LyricLine fakeLyricLine = new LyricLine(Arrays.asList("hello ", "goodbye"), 0);
-            LyricLine fakeNextLine = new LyricLine(Arrays.asList("hello ", "goodbye"), 1);
+//            LyricLine fakeLyricLine = new LyricLine(Arrays.asList("hello ", "goodbye"), 0);
+//            LyricLine fakeNextLine = new LyricLine(Arrays.asList("hello ", "goodbye"), 1);
            
             server.start();
             System.out.println("Ready to play " + karaoke.getTitle() + " by " + karaoke.getComposer());
@@ -94,8 +86,8 @@ public class Main {
                 //server.start();
                 //MusicPlayer.play(karaoke);
                 System.out.println("would play karaoke now");
-                server.putInBlockingQueue(fakeLyricLine);
-                server.putInBlockingQueue(fakeNextLine);
+//                server.putInBlockingQueue(fakeLyricLine);
+//                server.putInBlockingQueue(fakeNextLine);
 //                karaoke.notifyAll();
                 
             }

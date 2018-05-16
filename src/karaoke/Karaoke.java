@@ -51,19 +51,6 @@ public class Karaoke {
         return new Karaoke(header,body);
     }
     
-    
-    
-    /**
-     * Provides a copy of the lyric lines of a certain voice
-     * @param voice voice whose lyric lines are returned
-     * @return the lyric lines of voice <voice>
-     */
-    public List<String> getVoiceLyricLinesList(String voice){
-        List<String> lyricLines = this.body.getVoiceLyricLines(voice);
-        return lyricLines;
-
-    }
-    
     /**
      * Play this karaoke
      * @param player player to play on
@@ -103,16 +90,5 @@ public class Karaoke {
         } return voices;
     }
     
-    /**
-     * Provides duration list of the music of a certain
-     * voice in the karaoke's body
-     * @param voice voice whose music's duration list
-     *        is returned
-     * @return duration list of voice <voice>'s music
-     */
-    public List<Double> getDurationList(String voice){
-        return this.body.getVoiceDurationList(voice);
-        
-    }
     
 }
