@@ -4,10 +4,13 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import com.sun.net.httpserver.HttpContext;
@@ -29,7 +32,8 @@ public class WebServer {
     
     private final HttpServer server;
     private final Karaoke karaoke;
-    public final Map<String, BlockingQueue<LyricLine>> bq = new HashMap<>();
+    private final Map<String,BlockingQueue<LyricLine>> bq = new HashMap<>();
+    private final Map<String, Integer> countPerVoice = new HashMap<>();
     
     // Abstraction function:
     //   AF(server, karaoke, bq) = a new WebServer instance, where the lyrics for karaoke are streamed on server, where
@@ -58,22 +62,27 @@ public class WebServer {
         this.server = HttpServer.create(new InetSocketAddress(port), 0);
         this.karaoke = karaoke;
 
+
+        server.setExecutor(Executors.newCachedThreadPool());
         LogFilter log = new LogFilter();
         HeadersFilter headers = new HeadersFilter();
         // all responses will be plain-text UTF-8
-        headers.add("Content-Type", "text/plain; charset=utf-8");
+        //headers.add("Content-Type", "text/html; charset=utf-8");
         for(String voice: this.karaoke.getVoices()) {
             HttpContext url = this.server.createContext("/"+voice, new HttpHandler(){
                 public void handle(HttpExchange exchange) throws IOException{
+                    countPerVoice.put(voice, countPerVoice.get(voice) + 1);
+                    
                     html2(exchange);
                     
                 }
             });
             bq.put(voice, new LinkedBlockingQueue<>());
+            countPerVoice.put(voice, 0);
         
             // add logging to the /hello/ handler and set required HTTP headers
             //   (do this on all your handlers)
-            url.getFilters().addAll(Arrays.asList(log, headers));
+            //url.getFilters().addAll(Arrays.asList(log, headers));
         }
         
         checkRep();
@@ -85,7 +94,7 @@ public class WebServer {
     private void checkRep() {
         assert server != null;
         assert karaoke != null;
-        assert bq != null;
+        assert bq != null; //TODO
     }
     
    
@@ -121,7 +130,9 @@ public class WebServer {
      * @throws InterruptedException if the thread is interrupted
      */
     public void putInBlockingQueue(LyricLine l) throws InterruptedException {
-        bq.get(l.getVoice()).put(l);
+        for (int i = 0; i < countPerVoice.get(l.getVoice()); i ++) {
+            bq.get(l.getVoice()).put(l);
+        }
         checkRep();
         
     }
@@ -129,7 +140,6 @@ public class WebServer {
     private void html2(HttpExchange exchange) throws IOException {
         final String path = exchange.getRequestURI().getPath();
         
-        System.err.println("received request " + path);
 
         // html response
         exchange.getResponseHeaders().add("Content-Type", "text/html; charset=utf-8");
@@ -169,7 +179,6 @@ public class WebServer {
         } finally {
             exchange.close();
         }
-        System.err.println("done streaming request");
     }
     
 }

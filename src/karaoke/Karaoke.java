@@ -113,10 +113,10 @@ public class Karaoke {
      * @param voice the voice you want the lyrics for 
      * @return the list of lyric lines for this karaoke for this voice
      */
-    public List<LyricLine> getLyrics(String voice) {
-        List<LyricLine> allLyrics = new ArrayList<>();
+    public List<String> getLyrics(String voice) {
+        List<String> allLyrics = new ArrayList<>();
         for (Playable p : this.body.getVoicesToMusics().get(voice).getComponents()) {
-            allLyrics.add(p.getLyricLine());
+            allLyrics.add(p.getLyricLine().toString() + p.getLyricLine().getVoice() );
         } return allLyrics;
     }
 }

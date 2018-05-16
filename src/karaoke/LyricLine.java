@@ -130,7 +130,7 @@ public class LyricLine {
         checkRep();
         String lyricString = "";
         for (String lyric : this.lyrics) {
-            lyricString += lyric;
+            lyricString += lyric + " ";
         }
         return lyricString;
     }
