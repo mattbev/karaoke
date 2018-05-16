@@ -15,7 +15,6 @@ import karaoke.sound.*;
  */
 public class Note {
 
-//    private final Instrument instrument;
     private final double duration;
     private final Pitch pitch;
     private final String accidental;
@@ -42,7 +41,6 @@ public class Note {
      * @param accidental the accidental of the note
      */
     public Note(double duration, Pitch pitch, String accidental) {
-//        this.instrument = instrument;
         this.duration = duration;
         this.pitch = pitch;
         this.accidental = accidental;
@@ -107,7 +105,7 @@ public class Note {
      * assert stated and implied RI
      */
     private void checkRep() {
-//        assert instrument != null : "instrument can't be null";
+        assert instrument != null : "instrument can't be null";
         assert pitch != null : "pitch can't be null";
         assert accidental != null : "accidental can't be null";
         assert duration > 0;
@@ -143,15 +141,15 @@ public class Note {
         return this.accidental;
     }
     
-//    /**
-//     * Return the instrument this note is played by
-//     * 
-//     * @return this note's instrument
-//     */
-//    public Instrument getInstrument() {
-//        checkRep();
-//        return this.instrument;
-//    }
+    /**
+     * Return the instrument this note is played by
+     * 
+     * @return this note's instrument
+     */
+    public Instrument getInstrument() {
+        checkRep();
+        return this.instrument;
+    }
     
 
     /**

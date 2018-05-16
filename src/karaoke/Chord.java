@@ -173,9 +173,14 @@ public class Chord implements Playable {
         return chord + "]";
     }
 
-    @Override
-    public List<Measure> getMusic() {
-        return Arrays.asList(new Measure(Arrays.asList(this)));
+//    @Override
+//    public List<Measure> getMusic() {
+//        return Arrays.asList(new Measure(Arrays.asList(this)));
+//    }
+
+    public List<Double> getDurationList() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

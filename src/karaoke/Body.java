@@ -13,7 +13,7 @@ import karaoke.sound.SequencePlayer;
  * Immutable data type representing a karaoke music body
  *
  */
-public class Body implements Music {
+public class Body {
     private HashMap<String,Music> voiceToMusic = new HashMap<String,Music>();
     private HashMap<String,List<LyricLine>> voiceToLyrics = new HashMap<>();
     
@@ -42,23 +42,23 @@ public class Body implements Music {
      */
     public Body(HashMap<String,Music> musicMap, HashMap<String,LyricLine> lyricMap) {
         this.voiceToMusic = musicMap;
-        this.voiceToLyrics = lyricMap;
+//        this.voiceToLyrics = lyricMap;
     }
     
    
     
-    /**
-     * Provides a copy of a certain voice's lyric line list
-     * @param voice voice whose lyric list is returned
-     * @return lyric line list 
-     */
-    public List<String> getVoiceLyricLines(String voice){
-        List<String> lyricLineListCopy= new ArrayList<String>();
-        for(String line: voiceToLyrics.get(voice).getLyricLine()) {
-            lyricLineListCopy.add(line);
-        }
-        return lyricLineListCopy;
-    }
+//    /**
+//     * Provides a copy of a certain voice's lyric line list
+//     * @param voice voice whose lyric list is returned
+//     * @return lyric line list 
+//     */
+//    public List<String> getVoiceLyricLines(String voice){
+//        List<String> lyricLineListCopy= new ArrayList<String>();
+//        for(String line: voiceToLyrics.get(voice).getLyricLine()) {
+//            lyricLineListCopy.add(line);
+//        }
+//        return lyricLineListCopy;
+//    }
     
     /**
      * Provides a copy of a certain voice's music's duration list
@@ -77,7 +77,7 @@ public class Body implements Music {
     
     
     //don't really need this but necessary from interface
-    @Override
+    
     public List<Double> getDurationList(){
         List<Double> durationList = new ArrayList<Double>();
         for(String voice: this.voiceToMusic.keySet()) {
@@ -97,7 +97,7 @@ public class Body implements Music {
         return 0;
     }
 
-    @Override
+    
     public void play(SequencePlayer player, double startBeat) {
         for(String voice: this.voiceToMusic.keySet()) {
             Music voiceMusic = this.voiceToMusic.get(voice);

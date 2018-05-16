@@ -11,7 +11,7 @@ import karaoke.sound.SequencePlayer;
  * An immutable ADT to represent one syllable component in a piece of music that has a lyric syllable
  *
  */
-public interface Playable extends Music {
+public interface Playable {
     
     // Datatype definition:
     //      Playable = Chord(notes: List<Note>, lyric: List<Lyric>)
