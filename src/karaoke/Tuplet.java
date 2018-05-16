@@ -85,12 +85,17 @@ public class Tuplet implements Playable {
         //add notes of correct length into chord list
         for(Chord chord : chords) {
             double newDuration = chord.duration() * multiplier;
+            System.out.println("tuplet note duration: "+newDuration);
+
             Chord newChord = chord.copyChordNewDuration(newDuration, this.type);
+            System.out.println("newChord.duration()" + newChord.duration());
             dur += newDuration;
+            System.out.println("tuplet's updated duration: "+dur);
             newChords.add(newChord);
         }
         
         this.duration = dur;
+        System.out.println("tuplet duration: "+dur);
     }
     
     public List<Chord> getComponents() {
@@ -114,7 +119,9 @@ public class Tuplet implements Playable {
         
         double beginBeat = startBeat;
         for(Chord chord: newChords) {
+            System.out.println("tuplet chord startBeat: "+beginBeat);
             chord.play(player, beginBeat, server);
+            System.out.println("tuplet note's duration in play: "+chord.duration());
             beginBeat += chord.duration();
             Consumer<Double> c1 = i -> {
                 try {
