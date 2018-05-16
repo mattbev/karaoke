@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import edu.mit.eecs.parserlib.UnableToParseException;
 import karaoke.Karaoke;
+import karaoke.parser.KaraokeParser;
 import karaoke.sound.MidiSequencePlayer;
 import karaoke.sound.SequencePlayer;
 
@@ -136,7 +137,7 @@ public class MusicParserTest {
             Karaoke karaoke = KaraokeParser.parse("sample-abc/piece3.jpg");
             SequencePlayer player = new MidiSequencePlayer();
             double startBeat = 0;
-            karaoke.play(player, startBeat);
+//            karaoke.play(player, startBeat);
         } catch (Exception e) {
             assert false: "file should have parsed correctly";
         }

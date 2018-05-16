@@ -36,22 +36,22 @@ public class KaraokeParser {
     private static enum ABCGrammar {
        // end product
        ABC_TUNE, 
-       
-       // header
-       ABC_HEADER, FIELD_NUMBER, FIELD_TITLE, OTHER_FIELDS, FIELD_COMPOSER, 
-       FIELD_DEFAULT_LENGTH, FIELD_METER, FIELD_TEMPO, FIELD_VOICE, FIELD_KEY, 
-       KEY, KEYNOTE, METER, METER_FRACTION, TEMPO, 
-       
-       // body
-       ABC_BODY, ABC_LINE, ELEMENT, // spaces and tabs
-       NOTE_ELEMENT, NOTE, PITCH, NOTE_LENGTH, NOTE_LENGTH_STRICT, // notes
-       REST_ELEMENT, // rests
-       TUPLET_ELEMENT, TUPLET_SPEC, // tuplets
-       CHORD, // chords
-       MIDDLE_OF_BODY_FIELD, LYRIC, LYRICAL_ELEMENT, // voice
-       
-       // general
-       COMMENT, COMMENT_TEXT, END_OF_LINE,       
+//       
+//       // header
+//       ABC_HEADER, FIELD_NUMBER, FIELD_TITLE, OTHER_FIELDS, FIELD_COMPOSER, 
+//       FIELD_DEFAULT_LENGTH, FIELD_METER, FIELD_TEMPO, FIELD_VOICE, FIELD_KEY, 
+//       KEY, KEYNOTE, METER, METER_FRACTION, TEMPO, 
+//       
+//       // body
+//       ABC_BODY, ABC_LINE, ELEMENT, // spaces and tabs
+//       NOTE_ELEMENT, NOTE, PITCH, NOTE_LENGTH, NOTE_LENGTH_STRICT, // notes
+//       REST_ELEMENT, // rests
+//       TUPLET_ELEMENT, TUPLET_SPEC, // tuplets
+//       CHORD, // chords
+//       MIDDLE_OF_BODY_FIELD, LYRIC, LYRICAL_ELEMENT, // voice
+//       
+//       // general
+//       COMMENT, COMMENT_TEXT, END_OF_LINE,       
     }
     
     private static Parser<ABCGrammar> parser = makeParser();
