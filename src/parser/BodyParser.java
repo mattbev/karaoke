@@ -135,7 +135,7 @@ public class BodyParser {
                             if (noteChild.children().get(1).text().length() > 0) {
                                 noteLength = noteTree.children().get(1).text();
                             } else {
-                                noteLength = header.getDefaultLength();
+                                noteLength = "1";
                             }
                             final Note note = new Note(pitch, noteLength, header);  
                             notes.add(note);
@@ -153,9 +153,9 @@ public class BodyParser {
                     final List<ParseTree<BodyGrammar>> restChildren = child.children();
                     String restLength = restChildren.get(0).children().get(0).text();
                     if (restLength.length() == 0) {
-                        restLength = header.getDefaultLength();
+                        restLength = "1";
                     }
-                    final Rest rest = Playable.createRestFromString(restLength, LyricLine.emptyLyricLine());
+                    final Rest rest = Playable.createRestFromString(restLength, LyricLine.emptyLyricLine(), header);
                     line.add(rest);
                     continue;
                 }
