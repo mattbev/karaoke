@@ -111,6 +111,7 @@ public class Tuplet implements Playable {
         double beginBeat = startBeat;
         for(Chord chord: newChords) {
             chord.play(player, beginBeat, server);
+            beginBeat += chord.duration();
             Consumer<Double> c1 = i -> {
                 try {
                     server.putInBlockingQueue(lyricLine);
@@ -119,7 +120,7 @@ public class Tuplet implements Playable {
                 }
             };
             player.addEvent(startBeat , c1 );
-            beginBeat += chord.duration();
+            
         }
     }
     
