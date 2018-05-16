@@ -10,11 +10,12 @@ abc_tune ::= abc_header abc_body;
 @skip space_or_tab {
     abc_header ::= field_number comment* field_title other_fields* field_key;
     field_number ::= "X:" digit+ end_of_line;
-    field_title ::= "T:" text end_of_line;
+    field_meter ::= "M:" meter end_of_line;
+    
     other_fields ::= field_composer | field_default_length | field_meter | field_tempo | field_voice | comment;
     field_composer ::= "C:" text end_of_line;
     field_default_length ::= "L:" note_length_strict end_of_line;
-    field_meter ::= "M:" meter end_of_line;
+    field_title ::= "T:" text end_of_line;
     field_tempo ::= "Q:" tempo end_of_line;
     field_voice ::= "V:" text end_of_line;
     field_key ::= "K:" key end_of_line;
@@ -68,7 +69,7 @@ middle_of_body_field ::= field_voice;
 
 lyric ::= "w:" lyrical_element*;
 lyrical_element ::= " "+ | "-" | "_" | "*" | "~" | backslash_hyphen | "|" | lyric_text;
-lyric_text ::= ([A-Z]|[a-z])*;
+lyric_text ::= ([A-Z]|[a-z]|"!"|","|"'"|"?"|".")*;
 
 backslash_hyphen ::= "\\" "-";
 // backslash immediately followed by hyphen
@@ -76,7 +77,7 @@ backslash_hyphen ::= "\\" "-";
 /* General */
 
 comment ::= space_or_tab* "%" text newline;
-text ::= [ ^(newline)]*;
+text ::= [^\r\n]*;
 
 end_of_line ::= comment | newline;
 
