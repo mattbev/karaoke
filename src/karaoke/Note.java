@@ -112,7 +112,7 @@ public class Note {
         if (denominator.length() > 0) {
             denominatorInt = Integer.parseInt(denominator);
         }
-        final double noteDuration = ((double) numeratorInt) / ((double) denominatorInt) * header.getDefaultLengthDouble();
+        final double noteDuration = ((double) numeratorInt) / ((double) denominatorInt) * header.getDefaultLengthDouble() / 4.;
         
         this.accidental = noteAccidental;
         this.duration = noteDuration;
