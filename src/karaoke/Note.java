@@ -4,9 +4,10 @@ package karaoke;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Consumer;
 
-import karaoke.sound.*;
+import karaoke.sound.Instrument;
+import karaoke.sound.Pitch;
+import karaoke.sound.SequencePlayer;
 
 /**
  * @author chessa, mattbev, sophias

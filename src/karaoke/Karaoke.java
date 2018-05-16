@@ -92,5 +92,7 @@ public class Karaoke {
         } return voices;
     }
     
+//    public Body get
+    
     
 }

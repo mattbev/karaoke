@@ -145,9 +145,7 @@ public class BodyParser {
                         continue;
                     }
                     default:
-                        System.out.println(1);
                         throw new AssertionError("should never get here");
-//                        continue;
                     }
                 }
                 case REST_ELEMENT: //rest_element ::= "z" note_length
@@ -240,10 +238,7 @@ public class BodyParser {
                 case SPACE_OR_TAB: //space_or_tab ::= " " | "\t"
                     continue;
                 default:
-                    System.out.println(2);
                     throw new AssertionError("should never get here");
-//                    continue;
-        
                 }
             }
             case END_OF_LINE: //end_of_line ::= comment | newline
@@ -264,9 +259,7 @@ public class BodyParser {
                     return musicMap;                   
                 }
                 default:
-                    System.out.println(3);
                     throw new AssertionError("should never get here");
-//                    continue;
                 }
             }
             case LYRIC: //lyric ::= "w:" lyrical_element*
@@ -300,9 +293,7 @@ public class BodyParser {
             }
             
             default:
-                System.out.println(4);
                 throw new AssertionError("should never get here");        
-//                continue;
             }
             
         }

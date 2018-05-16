@@ -29,14 +29,11 @@ public class KaraokeParser {
      * @throws IOException 
      */
     public static void main(final String[] args) throws UnableToParseException, IOException {
-//        final String input1 = "img/black.png --- img/tech3.png";
-//        System.out.println(input1);
-//        final Expression expression1 = ExpressionParser.parse(input1);
-//        System.out.println(expression1);
         File f = new File("samples/piece1.abc");
         List<String> s = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8);
-        String contents = String.join("\n", s) + "\n";
+        String contents = String.join("\n", s);
         Karaoke karaoke = KaraokeParser.parse(contents);
+//        karaoke.
     }
     
     // the nonterminals of the grammar
@@ -93,8 +90,8 @@ public class KaraokeParser {
         final ParseTree<ABCGrammar> parseTree = parser.parse(string);
         
         //for visuals
-        System.out.println("parse tree " + parseTree);
-        Visualizer.showInBrowser(parseTree);
+//        System.out.println("parse tree " + parseTree);
+//        Visualizer.showInBrowser(parseTree);
         
         //make AST from parse tree
         final Karaoke karaoke = makeAbstractSyntaxTree(parseTree);
