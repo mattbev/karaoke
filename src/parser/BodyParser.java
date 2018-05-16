@@ -151,20 +151,11 @@ public class BodyParser {
                 case REST_ELEMENT: //rest_element ::= "z" note_length
                 {
                     final List<ParseTree<BodyGrammar>> restChildren = child.children();
-                    System.out.println(restChildren.get(0).children().get(0));
                     String restLength = restChildren.get(0).children().get(0).text();
-//                    if (restLength.length() == 0) {
-//                        restLength = header.getDefaultLength();
-//                    }
-//                    int numerator;
-//                    int denominator;
-//                    if (restLength.length() == 1) {
-//                        numerator = Integer.parseInt(restLength);
-//                        denominator = 1;
-//                    }
-//                    else if (restLength.length())
-////                    System.out.println(restLength);
-                    final Rest rest = Playable.createRest(Integer.parseInt(restLength), LyricLine.emptyLyricLine());
+                    if (restLength.length() == 0) {
+                        restLength = header.getDefaultLength();
+                    }
+                    final Rest rest = Playable.createRestFromString(restLength, LyricLine.emptyLyricLine());
                     line.add(rest);
                     continue;
                 }

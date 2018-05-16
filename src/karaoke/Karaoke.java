@@ -92,7 +92,13 @@ public class Karaoke {
         } return voices;
     }
     
-//    public Body get
+    public Body getBody() {
+        return this.body;
+    }
+    
+    public Header getHeader() {
+        return this.header;
+    }
     
     
 }

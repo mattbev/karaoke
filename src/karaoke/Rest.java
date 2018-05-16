@@ -50,6 +50,30 @@ public class Rest implements Playable {
         this.lyricLine = lyricLine;
     }
     
+    public Rest(String duration, LyricLine lyricLine) {
+        this.lyricLine = lyricLine;
+        
+        String numerator;
+        String denominator;
+        
+        if (duration.length() == 1) {
+            numerator = duration;
+            denominator = "1";
+        } else {
+            final String[] lengthParams = duration.split("/");
+            numerator = lengthParams[0];
+            denominator = lengthParams[1];
+        }
+        int numeratorInt = 1;
+        int denominatorInt = 1;
+        if (numerator.length() > 0) {
+            numeratorInt = Integer.parseInt(numerator);
+        }
+        if (denominator.length() > 0) {
+            denominatorInt = Integer.parseInt(denominator);
+        }
+        this.duration = ((double) numeratorInt) / ((double) denominatorInt);
+    }
 
     @Override
     public double duration() {
