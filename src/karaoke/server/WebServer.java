@@ -4,7 +4,9 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -20,18 +22,18 @@ import karaoke.LyricLine;
 /**
  * 
  * @author chessa, mattbev, sophias
- * An HTTP karaoke server
+ * 
+ * A web server to act as a karaoke lyric streaming machine for a specified song
  */
 public class WebServer {
-    public static final int AUTOSCROLL_LETTERS = 10;
     
     private final HttpServer server;
     private final Karaoke karaoke;
-    private final BlockingQueue<LyricLine> bq = new LinkedBlockingQueue();
-//    private final List<BlockingQueue<LyricLine>> bq1 = new ArrayList<>();
+    private final Map<String, BlockingQueue<LyricLine>> bq = new HashMap<>();
     
     // Abstraction function:
-    //   AF(server, karaoke) = a new WebServer instance, where the lyrics for karaoke are streamed on server
+    //   AF(server, karaoke, bq) = a new WebServer instance, where the lyrics for karaoke are streamed on server, where
+    //                  the lyrics for each voice v of the karaoke are being controlled in the queue bq.get(v)
     // Rep invariant:
     //   true
     // Safety from rep exposure:
@@ -56,25 +58,21 @@ public class WebServer {
         this.server = HttpServer.create(new InetSocketAddress(port), 0);
         this.karaoke = karaoke;
 
-//        LogFilter log = new LogFilter();
-//        HeadersFilter headers = new HeadersFilter();
+        LogFilter log = new LogFilter();
+        HeadersFilter headers = new HeadersFilter();
         // all responses will be plain-text UTF-8
-//        headers.add("Content-Type", "text/plain; charset=utf-8");
-        for(String voice: karaoke.getVoices()) {
+        headers.add("Content-Type", "text/plain; charset=utf-8");
+        for(String voice: this.karaoke.getVoices()) {
             HttpContext url = this.server.createContext("/"+voice, new HttpHandler(){
                 public void handle(HttpExchange exchange) throws IOException{
-                    html2(karaoke, exchange);
+                    html2(exchange);
+                    bq.put(voice, new LinkedBlockingQueue<>());
                 }
             });
         
-            // -or- use a lambda expression with "->"
-            //HttpContext hello = server.createContext("/hello/", exchange -> handleHello(exchange));
-            // -or- use a method reference with "::"
-            //HttpContext hello = server.createContext("/hello/", this::handleHello);
-            
             // add logging to the /hello/ handler and set required HTTP headers
             //   (do this on all your handlers)
-//            url.getFilters().addAll(Arrays.asList(log, headers));
+            url.getFilters().addAll(Arrays.asList(log, headers));
         }
         
         
@@ -85,7 +83,9 @@ public class WebServer {
      * assert RI
      */
     private void checkRep() {
-        assert true;
+        assert server != null;
+        assert karaoke != null;
+        assert bq != null;
     }
     
     
@@ -173,140 +173,13 @@ public class WebServer {
 //        }
 //        System.err.println("done streaming request");
 //    }
-    
-    /**
-     * 
-     * @param exchange the Http exchange where the lyrics are being watched
-     * @param karaoke the karaoke to be watched 
-     */
-//    private void handleWatch(HttpExchange exchange, Karaoke karaoke) throws IOException {
-//     // if you want to know the requested path:
-//        final String path = exchange.getRequestURI().getPath();
-//        
-//        // it will always start with the base path from server.createContext():
-//        final String base = exchange.getHttpContext().getPath();     
-//        assert path.startsWith(base);
-//        
-//        final String voiceID = path.substring(base.length());
-//        
-//        final String response;
-//        final Player player;
-//        exchange.sendResponseHeaders(200, 0);
-//        if (board.getPlayers().containsKey(playerID)) {
-//            // if the request is valid, respond with HTTP code 200 to indicate success
-//            player = board.getPlayerFromID(playerID);
-////        } else {
-////            player = new Player(playerID, board);
-////        }
-//        response = player.boardToStringWeb();
-////        else {
-////            // otherwise, respond with HTTP code 404 to indicate an error
-////            exchange.sendResponseHeaders(404, 0);
-////            response = "player " + playerID + " is an invalid player";
-////        }
-//        // write the response to the output stream using UTF-8 character encoding
-//        OutputStream body = exchange.getResponseBody();
-//        PrintWriter out = new PrintWriter(body, true);
-//        out.println(response);
-//        exchange.close();
-//    }
-//    }
-    
-    //uncomment the above ^^
-    
-    
-    // this was handleLook from ps4, as a guide for when we implement if needed
-    
-    
-    /*
-     * Handle a request for /look/<player> 
-     *  
-     * 
-     * @param exchange HTTP request/response, modified by this method to send a
-     *                 response to the client and close the exchange
-     
-    private void handleLook(HttpExchange exchange, Board board) throws IOException {
-     // if you want to know the requested path:
-        final String path = exchange.getRequestURI().getPath();
-        
-        // it will always start with the base path from server.createContext():
-        final String base = exchange.getHttpContext().getPath();
-        assert path.startsWith(base);
-        
-        final String playerID = path.substring(base.length());
-        
-        final String response;
-        final Player player;
-        exchange.sendResponseHeaders(200, 0);
-        if (board.getPlayers().containsKey(playerID)) {
-            // if the request is valid, respond with HTTP code 200 to indicate success
-            player = board.getPlayerFromID(playerID);
-        } else {
-            player = new Player(playerID, board);
-        }
-        response = player.boardToStringWeb();
-        else {
-            // otherwise, respond with HTTP code 404 to indicate an error
-            exchange.sendResponseHeaders(404, 0);
-            response = "player " + playerID + " is an invalid player";
-        }
-        // write the response to the output stream using UTF-8 character encoding
-        OutputStream body = exchange.getResponseBody();
-        PrintWriter out = new PrintWriter(new OutputStreamWriter(body, UTF_8), true);
-        out.println(response);
-        exchange.close();
-    }
-    
-    /*
-     * Handle a request for /flip/<player>/<row>,<col> 
-     *  
-     * 
-     * @param exchange HTTP request/response, modified by this method to send a
-     *                 response to the client and close the exchange
-     *
-    private void handleFlip(HttpExchange exchange, Board board) throws IOException {
-        // if you want to know the requested path:
-           final String path = exchange.getRequestURI().getPath();
-           
-           // it will always start with the base path from server.createContext():
-           final String base = exchange.getHttpContext().getPath();
-           assert path.startsWith(base);
-           
-           final String[] parameters = path.substring(base.length()).split("/");
-           final String[] coords = parameters[1].split(",");
-           final String playerID = parameters[0];
-           final int row = Integer.parseInt(coords[0]);
-           final int column = Integer.parseInt(coords[1]);
-           
-           final String response;
-           final Player player;
-           exchange.sendResponseHeaders(200, 0);
-           if (board.getPlayers().containsKey(playerID)) {
-               // if the request is valid, respond with HTTP code 200 to indicate success
-               player = board.getPlayerFromID(playerID);
-           } else {
-               player = new Player(playerID, board);
-           }
-           player.flip(row-1, column-1);
-           response = player.boardToStringWeb();
-           else {
-               // otherwise, respond with HTTP code 404 to indicate an error
-               exchange.sendResponseHeaders(404, 0);
-               response = "player " + playerID + " is an invalid player";
-           }
-           // write the response to the output stream using UTF-8 character encoding
-           OutputStream body = exchange.getResponseBody();
-           PrintWriter out = new PrintWriter(new OutputStreamWriter(body, UTF_8), true);
-           out.println(response);
-           exchange.close();
-       }
-    */
-    
+
     
     /**
      * @return the port on which this server is listening for connections
      */
     public int port() {
+        checkRep();
         return server.getAddress().getPort();
     }
     
@@ -316,7 +189,7 @@ public class WebServer {
     public void start() {
         System.err.println("Server will listen on " + server.getAddress());
         server.start();
-        //htmlString should be called here?
+        checkRep();
     }
     
     /**
@@ -325,6 +198,7 @@ public class WebServer {
     public void stop() {
         System.err.println("Server will stop");
         server.stop(0);
+        checkRep();
     }
     
     /**
@@ -334,11 +208,12 @@ public class WebServer {
      * @throws InterruptedException if the thread is interrupted
      */
     public void putInBlockingQueue(LyricLine l) throws InterruptedException {
-        bq.put(l);
+        bq.get(l.getVoice()).put(l);
+        checkRep();
         
     }
     
-    private void html2(Karaoke karaoke, HttpExchange exchange) throws IOException {
+    private void html2(HttpExchange exchange) throws IOException {
         final String path = exchange.getRequestURI().getPath();
         
         System.err.println("received request " + path);
@@ -365,7 +240,7 @@ public class WebServer {
             // In this example, the event is just a brief fixed-length delay, but it
             // could synchronize with another thread instead.
             try {
-                LyricLine next = bq.take();
+                LyricLine next = bq.get(path.substring(1, path.length() - 1)).take();
                 out.println(next.toString());
             } catch (InterruptedException e) {
                 return;

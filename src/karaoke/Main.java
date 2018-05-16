@@ -15,6 +15,7 @@ import java.util.NoSuchElementException;
 import java.util.Queue;
 
 import karaoke.server.WebServer;
+import karaoke.sound.MusicPlayer;
 import parser.KaraokeParser;
 
 /**
@@ -25,7 +26,7 @@ public class Main {
   
     
     /**
-     * Start a karaoke server using the given ABC music file.
+     * Start a karaoke machine using the given ABC music file.
      * 
      * <p> Command-line usage:
      * 
@@ -66,10 +67,6 @@ public class Main {
             System.out.println("Playing " + karaoke.getTitle() + " by " + karaoke.getComposer());
             WebServer server = new WebServer(karaoke, port);
             
-            
-//            LyricLine fakeLyricLine = new LyricLine(Arrays.asList("hello ", "goodbye"), 0);
-//            LyricLine fakeNextLine = new LyricLine(Arrays.asList("hello ", "goodbye"), 1);
-           
             server.start();
             System.out.println("Ready to play " + karaoke.getTitle() + " by " + karaoke.getComposer());
             System.out.println(" ");
@@ -83,12 +80,8 @@ public class Main {
             System.out.println(" ");
             BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
             if (b.readLine().equals("play")) {
-                //server.start();
-                //MusicPlayer.play(karaoke,server);
+                MusicPlayer.play(karaoke,server);
                 System.out.println("would play karaoke now");
-//                server.putInBlockingQueue(fakeLyricLine);
-//                server.putInBlockingQueue(fakeNextLine);
-//                karaoke.notifyAll();
                 
             }
         } catch (Exception e) {

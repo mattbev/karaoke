@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.sun.net.httpserver.HttpServer;
 
 import karaoke.server.WebServer;
 import karaoke.sound.SequencePlayer;
