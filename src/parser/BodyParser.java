@@ -119,7 +119,7 @@ public class BodyParser {
                         } else {
                             noteLength = header.getDefaultLength();
                         }
-                        final Note note = new Note(pitch, noteLength);    
+                        final Note note = new Note(pitch, noteLength, header);    
                         final Chord noteChord = Playable.createChord(Arrays.asList(note), LyricLine.emptyLyricLine());
                         line.add(noteChord);
                         continue;
@@ -137,7 +137,7 @@ public class BodyParser {
                             } else {
                                 noteLength = header.getDefaultLength();
                             }
-                            final Note note = new Note(pitch, noteLength);  
+                            final Note note = new Note(pitch, noteLength, header);  
                             notes.add(note);
                         }   
                         final Chord chord = Playable.createChord(notes, LyricLine.emptyLyricLine());
@@ -179,7 +179,7 @@ public class BodyParser {
                                 } else {
                                     noteLength = header.getDefaultLength();
                                 }
-                                final Note note = new Note(pitch, noteLength);    
+                                final Note note = new Note(pitch, noteLength, header);    
                                 final Chord noteChord = Playable.createChord(Arrays.asList(note), LyricLine.emptyLyricLine());
                                 tupletPlayables.add(noteChord);
                                 continue;
@@ -197,7 +197,7 @@ public class BodyParser {
                                     } else {
                                         noteLength = header.getDefaultLength();
                                     }
-                                    final Note note = new Note(pitch, noteLength);  
+                                    final Note note = new Note(pitch, noteLength, header);  
                                     notes.add(note);
                                 }   
                                 final Chord chord = Playable.createChord(notes, LyricLine.emptyLyricLine());
