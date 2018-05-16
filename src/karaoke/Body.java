@@ -15,7 +15,7 @@ import karaoke.sound.SequencePlayer;
  */
 public class Body implements Music {
     private HashMap<String,Music> voiceToMusic = new HashMap<String,Music>();
-    private HashMap<String,LyricLine> voiceToLyrics = new HashMap<String,LyricLine>();
+    private HashMap<String,List<LyricLine>> voiceToLyrics = new HashMap<>();
     
     // Abstraction Function:
     //   AF(voiceToMusic, voiceToLyrics) = one or more musics played at the same time by different voices

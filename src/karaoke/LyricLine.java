@@ -128,4 +128,5 @@ public class LyricLine {
     public String toString() {
         return this.getText() + " %%% bolded index: " + this.boldedIndex;
     }
+    
 }

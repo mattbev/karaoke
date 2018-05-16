@@ -75,16 +75,25 @@ public class Main {
             WebServer server = new WebServer(karaoke, port);
             
             */
+            LyricLine fakeLyricLine = new LyricLine(Arrays.asList("hello ", "goodbye"), 0);
+            LyricLine fakeNextLine = new LyricLine(Arrays.asList("hello ", "goodbye"), 1);
+//            System.out.println("Playing " + karaoke.getTitle() + " by " + karaoke.getComposer());
+            WebServer server = new WebServer(port);
+            server.start();
             
             System.out.println("To view the lyrics, navigate in your browser to one of the following urls, where the extension"
                     + " indicates which voice's lyrics will be streaming at that url:");
 //            System.out.println(urls);
-            System.out.println("Begin playing the music by typing \"play\" and hitting Enter");
+            System.out.println("http://" + iPAddress + ":" + port + "/hello/");
+            System.out.println("Begin playing the music and streaming the lyrics by typing \"play\" and hitting Enter");
             BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
             if (b.readLine().equals("play")) {
                 //server.start();
                 //MusicPlayer.play(karaoke);
-                System.out.println("would play karaoke here");
+                System.out.println("would play karaoke now");
+                server.putInBlockingQueue(fakeLyricLine);
+                server.putInBlockingQueue(fakeNextLine);
+//                karaoke.notifyAll();
                 
             }
         } catch (Exception e) {

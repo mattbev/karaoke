@@ -4,13 +4,17 @@ import java.io.Writer;
 import java.io.PrintWriter;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
+import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import karaoke.*;
@@ -25,7 +29,9 @@ public class WebServer {
     
     private final HttpServer server;
     private final Karaoke karaoke;
-
+    private final BlockingQueue<LyricLine> bq = new LinkedBlockingQueue();
+//    private final List<BlockingQueue<LyricLine>> bq1 = new ArrayList<>();
+    
     // Abstraction function:
     //   AF(server, karaoke) = a new WebServer instance, where the lyrics for karaoke are streamed on server
     // Rep invariant:
@@ -37,6 +43,7 @@ public class WebServer {
     // Thread safety argument:
     //   the shared karaoke is immutable, with immutable lyrics as well
     //   safe b/c will never have multiple users on the same thread (multiple players are on multiple threads)
+    //   multiple users have their own blocking queues
     //   uses thread safe types internally
 
 
@@ -50,6 +57,14 @@ public class WebServer {
     public WebServer(Karaoke karaoke, int port) throws IOException {
         this.server = HttpServer.create(new InetSocketAddress(port), 0);
         this.karaoke = karaoke;
+        
+        HttpContext hello = server.createContext("/hello/", new HttpHandler() {
+            public void handle(HttpExchange exchange) throws IOException {
+                html2(exchange);
+                bq1.add(new LinkedBlockingQueue());
+            }
+        });
+        
         checkRep();
     }
     
@@ -298,4 +313,64 @@ public class WebServer {
         System.err.println("Server will stop");
         server.stop(0);
     }
+    
+    /**
+     * Put s a line of lyrics into a blocking queue
+     * 
+     * @param l the line of lyrics, with one bolded syllable, to be put into the queue
+     * @throws InterruptedException if the thread is interrupted
+     */
+    public void putInBlockingQueue(LyricLine l) throws InterruptedException {
+        for (BlockingQueue b : bq1) {
+            b.put(l);
+        }
+        
+    }
+    
+    private void html2(HttpExchange exchange) throws IOException {
+        final String path = exchange.getRequestURI().getPath();
+        
+        System.err.println("received request " + path);
+
+        // html response
+        exchange.getResponseHeaders().add("Content-Type", "text/html; charset=utf-8");
+        
+        // must call sendResponseHeaders() before calling getResponseBody()
+        final int successCode = 200;
+        final int lengthNotKnownYet = 0;
+        exchange.sendResponseHeaders(successCode, lengthNotKnownYet);
+
+        // get output stream to write to web browser
+        final boolean autoflushOnPrintln = true;
+        PrintWriter out = new PrintWriter(
+                              new OutputStreamWriter(
+                                  exchange.getResponseBody(), 
+                                  StandardCharsets.UTF_8), 
+                              autoflushOnPrintln);
+        
+        try {
+
+            // Wait until an event occurs in the server.
+            // In this example, the event is just a brief fixed-length delay, but it
+            // could synchronize with another thread instead.
+            try {
+                LyricLine next = bq.take();
+                out.println(next.getText());
+            } catch (InterruptedException e) {
+                return;
+            }
+            
+            // Send a full HTML page to the web browser
+            //out.println(System.currentTimeMillis() + "<br>");
+            
+            // End the page with Javascript that causes the browser to immediately start 
+            // reloading this URL, so that this handler runs again and waits for the next event
+            out.println("<script>location.reload()</script>");
+            
+        } finally {
+            exchange.close();
+        }
+        System.err.println("done streaming request");
+    }
+    
 }
