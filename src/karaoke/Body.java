@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.sun.net.httpserver.HttpServer;
+
+import karaoke.server.WebServer;
 import karaoke.sound.SequencePlayer;
 
 /**
@@ -63,10 +66,10 @@ public class Body {
      * @param player the player to play the music
      * @param startBeat the beat to start the music on
      */
-    public void play(SequencePlayer player, double startBeat) {
+    public void play(SequencePlayer player, double startBeat, WebServer server) {
         for (String voice : this.voiceToMusic.keySet()) {
             final Music voiceMusic = this.voiceToMusic.get(voice);
-            voiceMusic.play(player, startBeat);
+            voiceMusic.play(player, startBeat, server);
         }
     }
 

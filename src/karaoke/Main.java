@@ -84,7 +84,7 @@ public class Main {
             BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
             if (b.readLine().equals("play")) {
                 //server.start();
-                //MusicPlayer.play(karaoke);
+                //MusicPlayer.play(karaoke,server);
                 System.out.println("would play karaoke now");
 //                server.putInBlockingQueue(fakeLyricLine);
 //                server.putInBlockingQueue(fakeNextLine);

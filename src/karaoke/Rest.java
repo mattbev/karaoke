@@ -3,6 +3,11 @@
  */
 package karaoke;
 
+import java.util.function.Consumer;
+
+import com.sun.net.httpserver.HttpServer;
+
+import karaoke.server.WebServer;
 import karaoke.sound.SequencePlayer;
 
 /**
@@ -54,7 +59,15 @@ public class Rest implements Playable {
      * Provide a rest in the karaoke
      */
     @Override
-    public void play(SequencePlayer player, double startBeat) {
+    public void play(SequencePlayer player, double startBeat, WebServer server) {
+        Consumer<Double> c1 = i -> {
+            try {
+                server.putInBlockingQueue(lyricLine);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
+        player.addEvent(startBeat , c1 );
         return;
     }
     

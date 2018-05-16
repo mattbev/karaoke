@@ -1,6 +1,7 @@
 package karaoke;
 import java.util.List;
 
+import karaoke.server.WebServer;
 import karaoke.sound.*;
 
 
@@ -64,7 +65,7 @@ public interface Music {
      * @param player player to play on
      * @param startBeat when to play
      */
-    public void play(SequencePlayer player, double startBeat);
+    public void play(SequencePlayer player, double startBeat, WebServer server);
     
    
     

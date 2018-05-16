@@ -2,7 +2,11 @@ package karaoke;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
+import com.sun.net.httpserver.HttpServer;
+
+import karaoke.server.WebServer;
 import karaoke.sound.SequencePlayer;
 
 public class Tuplet implements Playable {
@@ -99,11 +103,19 @@ public class Tuplet implements Playable {
 
     
     @Override
-    public void play(SequencePlayer player, double startBeat) {
+    public void play(SequencePlayer player, double startBeat, WebServer server) {
         
         double beginBeat = startBeat;
         for(Chord chord: newChords) {
-            chord.play(player, beginBeat);
+            chord.play(player, beginBeat, server);
+            Consumer<Double> c1 = i -> {
+                try {
+                    server.putInBlockingQueue(lyricLine);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            };
+            player.addEvent(startBeat , c1 );
             beginBeat += chord.duration();
         }
     }

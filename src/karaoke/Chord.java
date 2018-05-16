@@ -2,10 +2,14 @@
  * 
  */
 package karaoke;
+import karaoke.server.WebServer;
 import karaoke.sound.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+
+import com.sun.net.httpserver.HttpServer;
 
 /**
  * @author chessa, mattbev, sophias
@@ -88,13 +92,22 @@ public class Chord implements Playable {
      * Play this chord
      * @param player player producing the chord
      * @param startBeat beat at which the chord should play
+     * @param server server the chord is played on
      */
     @Override
-    public void play(SequencePlayer player, double startBeat) {
+    public void play(SequencePlayer player, double startBeat, WebServer server) {
         
         //iterate through every note in the chord and give it the same startBeat on which to play
         for(Note note: notes) {
             note.play(player, startBeat);
+            Consumer<Double> c1 = i -> {
+                try {
+                    server.putInBlockingQueue(lyricLine);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            };
+            player.addEvent(startBeat , c1 );
         }
         checkRep();
     }

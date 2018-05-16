@@ -2,6 +2,9 @@ package karaoke;
 
 import java.util.List;
 
+import com.sun.net.httpserver.HttpServer;
+
+import karaoke.server.WebServer;
 import karaoke.sound.SequencePlayer;
 
 /**
@@ -82,8 +85,9 @@ public interface Playable {
      * Play this playable
      * @param player player on which to play
      * @param startBeat when to play
+     * @param server the playable is played on
      */
-    public void play(SequencePlayer player, double startBeat) ;
+    public void play(SequencePlayer player, double startBeat, WebServer server) ;
         
     @Override
     public boolean equals(Object that);

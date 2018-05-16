@@ -3,6 +3,8 @@ package karaoke;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.net.httpserver.HttpServer;
+
 import karaoke.sound.SequencePlayer;
 
 /**
@@ -55,9 +57,10 @@ public class Karaoke {
      * Play this karaoke
      * @param player player to play on
      * @param startBeat when to play
+     * @param server the server the karaoke is being played on
      */
-    public void play(SequencePlayer player, double startBeat) {
-        body.play(player, startBeat);
+    public void play(SequencePlayer player, double startBeat, HttpServer server) {
+        body.play(player, startBeat, HttpServer server);
     }
     
     /**
