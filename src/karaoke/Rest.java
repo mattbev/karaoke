@@ -5,8 +5,6 @@ package karaoke;
 
 import java.util.function.Consumer;
 
-import com.sun.net.httpserver.HttpServer;
-
 import karaoke.server.WebServer;
 import karaoke.sound.SequencePlayer;
 
@@ -50,6 +48,12 @@ public class Rest implements Playable {
         this.lyricLine = lyricLine;
     }
     
+    /**
+     * Make a component to represent a pause in a piece of music
+     * 
+     * @param duration the duration of the pause
+     * @param lyricLine a line of lyrics tied to the rest
+     */
     public Rest(String duration, LyricLine lyricLine) {
         this.lyricLine = lyricLine;
         

@@ -169,6 +169,10 @@ public class Header {
         return this.index;
     }
     
+    /**
+     * get the length of the default note as a double
+     * @return the length of the default note
+     */
     public double getDefaultLengthDouble() {
         String numerator;
         String denominator;

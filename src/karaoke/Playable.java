@@ -2,8 +2,6 @@ package karaoke;
 
 import java.util.List;
 
-import com.sun.net.httpserver.HttpServer;
-
 import karaoke.server.WebServer;
 import karaoke.sound.SequencePlayer;
 

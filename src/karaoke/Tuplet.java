@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.sun.net.httpserver.HttpServer;
-
 import karaoke.server.WebServer;
 import karaoke.sound.SequencePlayer;
 
@@ -91,10 +89,6 @@ public class Tuplet implements Playable {
         }
         
         this.duration = dur;
-    }
-    
-    public List<Chord> getComponents() {
-        return new ArrayList<>(this.newChords);
     }
     
     @Override

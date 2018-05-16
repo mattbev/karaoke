@@ -119,7 +119,7 @@ public class BodyParser {
                         } else {
                             noteLength = header.getDefaultLength();
                         }
-                        final Note note = new Note(pitch, noteLength, header);    
+                        final Note note = new Note(pitch, noteLength);    
                         final Chord noteChord = Playable.createChord(Arrays.asList(note), LyricLine.emptyLyricLine());
                         line.add(noteChord);
                         continue;
@@ -137,7 +137,7 @@ public class BodyParser {
                             } else {
                                 noteLength = header.getDefaultLength();
                             }
-                            final Note note = new Note(pitch, noteLength, header);  
+                            final Note note = new Note(pitch, noteLength);  
                             notes.add(note);
                         }   
                         final Chord chord = Playable.createChord(notes, LyricLine.emptyLyricLine());
@@ -179,7 +179,7 @@ public class BodyParser {
                                 } else {
                                     noteLength = header.getDefaultLength();
                                 }
-                                final Note note = new Note(pitch, noteLength, header);    
+                                final Note note = new Note(pitch, noteLength);    
                                 final Chord noteChord = Playable.createChord(Arrays.asList(note), LyricLine.emptyLyricLine());
                                 tupletPlayables.add(noteChord);
                                 continue;
@@ -197,7 +197,7 @@ public class BodyParser {
                                     } else {
                                         noteLength = header.getDefaultLength();
                                     }
-                                    final Note note = new Note(pitch, noteLength, header);  
+                                    final Note note = new Note(pitch, noteLength);  
                                     notes.add(note);
                                 }   
                                 final Chord chord = Playable.createChord(notes, LyricLine.emptyLyricLine());
@@ -282,6 +282,8 @@ public class BodyParser {
                 musicMap.put(voice, musicList);
                 return musicMap;  
             }
+            case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
+                continue;
             
             default:
                 throw new AssertionError("should never get here");        

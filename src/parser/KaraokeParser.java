@@ -9,7 +9,6 @@ import java.util.List;
 import edu.mit.eecs.parserlib.ParseTree;
 import edu.mit.eecs.parserlib.Parser;
 import edu.mit.eecs.parserlib.UnableToParseException;
-import edu.mit.eecs.parserlib.Visualizer;
 import karaoke.Body;
 import karaoke.Header;
 import karaoke.Karaoke;
