@@ -1,4 +1,4 @@
-package karaoke.parser;
+package parser;
 import java.io.IOException;
 
 import org.junit.Test;

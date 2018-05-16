@@ -8,8 +8,8 @@ abc_tune ::= abc_header abc_body;
 
 // ignore space_or_tab between terminals in the header
 @skip space_or_tab {
-    abc_header ::= field_number comment* field_title other_fields* field_key;
-    field_number ::= "X:" digit+ end_of_line;
+	abc_header ::= field_number comment* field_title other_fields* field_key;
+	field_number ::= "X:" digit+ end_of_line;
 	field_title ::= "T:" text end_of_line;
 	other_fields ::= field_composer | field_default_length | field_meter | field_tempo | field_voice | comment;
 	field_composer ::= "C:" text end_of_line;
