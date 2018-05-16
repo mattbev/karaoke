@@ -1,6 +1,5 @@
 package karaoke.music;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,7 +8,6 @@ import org.junit.Test;
 import karaoke.LyricLine;
 import karaoke.Note;
 import karaoke.Playable;
-import karaoke.sound.Instrument;
 import karaoke.sound.Pitch;
 
 /**
@@ -114,7 +112,7 @@ public class PlayableTest {
     //tests that a correct rest was made for a rest of duration 0
     @Test
     public void testCreateRestZeroDuration() {
-        Playable playable = Playable.createRest(0, LyricLine.emptyLyricLine());
+        Playable playable = Playable.createRestFromDouble(0, LyricLine.emptyLyricLine());
         assert playable.duration() == 0;
         assert playable.getLyricLine().equals(LyricLine.emptyLyricLine());
     }
@@ -122,7 +120,7 @@ public class PlayableTest {
     //tests that a correct rest was made for a rest of duration >0
     @Test
     public void testCreateRestNonZeroDuration() {
-        Playable playable = Playable.createRest(.5 , LyricLine.emptyLyricLine());
+        Playable playable = Playable.createRestFromDouble(.5 , LyricLine.emptyLyricLine());
         assert playable.duration() == .5;
         assert playable.getLyricLine().equals(LyricLine.emptyLyricLine());
     }
@@ -134,7 +132,7 @@ public class PlayableTest {
     //tests that a duration of 0 was returned for a playable with non zero magnitude
     @Test
     public void testGetDurationNonZeroSeconds() {
-        Playable playable = Playable.createRest(5 , LyricLine.emptyLyricLine());
+        Playable playable = Playable.createRestFromDouble(5 , LyricLine.emptyLyricLine());
         assert playable.duration() == 5;
     }
     
