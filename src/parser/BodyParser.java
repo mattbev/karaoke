@@ -266,7 +266,8 @@ public class BodyParser {
                     } else {
                         lyricElements.add(lyricChildren.get(i).text());
                     }
-                }                
+                }    
+                System.out.println(lyricElements);
       
                 for (int i=0; i < mostRecentLine.getComponents().size(); i++) {
                     
@@ -319,7 +320,7 @@ public class BodyParser {
         
         //case ABC_LINE: // abc_line ::= element+ end_of_line (lyric end_of_line)?  | middle_of_body_field | comment
         for (ParseTree<BodyGrammar> child : children) {   // for each line
-            switch(child.name()) {
+            switch(child.children().get(0).name()) {
                 case MIDDLE_OF_BODY_FIELD: //middle_of_body_field ::= field_voice
                 {
                     voice = child.children().get(0).text(); //should always be declared before hitting default case if there are voices in the abc file
@@ -330,7 +331,10 @@ public class BodyParser {
                 }
                 default: // when abc_line ::= element+ end_of_line (lyric end_of_line)?
                     try {
+                        System.out.println("child: " + child.children().get(0).name());
+                        System.out.println(child);
                         voicesToLines = evaluateLine(child, header, voicesToLines, voice);
+//                        System.out.println(voicesToLines.get("1").get(0).getComponents());
                     } catch(AssertionError e) {
                         System.out.println(e.toString());
                         throw new AssertionError("should never get here");

@@ -114,8 +114,8 @@ public class Main {
             
             
             System.out.println("\nReady to play " + karaoke.getTitle() + " by " + karaoke.getComposer());
-            System.out.println("\nTo get ready to view the lyrics, navigate in your browser to one of the following urls, where the extension"
-                    + " indicates which voice's lyrics will be streaming at that url, where voice \"1\" is the default if your file specified no voice:");
+            System.out.println("\nTo get ready to view the lyrics, navigate in your browser to one of the following urls, \nwhere the extension"
+                    + " indicates which voice's lyrics will be streaming at that url, \nwhere voice \"1\" is the default if your file specified no voice:");
             System.out.println("\n"+String.join("\n", urls));
 
             System.out.println("\nBegin playing the music and streaming the lyrics by typing \"play\" and hitting Enter");

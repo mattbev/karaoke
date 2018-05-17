@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import edu.mit.eecs.parserlib.ParseTree;
 import edu.mit.eecs.parserlib.Parser;
 import edu.mit.eecs.parserlib.UnableToParseException;
+import edu.mit.eecs.parserlib.Visualizer;
 import karaoke.Body;
 import karaoke.Header;
 import karaoke.Karaoke;
@@ -36,8 +37,8 @@ public class KaraokeParser {
                 .collect(Collectors.toList());
         String contents = String.join("\n", s) +"\n";
         Karaoke karaoke = KaraokeParser.parse(contents);
-        System.out.println(karaoke.getHeader().toString());
         System.out.println(karaoke.getBody().getVoicesToMusics().get("1").getComponents());
+        System.out.println(karaoke.getLinesOfLyrics("1"));
     }
     
     // the nonterminals of the grammar
@@ -95,7 +96,7 @@ public class KaraokeParser {
         
         //for visuals
 //        System.out.println("parse tree " + parseTree);
-//        Visualizer.showInBrowser(parseTree);
+        Visualizer.showInBrowser(parseTree);
         
         //make AST from parse tree
         final Karaoke karaoke = makeAbstractSyntaxTree(parseTree);
