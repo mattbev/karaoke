@@ -232,7 +232,10 @@ public class BodyParser {
                     //      -clear repeat list and first and second seen slots
                     //ELSE  list it as first major bar line
                     //--->  start keeping "repeat list" of notes that come after it
-                    continue;
+                    final String barline = child.children().get(0).text();
+                    if (barline.equals(":|")) {
+                        
+                    }
                 case NTH_REPEAT: //nth_repeat ::= "[1" | "[2"
                     continue;
                 case SPACE_OR_TAB: //space_or_tab ::= " " | "\t"
@@ -273,7 +276,6 @@ public class BodyParser {
                 final List<String> parsedLyricStrings = (List<String>) parsedLyricElements.get(1);
 
                 final List<Playable> modifiedLine = new ArrayList<>();
-
                 for (int i=0; i<line.size(); i++) {
                     final Playable p = line.get(i);
                     final LyricLine lyricLine = new LyricLine(parsedLyricStrings, playableLyricIndexes.get(i), voice);
@@ -297,7 +299,7 @@ public class BodyParser {
             
         }
         if (musicMap.containsKey(voice)) { // if there, add it to current list
-            final List<Music> musicList = musicMap.get(voice);
+            final List<Music> musicList = new ArrayList<>(musicMap.get(voice));
             musicList.add(Music.createLine(line));
             
             musicMap.put(voice, musicList);
@@ -432,14 +434,18 @@ public class BodyParser {
             i++;
         }
         
-        final Set<Integer> restIndices = new HashSet<>();
+        final List<Integer> restIndices = new ArrayList<>();
         Map<Integer, Integer> newAssignments = new HashMap<>();
         
         for (int n=0; n < playableList.size(); n++) {
             Playable p = playableList.get(n);
             if (p instanceof Rest) {
                 restIndices.add(n);
-                lyricStrings.add(n, "");
+                try {
+                    lyricStrings.add(n, "");
+                } catch (IndexOutOfBoundsException e) {
+                    lyricStrings.add("");
+                }
             }
 
         
@@ -457,7 +463,11 @@ public class BodyParser {
         }
 
         for (Integer index : restIndices) {
-            newAssignments.put(index, assignments.get(index));
+            if (index == 0 || index == 1) {
+                newAssignments.put(index, index);
+            } else {
+            newAssignments.put(index, newAssignments.get(index-1)+1);
+            }
         }
         return Collections.unmodifiableList(Arrays.asList(newAssignments, lyricStrings));
         
@@ -481,8 +491,7 @@ public class BodyParser {
         
         //case ABC_LINE: // abc_line ::= element+ end_of_line (lyric end_of_line)?  | middle_of_body_field | comment
         for (ParseTree<BodyGrammar> child : children) {// for each line
-            switch(child.children().get(0).name()) {
-                
+            switch(child.children().get(0).name()) {                
                 case MIDDLE_OF_BODY_FIELD: //middle_of_body_field ::= field_voice
                 {
                     voice = child.children().get(0).children().get(0).children().get(0).text(); //should always be declared before hitting default case if there are voices in the abc file

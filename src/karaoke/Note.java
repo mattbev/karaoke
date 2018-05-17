@@ -70,6 +70,7 @@ public class Note {
         if (basenote.toLowerCase().equals(basenote)) {
             notePitch = notePitch.transpose(Pitch.OCTAVE);
         }
+        
         String noteAccidental = "";
         if (pitchParams.length > 0 && (pitchParams[0].contains("^") || pitchParams[0].contains("_"))) {
             noteAccidental += pitchParams[0];
@@ -109,10 +110,15 @@ public class Note {
             numerator = "1";
             denominator = "1";
         }
-        else if (noteLength.length() == 1) {
+        else if (noteLength.length() == 1 && !noteLength.contains("/")) {
             numerator = noteLength;
             denominator = "1";
-        } else {
+        } 
+        else if (noteLength.length() == 1 && noteLength.contains("/")) {
+            numerator = "1";
+            denominator = "2";
+        }
+        else {
             final String[] lengthParams = noteLength.split("/");
             numerator = lengthParams[0];
             denominator = lengthParams[1];

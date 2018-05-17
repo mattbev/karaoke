@@ -143,6 +143,8 @@ public class HeaderParser {
                           headerMap.put('V', voices);
                           continue;
                       }
+                  case COMMENT:
+                      continue;
                   default:
                       throw new AssertionError("should never get here");
                   }
