@@ -71,7 +71,8 @@ public class Chord implements Playable {
     @Override
     public double duration() {
         checkRep();
-        return this.notes.get(0).getDuration();
+        double dur = this.notes.get(0).getDuration();
+        return dur;
     }
 
     
@@ -133,7 +134,6 @@ public class Chord implements Playable {
     
     
     /**
-     * 
      * @param t the tuplet type
      * @return the number to divide the total duration by
      */

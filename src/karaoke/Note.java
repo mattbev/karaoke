@@ -53,9 +53,10 @@ public class Note {
      * construct a Note object from string input
      * @param pitch the pitch of the note
      * @param noteLength the duration of the note
+     * @param header the header of the nmusic that the note is parsed from
      */
     public Note(String pitch, String noteLength, Header header) {
-
+        
         Set<String> validNotes = new HashSet<>(Arrays.asList("C","D","E","F","G","A","B","c","d","e","f","g","a","b"));
         String basenote = "";
         for (String note : validNotes) {
@@ -64,18 +65,23 @@ public class Note {
                 break;
             }
         }
-//        System.out.println(basenote);
         String[] pitchParams = pitch.split(basenote);
 
         Pitch notePitch = new Pitch(basenote.toUpperCase().toCharArray()[0]);
         if (basenote.toLowerCase().equals(basenote)) {
-            System.out.println(true);
             notePitch = notePitch.transpose(Pitch.OCTAVE);
         }
         String noteAccidental = "";
-//        System.out.println(pitchParams.length);
+        if (pitchParams.length > 0 && (pitchParams[0].contains("^") || pitchParams[0].contains("_"))) {
+            noteAccidental += pitchParams[0];
+            if (noteAccidental.contains("^")) {
+                notePitch = notePitch.transpose(noteAccidental.length());
+            }
+            else if (noteAccidental.contains("_")) {
+                notePitch = notePitch.transpose(-noteAccidental.length());
+            }
+        }
         if (pitchParams.length == 2) {
-            noteAccidental = pitchParams[0];
             final String octave = pitchParams[1];            
             
             if (octave.contains("'")) {
@@ -84,18 +90,25 @@ public class Note {
             else if(octave.contains(",")) {
                 notePitch = notePitch.transpose(-Pitch.OCTAVE*octave.length());
             }
-            if (noteAccidental.contains("^")) {
-                notePitch = notePitch.transpose(noteAccidental.length());
-            }
-            else if (noteAccidental.contains("_")) {
-                notePitch = notePitch.transpose(-noteAccidental.length());
-            }
-        }
+        }        
+        final double beatMultiplier = 4.;
+        this.accidental = noteAccidental;
+        this.duration = Note.parseLength(noteLength) * header.getDefaultLengthDouble() * beatMultiplier;
+        this.pitch = notePitch;
+
+    }
+    
+    /**
+     * 
+     * @param noteLength the raw length of the note
+     * @return the parsed length of the note
+     */
+    public static double parseLength(String noteLength) {
         String numerator;
         String denominator;
         if (noteLength.length() == 0) {
-            numerator = "0";
-            denominator = "0";
+            numerator = "1";
+            denominator = "1";
         }
         else if (noteLength.length() == 1) {
             numerator = noteLength;
@@ -113,13 +126,8 @@ public class Note {
         if (denominator.length() > 0) {
             denominatorInt = Integer.parseInt(denominator);
         }
-        final double noteDuration = ((double) numeratorInt) / ((double) denominatorInt) * header.getDefaultLengthDouble() * 4.;
         
-        this.accidental = noteAccidental;
-        this.duration = noteDuration;
-        this.pitch = notePitch;
-//        System.out.println("constructor pitch: "+pitch);
-
+        return ((double) numeratorInt) / ((double) denominatorInt);
     }
     
     
@@ -180,10 +188,7 @@ public class Note {
      * @param startBeat beat at which the note should play
      */
     public void play(SequencePlayer player, double startBeat) {
-        System.out.println("startbeat: "+startBeat);
-       
         player.addNote(instrument, pitch, startBeat, duration);
-        System.out.println("duration: "+duration);
         checkRep();        
     }
 

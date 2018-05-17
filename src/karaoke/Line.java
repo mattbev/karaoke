@@ -66,6 +66,7 @@ public class Line implements Music {
         for(Playable playable: components) {
             d += playable.duration();
         }
+        System.out.println("lineDur = "+d);
         return d;
     }
 
