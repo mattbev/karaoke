@@ -25,7 +25,10 @@ public class Body {
     //      
     //
     // Rep Invariant:
-    //      voiceToMusic.size() > 0
+    //      -voiceToMusic.size() > 0
+    //      
+    //      -voiceToMusic.get(i).size() > 0
+    //          for all i in voicetoMusic.keySet()
     //   
     //
     // Rep Safety Argument:
@@ -44,10 +47,23 @@ public class Body {
     }
     
     /**
+     * check the stated and implied rep invariant
+     */
+    private void checkRep() {
+        assert this.voiceToMusic.size() > 0;
+        assert this.voiceToMusic != null;
+        for(String voice: this.voiceToMusic.keySet()){
+            assert this.voiceToMusic.get(voice) != null;
+        }
+
+    }
+    
+    /**
      * gets the voices and their corresponding musics
      * @return the map mapping voices to their musics
      */
     public Map<String, Music> getVoicesToMusics() {
+        checkRep();
         return new HashMap<String, Music>(this.voiceToMusic);
     }
     
@@ -56,6 +72,7 @@ public class Body {
      * @return the set of all voices 
      */
     public Set<String> getVoices() {
+        checkRep();
         return this.voiceToMusic.keySet();
     }
 
@@ -66,6 +83,7 @@ public class Body {
      *        music is played
      */
     public void play(SequencePlayer player, WebServer server) {
+        checkRep();
         for (String voice : this.voiceToMusic.keySet()) {
             final Music voiceMusic = this.voiceToMusic.get(voice);
             voiceMusic.play(player, 0, server);

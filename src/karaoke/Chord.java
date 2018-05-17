@@ -18,11 +18,6 @@ import karaoke.sound.SequencePlayer;
  */
 public class Chord implements Playable { 
     
-    private static final double DUPLET_LENGTH = 2.0/3;
-    private static final double TRIPLET_LENGTH = 3.0/2;
-    private static final double QUADRUPLET_LENGTH = 3.0/4;
-    
-    
     private final List<Note> notes;
     private final LyricLine lyricLine;
     
@@ -53,6 +48,7 @@ public class Chord implements Playable {
      *        falls on with the chord's lyric bolded
      */
     public Chord(List<Note> notes, LyricLine lyricLine) {
+        
         this.notes = new ArrayList<>(notes); 
         this.lyricLine = lyricLine;
         checkRep();
@@ -62,6 +58,7 @@ public class Chord implements Playable {
      * checks that the rep is not broken
      */
     private void checkRep() {
+        assert this.notes != null;
         assert notes.size() > 0 : "a chord must contain at least one note";
         for (Note n : this.notes) {
             assert n != null : "Notes cannot be null";
@@ -124,7 +121,6 @@ public class Chord implements Playable {
         LyricLine l = this.getLyricLine();
         List<Note> notesCopy = new ArrayList<>();
         for (Note note : this.notes) {
-            //double mult = getMultiplier(t);
             notesCopy.add(new Note(duration, note.getPitch(), note.getAccidental()));
         }
         checkRep();
@@ -132,26 +128,6 @@ public class Chord implements Playable {
         
     }
     
-    
-    /**
-     * @param t the tuplet type
-     * @return the number to divide the total duration by
-     */
-    private static double getMultiplier(Tuplet.Type t) {
-        switch (t) {
-        
-        case DUPLET: {
-            return DUPLET_LENGTH;
-        }
-        case TRIPLET: {
-            return TRIPLET_LENGTH;
-        }
-        case QUADRUPLET: {
-            return QUADRUPLET_LENGTH;
-        }
-        default: throw new AssertionError("should never get here");
-        }
-    }
     
     @Override
     public LyricLine getLyricLine() {
