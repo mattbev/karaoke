@@ -146,7 +146,7 @@ public class BodyParser {
                         continue;
                     }
                     default:
-                        throw new AssertionError("should never get here");
+                        throw new AssertionError("should never get here6");
                     }
                 }
                 case REST_ELEMENT: //rest_element ::= "z" note_length
@@ -206,13 +206,13 @@ public class BodyParser {
                                 continue;
                             }
                             default:
-                                throw new AssertionError("should never get here");
+                                throw new AssertionError("should never get here5");
                             }
                         }
                         case TUPLET_SPEC:
                             continue;
                         default:
-                            throw new AssertionError("should never get here");
+                            throw new AssertionError("should never get here4");
                         }
                     }
                     final List<Chord> tupletChords = new ArrayList<>();
@@ -238,7 +238,7 @@ public class BodyParser {
                 case SPACE_OR_TAB: //space_or_tab ::= " " | "\t"
                     continue;
                 default:
-                    throw new AssertionError("should never get here");
+                    throw new AssertionError("should never get here3");
                 }
             }
             case END_OF_LINE: //end_of_line ::= comment | newline
@@ -260,7 +260,7 @@ public class BodyParser {
                     continue;
                 }
                 default:
-                    throw new AssertionError("should never get here");
+                    throw new AssertionError("should never get here2");
                 }
             }
 
@@ -298,7 +298,9 @@ public class BodyParser {
         }
         if (musicMap.containsKey(voice)) { // if there, add it to current list
             final List<Music> musicList = musicMap.get(voice);
+            System.out.println(musicList);
             musicList.add(Music.createLine(line));
+            
             musicMap.put(voice, musicList);
         } else { // if not there, create new entry
             musicMap.put(voice, Arrays.asList(Music.createLine(line)));
@@ -480,11 +482,11 @@ public class BodyParser {
         
         //case ABC_LINE: // abc_line ::= element+ end_of_line (lyric end_of_line)?  | middle_of_body_field | comment
         for (ParseTree<BodyGrammar> child : children) {// for each line
-            switch(child.name()) {
+            switch(child.children().get(0).name()) {
                 
                 case MIDDLE_OF_BODY_FIELD: //middle_of_body_field ::= field_voice
                 {
-                    voice = child.children().get(0).text(); //should always be declared before hitting default case if there are voices in the abc file
+                    voice = child.children().get(0).children().get(0).children().get(0).text(); //should always be declared before hitting default case if there are voices in the abc file
                     continue;
                 }
                 case COMMENT: //comment ::= space_or_tab* "%" text newline
@@ -493,7 +495,7 @@ public class BodyParser {
                     try {
                         voicesToLines = evaluateLine(child, header, voicesToLines, voice);
                     } catch(AssertionError e) {
-                        throw new AssertionError("should never get here");
+                        throw new AssertionError("should never get here1");
                     }
             }
         }
