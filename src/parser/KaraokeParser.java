@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import edu.mit.eecs.parserlib.ParseTree;
 import edu.mit.eecs.parserlib.Parser;
 import edu.mit.eecs.parserlib.UnableToParseException;
-import edu.mit.eecs.parserlib.Visualizer;
 import karaoke.Body;
 import karaoke.Header;
 import karaoke.Karaoke;
@@ -95,7 +94,7 @@ public class KaraokeParser {
         
         //for visuals
 //        System.out.println("parse tree " + parseTree);
-        Visualizer.showInBrowser(parseTree);
+//        Visualizer.showInBrowser(parseTree);
         
         //make AST from parse tree
         final Karaoke karaoke = makeAbstractSyntaxTree(parseTree);

@@ -263,16 +263,15 @@ public class BodyParser {
                     throw new AssertionError("should never get here");
                 }
             }
+
             case LYRIC: //lyric ::= "w:" lyrical_element*
             {
-//                System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
                 final List<ParseTree<BodyGrammar>> lyricChildren = child.children();
                 final List<String> lyricStrings = getLyricStrings(lyricChildren);
                 final List<Object> parsedLyricElements = asssignLyricsToPlayables(lyricStrings, line, lyricChildren);
-//                System.out.println(parsedLyricElements);
                 final Map<Integer, Integer> playableLyricIndexes = (Map<Integer, Integer>) parsedLyricElements.get(0);
                 final List<String> parsedLyricStrings = (List<String>) parsedLyricElements.get(1);
-//                System.out.println(parsedLyricStrings);
+
                 final List<Playable> modifiedLine = new ArrayList<>();
 
                 for (int i=0; i<line.size(); i++) {
@@ -368,17 +367,12 @@ public class BodyParser {
         } while (true);
         
         final List<ParseTree<BodyGrammar>> lyricChildren = treeChildren.subList(k, treeChildren.size());
-        System.out.println(lyricStrings);
-        System.out.println(lyricChildren);
-        System.out.println(playableList);
         int playableIndex = 0;
         int lyricIndex = 0;
         int i = 0;
         outerloop:
         while (i < lyricChildren.size()) {
             ParseTree<BodyGrammar> child = lyricChildren.get(i);
-            System.out.println(child);
-            System.out.println(playableIndex);
             //case 1: a text = assign to playable
             if (child.children().size() > 0 && child.children().get(0).name().equals(BodyGrammar.LYRIC_TEXT)) {
                 assignments.put(playableIndex, lyricIndex);
@@ -387,36 +381,21 @@ public class BodyParser {
                     break outerloop;
                 }
             }
-            //case 2: a hyphen or underscore
-            else if (child.text().equals("-") || child.text().equals("_")) {
-//                int nextIndex = i;
-//                while (lyricChildren.get(nextIndex).text().equals("-")) {
-//                    assignments.put(playableIndex, lyricIndex);
-//                    playableIndex++;
-//                    if (! (playableIndex < playables.size())) {
-//                        break outerloop;
-//                    }
-//                    lyricIndex++;
-//                    nextIndex++;                
-//                }
-                if (child.text().equals("-")) {
-                    lyricIndex++;
-                }
-//                while (lyricChildren.get(nextIndex).text().equals("_")) {
-//                    assignments.put(playableIndex, lyricIndex);
-//                    playableIndex++;
-//                    if (! (playableIndex < playables.size())) {
-//                        break outerloop;
-//                    }
-//                    nextIndex++;
-//                }
-//                i = nextIndex;
-//                lyricIndex++;
-//                if (child.text().equals("_")) {
-//                    
-//                }
+            //case 2: a hyphen
+            if (child.text().equals("-")) {
+                lyricIndex++;
             }
-            //case 3: star
+            
+            //case 3: an underscore
+            if (child.text().equals("_")) {
+                assignments.put(playableIndex, lyricIndex);
+                playableIndex++;
+                if (! (playableIndex < playables.size())) {
+                    break outerloop;
+                }
+            }
+            
+            //case 4: star
             else if (child.text().equals("*")) {
                 int nextIndex = i;
                 while (lyricChildren.get(nextIndex).text().equals("*")) {
@@ -430,7 +409,7 @@ public class BodyParser {
                 i = nextIndex;
                 lyricIndex++;
             }
-            //case 4: squiggle
+            //case 5: squiggle
             else if (child.text().equals("~")) {
                 assignments.put(playableIndex, lyricIndex);
                 playableIndex++;
@@ -439,7 +418,7 @@ public class BodyParser {
                 }
                 lyricIndex++;
             }
-            //case 5: backslash hyphen
+            //case 6: backslash hyphen
             else if (child.text().equals("\\-")) {
                 assignments.put(playableIndex, lyricIndex);
                 playableIndex++;
@@ -448,85 +427,45 @@ public class BodyParser {
                 }                
                 lyricIndex++;
             }
-            //case 6: barline
+            //case 7: barline
             else if (child.text().equals("|")) {
                 //TODO
             }
-            //case 7: space
+            //case 8: space
             else if (child.text().equals(" ")) {
-//                if (! (playableIndex < playables.size())) {
-//                   break outerloop;
-//                }
                 lyricIndex++;
             }
             i++;
         }
-        lyricIndex++;
-        assignments.put(playableIndex, lyricIndex);
+        
+        final Set<Integer> restIndices = new HashSet<>();
+        Map<Integer, Integer> newAssignments = new HashMap<>();
+        
+        for (int n=0; n < playableList.size(); n++) {
+            Playable p = playableList.get(n);
+            if (p instanceof Rest) {
+                restIndices.add(n);
+                lyricStrings.add(n, "");
+            }
 
-//        for (int j=0; j<playableList.size(); j++) {
-//            if (assignments.containsKey(j)) { //!(p instanceof Rest)
-//                assignments.put(j, assignments.get(j) + numRests);
-//                currentLyricIndex = assignments.get(j);
-//            } else {
-//                numRests++;
-//                System.out.println("hskjlfhkadsjlhfkldshfkls");
-//                lyricStrings.add(currentLyricIndex, "");
-//                int assigningIndex = currentLyricIndex;
-//                if (currentLyricIndex != 0) {
-//                    assigningIndex++;
-//                }
-//                assignments.put(j, assigningIndex);
-//            }
-//        }
         
-/*
-        Map<Integer, Integer> newAssignments = new HashMap<>();
-        
-        for (Map.Entry<Integer, Integer> entry : assignments.entrySet())
-        {
-            newAssignments.put(entry.getKey(), entry.getValue());
         }
-        
-        int counter = 0;
-        int numRests = 0;
-        for (Playable p : playableList) {
-            if ((p instanceof Rest)) {
-                for (int j = assignments.size(); j > counter; j--) {
-                    lyricStrings.add(counter, "");
-                    
-                    int oldKey = j;
-                    int oldValue = assignments.get(counter + numRests);
-                    newAssignments.put(oldKey + 1, oldValue + 1);
+        for (Integer key : assignments.keySet()) {
+            int newKey = key;
+            int newValue = assignments.get(key);
+            for (int v : restIndices) {
+                if (v <= newKey) {
+                    newKey++;
+                    newValue++;
                 }
-                numRests++;
-                lyricStrings.add(counter, "");
-                newAssignments.put(counter, assignments.get(counter) + numRests);
-            } else {
-                newAssignments.put(counter, 0);
             }
-            counter++;
-        
-        
-        int numRests = 0;
-        int counter = 0;
-        Map<Integer, Integer> newAssignments = new HashMap<>();
-        for (Playable p : playableList) {
-            if ((p instanceof Rest)) {
-                numRests++;
-                lyricStrings.add(counter, "");
-                newAssignments.put(counter, assignments.get(counter) + numRests);
-            } else {
-                newAssignments.put(counter, 0);
-            }
-            counter++;
-        */
-        
-       
-        System.out.println(lyricStrings);
-//        System.out.println(newAssignments);
-// w: A-_maze-__ing_ grace!__ How_ sweet__ the_ sound__ That_ saved__ a_ wretch__ like_ me.___
-        return Collections.unmodifiableList(Arrays.asList(assignments, lyricStrings));
+            newAssignments.put(newKey, newValue);
+        }
+
+        for (Integer index : restIndices) {
+            newAssignments.put(index, assignments.get(index));
+        }
+        return Collections.unmodifiableList(Arrays.asList(newAssignments, lyricStrings));
         
     }
     
