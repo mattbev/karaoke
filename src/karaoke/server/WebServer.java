@@ -165,7 +165,7 @@ public class WebServer {
             // could synchronize with another thread instead.
             try {
                 LyricLine next = bq.get(path.substring(1, path.length() - 1)).take();
-                out.println(next.toString());
+                out.println("<center>"+"<font face=\"verdana\" size=\"6\">"+next.toString() +"</font>"+"</center>");
             } catch (InterruptedException e) {
                 return;
             }

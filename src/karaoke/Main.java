@@ -54,6 +54,7 @@ public class Main {
         }
         
         try {
+            // ignore empty lines
             List<String> s = Files.readAllLines(Paths.get(songPath), StandardCharsets.UTF_8).stream()
                     .filter(i -> !i.isEmpty())
                     .collect(Collectors.toList());
@@ -62,6 +63,7 @@ public class Main {
             List<String> voices = karaoke.getVoices();
             List<String> urls = new ArrayList<>();
             
+            // possible urls (from voices)
             String mainUrl =  iPAddress + ":" + port + "/";
             for (String voice : voices) {
                 urls.add(mainUrl + voice + "/");
@@ -70,14 +72,14 @@ public class Main {
             server.start();
             
             
-            
+            // INSTRUCTIONS:
+            System.out.println("\n\n\n\n");
             System.out.println("\nReady to play " + karaoke.getTitle() + " by " + karaoke.getComposer());
             System.out.println("\nTo get ready to view the lyrics, navigate in your browser to one of the following urls, \nwhere the extension"
                     + " indicates which voice's lyrics will be streaming at that url, \nwhere voice \"1\" is the default if your file specified no voice:");
             System.out.println("\n"+String.join("\n", urls));
-
+            System.out.println("\nThe webpage will not load until you do the following instruction");
             System.out.println("\nBegin playing the music and streaming the lyrics by typing \"play\" and hitting Enter");
-
             System.out.println("\nTo exit at any time, press Ctrl-C");
             
             

@@ -47,7 +47,7 @@ public class LyricLine {
         
         //find current lyric string that should be bolded, then add bolding syntax
         String boldedLyric = this.lyrics.get(boldedIndex);
-        this.lyrics.set(boldedIndex, "<b>"+ boldedLyric + "</b>");
+        this.lyrics.set(boldedIndex, "<font face=\"verdana\" size=\"8\" color=\"#DC143C\">"+ boldedLyric + "</font>");
         checkRep();
     }
 
@@ -101,7 +101,7 @@ public class LyricLine {
     public static LyricLine emptyLyricLine() {
         List<String> lyr = new ArrayList<String>();
         lyr.add("no lyric");
-        LyricLine lyrics =  new LyricLine(lyr, 0, "main");  //no lyrics
+        LyricLine lyrics =  new LyricLine(lyr, 0, "1");  //no lyrics
         return lyrics;
     }
     
