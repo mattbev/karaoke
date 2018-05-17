@@ -224,6 +224,14 @@ public class BodyParser {
                     continue;                    
                 }
                 case BARLINE: //barline ::= "|" | "||" | "[|" | "|]" | ":|" | "|:"
+                    //Check if it's first or second seen major bar line
+                    //
+                    // IF second seen major bar line
+                    // ---> copy each of the notes kept in the repeat
+                    //      list and concat line
+                    //      -clear repeat list and first and second seen slots
+                    //ELSE  list it as first major bar line
+                    //--->  start keeping "repeat list" of notes that come after it
                     continue;
                 case NTH_REPEAT: //nth_repeat ::= "[1" | "[2"
                     continue;

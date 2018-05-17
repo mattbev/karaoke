@@ -42,6 +42,14 @@ public class Karaoke {
         this.header = header;
     }
     
+    /**
+     * check the stated and implied rep invariant
+     */
+    private void checkRep() {
+        assert body != null;
+        assert header != null;
+    }
+    
     
     /**
      * creates an new karaoke
@@ -59,6 +67,7 @@ public class Karaoke {
      * @param server the server the karaoke is being played on
      */
     public void play(SequencePlayer player, WebServer server) {
+        checkRep();
         body.play(player, server);
     }
     
@@ -68,6 +77,7 @@ public class Karaoke {
      * @return the title of this piece
      */
     public String getTitle() {
+        checkRep();
         return this.header.getTitle();
     }
 
@@ -77,6 +87,7 @@ public class Karaoke {
      * @return the composer of this song
      */
     public String getComposer() {
+        checkRep();
         return this.header.getComposer();
     }
     
@@ -86,6 +97,7 @@ public class Karaoke {
      * @return list of voices in the body of the karaoke
      */
     public List<String> getVoices() {
+        checkRep();
         List<String> voices = new ArrayList<>();
         for (String v : this.body.getVoices()) {
             voices.add(v);
@@ -97,6 +109,7 @@ public class Karaoke {
      * @return the karaoke body
      */
     public Body getBody() {
+        checkRep();
         return this.body;
     }
     
@@ -105,6 +118,7 @@ public class Karaoke {
      * @return the karaoke header
      */
     public Header getHeader() {
+        checkRep();
         return this.header;
     }
     
@@ -114,6 +128,7 @@ public class Karaoke {
      * @return the list of lyric lines for this karaoke for this voice
      */
     public List<String> getLinesOfLyrics(String voice) {
+        checkRep();
         List<String> allLyrics = new ArrayList<>();
         for (Playable p : this.body.getVoicesToMusics().get(voice).getComponents()) {
             allLyrics.add(p.getLyricLine().toString());

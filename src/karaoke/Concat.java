@@ -42,23 +42,36 @@ public class Concat implements Music {
      * @param secondMusic the second Music piece in the sequence
      */
     public Concat(Music firstMusic, Music secondMusic) {
+        checkRep();
         this.firstMusic = firstMusic;
         this.secondMusic = secondMusic;
+    }
+    
+    /**
+     * check the stated and implied rep invariant
+     */
+    private void checkRep() {
+        assert this.firstMusic != null;
+        assert this.secondMusic != null;
+
     }
 
     @Override
     public double duration() {
+        checkRep();
         return firstMusic.duration() + secondMusic.duration();
     }
 
     @Override
     public void play(SequencePlayer player, double startBeat, WebServer server) {
+        checkRep();
         firstMusic.play(player,startBeat, server);
         secondMusic.play(player, startBeat + firstMusic.duration(), server);
     }
     
     @Override
     public List<Playable> getComponents() {
+        checkRep();
         final List<Playable> firstComponents = new ArrayList<>(this.firstMusic.getComponents());
         final List<Playable> secondComponents = new ArrayList<>(this.secondMusic.getComponents());
         firstComponents.addAll(secondComponents);

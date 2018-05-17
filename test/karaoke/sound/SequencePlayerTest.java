@@ -13,12 +13,12 @@ public class SequencePlayerTest {
 
     /**
      * Tetsing Strategy:
+     * 
      * @category no_didit
      * Listening test on
      *  -piece1.abc
      *  -piece2.abc
      *  -piece3.abc
-     * 
      * 
      */
     

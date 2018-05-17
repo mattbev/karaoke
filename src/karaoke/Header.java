@@ -30,7 +30,7 @@ public class Header {
     //                             piece index of index
     //
     // Rep Invariant:
-    //   every header must have a:
+    //   -every header must have a:
     //      index number
     //      title
     //      key of the piece
@@ -105,11 +105,22 @@ public class Header {
         }
     }
     
+    
+    /**
+     * check the stated and implied rep invariant
+     */
+    private void checkRep() {
+        assert this.key != null;
+        assert this.title != null;
+        assert this.index != null;
+    }
+    
     /**
      * gets the name of the composer
      * @return the composer
      */
     public String getComposer() {
+        checkRep();
         return this.composer;
     }
     
@@ -118,6 +129,7 @@ public class Header {
      * @return the key
      */
     public String getKey() {
+        checkRep();
         return this.key;
     }
     
@@ -126,6 +138,7 @@ public class Header {
      * @return the default note length
      */
     public String getDefaultLength() {
+        checkRep();
         return this.defaultLength;
     }
     
@@ -134,6 +147,7 @@ public class Header {
      * @return the meter
      */
     public String getMeter() {
+        checkRep();
         return this.meter;
     }
     
@@ -142,6 +156,7 @@ public class Header {
      * @return the tempo
      */
     public String getTempo() {
+        checkRep();
         return this.tempo;
     }
     
@@ -150,6 +165,7 @@ public class Header {
      * @return the title
      */
     public String getTitle() {
+        checkRep();
         return this.title;
     }
     
@@ -158,6 +174,7 @@ public class Header {
      * @return the voices
      */
     public String getVoices() {
+        checkRep();
         return this.voices;
     }
     
@@ -166,6 +183,7 @@ public class Header {
      * @return the index
      */
     public String getIndex() {
+        checkRep();
         return this.index;
     }
     
@@ -174,6 +192,7 @@ public class Header {
      * @return the length of the default note
      */
     public double getDefaultLengthDouble() {
+        checkRep();
         String numerator;
         String denominator;
         if (this.defaultLength.length() == 1) {
@@ -197,6 +216,7 @@ public class Header {
     
     @Override
     public boolean equals(Object that) {
+        checkRep();
         if (that instanceof Header) {
             return ((Header) that).composer.equals(this.composer)
                     && ((Header) that).key.equals(this.key)
@@ -212,6 +232,7 @@ public class Header {
     
     @Override
     public int hashCode() {
+        checkRep();
         return this.composer.hashCode() +
                 this.defaultLength.hashCode() +
                 this.index.hashCode() +
@@ -224,6 +245,7 @@ public class Header {
     
     @Override
     public String toString() {
+        checkRep();
         return this.composer + "\n" +
                 this.defaultLength + "\n" +
                 this.index + "\n" +

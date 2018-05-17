@@ -17,7 +17,7 @@ public class LyricLine {
     private final int boldedIndex;
     private final String voice;
     
-    // AF(lyrics, boldedIndex, voice): A line of lyrics in a song with lyric at index boldedIndex bolded and
+    // AF(lyrics, boldedIndex, voice): A line of lyrics in a song with lyric at index <boldedIndex> bolded and
     //                                 sung with voice <voice>
     //
     // Rep Invariant:
@@ -58,7 +58,7 @@ public class LyricLine {
     private void checkRep() {
         assert this.boldedIndex >= 0 && this.boldedIndex < this.lyrics.size();
     }
-    
+   
     
     /**
      * gets all of the individual lyrics of a line in order
@@ -100,8 +100,8 @@ public class LyricLine {
      */
     public static LyricLine emptyLyricLine() {
         List<String> lyr = new ArrayList<String>();
-        lyr.add("");
-        LyricLine lyrics =  new LyricLine(lyr, 0, "1");  //no lyrics
+        lyr.add("♩♫♪");
+        LyricLine lyrics =  new LyricLine(lyr, 0, "main");  //no lyrics
         return lyrics;
     }
     
