@@ -9,16 +9,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 
 import karaoke.server.WebServer;
 import karaoke.sound.MusicPlayer;
-import karaoke.sound.Pitch;
+import parser.KaraokeParser;
 
 /**
  * Main entry point of the karaoke machine, run to make karaoke song requests and stream lyrics
@@ -58,6 +56,8 @@ public class Main {
             List<String> s = Files.readAllLines(Paths.get(songPath), StandardCharsets.UTF_8);
             String contents = String.join("\n",s) + "\n";
             karaoke = KaraokeParser.parse(contents);
+            System.out.println(karaoke.getHeader().toString());
+            System.out.println(karaoke.getBody().getVoicesToMusics().get("1").getComponents());
             
             //
             //
