@@ -64,19 +64,20 @@ public class Note {
                 break;
             }
         }
-        
+        System.out.println(basenote);
+        String[] pitchParams = pitch.split(basenote);
+
         Pitch notePitch = new Pitch(basenote.toUpperCase().toCharArray()[0]);
-      
-        final String[] pitchParams = pitch.split(basenote);
+        if (basenote.toLowerCase().equals(basenote)) {
+            System.out.println(true);
+            notePitch = notePitch.transpose(Pitch.OCTAVE);
+        }
         String noteAccidental = "";
+        System.out.println(pitchParams.length);
         if (pitchParams.length == 2) {
             noteAccidental = pitchParams[0];
-            final String octave = pitchParams[1];
-            final String basenoteCopy = basenote;
+            final String octave = pitchParams[1];            
             
-            if (basenoteCopy.toLowerCase().equals(basenote)) {
-                notePitch = notePitch.transpose(Pitch.OCTAVE);
-            }
             if (octave.contains("'")) {
                 notePitch = notePitch.transpose(Pitch.OCTAVE*octave.length());
             }
@@ -117,6 +118,8 @@ public class Note {
         this.accidental = noteAccidental;
         this.duration = noteDuration;
         this.pitch = notePitch;
+        System.out.println("constructor pitch: "+pitch);
+
     }
     
     
@@ -177,9 +180,10 @@ public class Note {
      * @param startBeat beat at which the note should play
      */
     public void play(SequencePlayer player, double startBeat) {
-
+        System.out.println("startbeat: "+startBeat);
+       
         player.addNote(instrument, pitch, startBeat, duration);
-//        System.out.println("duration: "+duration);
+        System.out.println("duration: "+duration);
         checkRep();        
     }
 

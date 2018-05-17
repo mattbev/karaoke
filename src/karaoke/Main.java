@@ -58,36 +58,36 @@ public class Main {
         try {
             List<String> s = Files.readAllLines(Paths.get(songPath), StandardCharsets.UTF_8);
             String contents = String.join("\n",s) + "\n";
-//            karaoke = KaraokeParser.parse(contents);
+            karaoke = KaraokeParser.parse(contents);
             
             //
             //
             //
             //
-            //CREATING KARAOKE STUB OBJECT FOR TESTING SEPARATELY OF PARSER::::
-            LyricLine l1 = new LyricLine(Arrays.asList("hello", "goodbye"), 0, "1");
-            LyricLine l2 = new LyricLine(Arrays.asList("hello", "goodbye"), 1, "1");
-            Playable p1 = Playable.createChord(Arrays.asList(new Note(15, new Pitch('C'), ",")), l1);
-            Playable p2 = Playable.createChord(Arrays.asList(new Note(5, new Pitch('D'), ",")), l2);
-            Music m1 = Music.createLine(Arrays.asList(p1, p2));
-            
-            LyricLine l3 = new LyricLine(Arrays.asList("hey", "bye"), 0, "2");
-            LyricLine l4 = new LyricLine(Arrays.asList("hey", "bye"), 1, "2");
-            //Playable p5 = Playable.createRestFromDouble(4, l3);
-            Playable p3 = Playable.createChord(Arrays.asList(new Note(5, new Pitch('C'), "''''")), l3);
-            Playable p4 = Playable.createChord(Arrays.asList(new Note(15, new Pitch('E'), "''''")), l4);
-            Music m2 = Music.createLine(Arrays.asList(p3, p4));
-            
-            Map<String, Music> musicMap = new HashMap<>();
-            musicMap.put("1", m1);
-            musicMap.put("2", m2);
-            Body body = new Body(musicMap);
-            Map<Character, String> headerMap = new HashMap<>();
-            headerMap.put('T', "hello");
-            headerMap.put('X', "1");
-            headerMap.put('K', "C");
-            Header header = new Header(headerMap);
-            karaoke = Karaoke.createKaraoke(header, body);
+//            //CREATING KARAOKE STUB OBJECT FOR TESTING SEPARATELY OF PARSER::::
+//            LyricLine l1 = new LyricLine(Arrays.asList("hello", "goodbye"), 0, "1");
+//            LyricLine l2 = new LyricLine(Arrays.asList("hello", "goodbye"), 1, "1");
+//            Playable p1 = Playable.createChord(Arrays.asList(new Note(15, new Pitch('C'), ",")), l1);
+//            Playable p2 = Playable.createChord(Arrays.asList(new Note(5, new Pitch('D'), ",")), l2);
+//            Music m1 = Music.createLine(Arrays.asList(p1, p2));
+//            
+//            LyricLine l3 = new LyricLine(Arrays.asList("hey", "bye"), 0, "2");
+//            LyricLine l4 = new LyricLine(Arrays.asList("hey", "bye"), 1, "2");
+//            //Playable p5 = Playable.createRestFromDouble(4, l3);
+//            Playable p3 = Playable.createChord(Arrays.asList(new Note(5, new Pitch('C'), "''''")), l3);
+//            Playable p4 = Playable.createChord(Arrays.asList(new Note(15, new Pitch('E'), "''''")), l4);
+//            Music m2 = Music.createLine(Arrays.asList(p3, p4));
+//            
+//            Map<String, Music> musicMap = new HashMap<>();
+//            musicMap.put("1", m1);
+//            musicMap.put("2", m2);
+//            Body body = new Body(musicMap);
+//            Map<Character, String> headerMap = new HashMap<>();
+//            headerMap.put('T', "hello");
+//            headerMap.put('X', "1");
+//            headerMap.put('K', "C");
+//            Header header = new Header(headerMap);
+//            karaoke = Karaoke.createKaraoke(header, body);
             //
             //
             //
