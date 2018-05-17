@@ -181,7 +181,7 @@ public class Note {
      */
     public void play(SequencePlayer player, double startBeat) {
         System.out.println("startbeat: "+startBeat);
-       
+        System.out.println("pitch: "+pitch);
         player.addNote(instrument, pitch, startBeat, duration);
         System.out.println("duration: "+duration);
         checkRep();        
