@@ -12,7 +12,7 @@ public class Repeat implements Music{
     
     // AF(toBeRepeated, endings): A Music consisting of repeated music sections with toBeRepeated playing twice;
     //                            and if they exist, two alternate endings <endings> play one each after
-    //                            the first and second playings of <toBeRepeated>, respectively.,
+    //                            the first and second playings of <toBeRepeated>, respectively.
     //                       
     //
     // RI: 
@@ -24,8 +24,8 @@ public class Repeat implements Music{
     //
     // Thread safety argument:
     //    This class is threadsafe because it's immutable:
-    //    - firstMusic, and secondMusic are final
-    //    - neither Music objects are every exposed to the client
+    //    - toBeReported, and endings are final
+    //    - neither Music objects or List<Music> are ever exposed to the client
     
     
     /**
@@ -42,7 +42,6 @@ public class Repeat implements Music{
         this.endings.add(endingTwo);
         this.toBeRepeated = rMusic;
     }
-    
     /**
     * Creates a repeat object
     * 
