@@ -238,7 +238,7 @@ public class BodyParser {
                 switch(endOfLineChild.name()) {
                 case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
                     continue;
-                case NEWLINE: //newline ::= "\n" | "\r" "\n"?
+                case NEWLINE: //newline ::= "\n" | "\r""\n"?
                 {
                     if (musicMap.containsKey(voice)) { // if there, add it to current list
                         final List<Music> musicList = musicMap.get(voice);
@@ -271,9 +271,7 @@ public class BodyParser {
                 for (int i=0; i < mostRecentLine.getComponents().size(); i++) {
                     
                     try {
-                        
                         final LyricLine lyricLine = new LyricLine(lyricElements, i, voice);
-                        
                         line.add(mostRecentLine.getComponents().get(i).copyWithNewLyric(lyricLine));
                     } catch(IndexOutOfBoundsException e) {
                         line.add(mostRecentLine.getComponents().get(i).copyWithNewLyric(LyricLine.emptyLyricLine()));
