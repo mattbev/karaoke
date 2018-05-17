@@ -238,7 +238,7 @@ public class BodyParser {
                 switch(endOfLineChild.name()) {
                 case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
                     continue;
-                case NEWLINE: //newline ::= "\n" | "\r" "\n"?
+                case NEWLINE: //newline ::= "\n" | "\r""\n"?
                 {
                     if (musicMap.containsKey(voice)) { // if there, add it to current list
                         final List<Music> musicList = musicMap.get(voice);

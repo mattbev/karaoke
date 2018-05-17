@@ -19,7 +19,6 @@ import java.util.Queue;
 import karaoke.server.WebServer;
 import karaoke.sound.MusicPlayer;
 import karaoke.sound.Pitch;
-import parser.KaraokeParser;
 
 /**
  * Main entry point of the karaoke machine, run to make karaoke song requests and stream lyrics
