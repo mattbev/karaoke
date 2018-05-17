@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import karaoke.server.WebServer;
+import karaoke.sound.Instrument;
 import karaoke.sound.SequencePlayer;
 
 public class Tuplet implements Playable {
@@ -105,11 +106,11 @@ public class Tuplet implements Playable {
 
     
     @Override
-    public void play(SequencePlayer player, double startBeat, WebServer server) {
+    public void play(SequencePlayer player, double startBeat, WebServer server, Instrument inst) {
         
         double beginBeat = startBeat;
         for(Chord chord: newChords) {
-            chord.play(player, beginBeat, server);
+            chord.play(player, beginBeat, server, inst);
             beginBeat += chord.duration();
             Consumer<Double> c1 = i -> {
                 try {

@@ -58,9 +58,9 @@ public interface Music {
      * @param player player to play on
      * @param startBeat when to play
      * @param server the server to play on
-     * 
+     * @param i the instrument to play the line on
      */
-    public void play(SequencePlayer player, double startBeat, WebServer server);
+    public void play(SequencePlayer player, double startBeat, WebServer server, Instrument i);
     
    
     

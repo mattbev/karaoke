@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import karaoke.server.WebServer;
+import karaoke.sound.Instrument;
 import karaoke.sound.SequencePlayer;
 
 /**
@@ -63,10 +64,10 @@ public class Concat implements Music {
     }
 
     @Override
-    public void play(SequencePlayer player, double startBeat, WebServer server) {
+    public void play(SequencePlayer player, double startBeat, WebServer server, Instrument i) {
         checkRep();
-        firstMusic.play(player,startBeat, server);
-        secondMusic.play(player, startBeat + firstMusic.duration(), server);
+        firstMusic.play(player,startBeat, server, i);
+        secondMusic.play(player, startBeat + firstMusic.duration(), server, i);
     }
     
     @Override

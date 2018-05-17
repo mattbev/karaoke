@@ -4,10 +4,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
@@ -65,8 +62,8 @@ public class WebServer {
 
 
         server.setExecutor(Executors.newCachedThreadPool());
-        LogFilter log = new LogFilter();
-        HeadersFilter headers = new HeadersFilter();
+        //LogFilter log = new LogFilter();
+        //HeadersFilter headers = new HeadersFilter();
         // all responses will be plain-text UTF-8
         //headers.add("Content-Type", "text/html; charset=utf-8");
         for(String voice: this.karaoke.getVoices()) {
@@ -95,7 +92,7 @@ public class WebServer {
     private void checkRep() {
         assert server != null;
         assert karaoke != null;
-        assert bq != null; //TODO
+        assert bq != null; 
     }
     
    

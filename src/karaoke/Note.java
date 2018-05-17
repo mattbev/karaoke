@@ -20,10 +20,9 @@ public class Note {
     private final double duration;
     private final Pitch pitch;
     private final String accidental;
-    private final Instrument instrument = Instrument.PIANO;
     
-    // AF(instrument, duration, pitch, accidental): A musical note of pitch pitch, with accidental accidental, played on 
-    //      instrument for the amount of time held in duration
+    // AF(duration, pitch, accidental): A musical note of pitch pitch, with accidental accidental, played
+    //                          for the amount of time held in duration
     //
     // Rep invariant:
     //      duration > 0
@@ -135,7 +134,6 @@ public class Note {
      * assert stated and implied RI
      */
     private void checkRep() {
-        assert instrument != null : "instrument can't be null";
         assert pitch != null : "pitch can't be null";
         assert accidental != null : "accidental can't be null";
         assert duration > 0;
@@ -171,24 +169,15 @@ public class Note {
         return this.accidental;
     }
     
-    /**
-     * Return the instrument this note is played by
-     * 
-     * @return this note's instrument
-     */
-    public Instrument getInstrument() {
-        checkRep();
-        return this.instrument;
-    }
-    
 
     /**
      * Play this note
      * @param player player producing the note
      * @param startBeat beat at which the note should play
+     * @param i the instrument to play the note on
      */
-    public void play(SequencePlayer player, double startBeat) {
-        player.addNote(instrument, pitch, startBeat, duration);
+    public void play(SequencePlayer player, double startBeat, Instrument i) {
+        player.addNote(i, pitch, startBeat, duration);
         checkRep();        
     }
 
@@ -217,4 +206,5 @@ public class Note {
     public String toString() {
         return "" + this.accidental + this.pitch + this.duration;
     }
+    
 }

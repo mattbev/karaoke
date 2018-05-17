@@ -6,6 +6,7 @@ package karaoke;
 import java.util.function.Consumer;
 
 import karaoke.server.WebServer;
+import karaoke.sound.Instrument;
 import karaoke.sound.SequencePlayer;
 
 /**
@@ -91,7 +92,7 @@ public class Rest implements Playable {
      * Provide a rest in the karaoke
      */
     @Override
-    public void play(SequencePlayer player, double startBeat, WebServer server) {
+    public void play(SequencePlayer player, double startBeat, WebServer server, Instrument inst) {
         Consumer<Double> c1 = i -> {
             try {
                 server.putInBlockingQueue(lyricLine);

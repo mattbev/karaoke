@@ -16,6 +16,7 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 
 import karaoke.server.WebServer;
+import karaoke.sound.Instrument;
 import karaoke.sound.MusicPlayer;
 import parser.KaraokeParser;
 
@@ -74,18 +75,30 @@ public class Main {
             
             // INSTRUCTIONS:
             System.out.println("\n\n\n\n");
-            System.out.println("\nReady to play " + karaoke.getTitle() + " by " + karaoke.getComposer());
-            System.out.println("\nTo get ready to view the lyrics, navigate in your browser to one of the following urls, \nwhere the extension"
-                    + " indicates which voice's lyrics will be streaming at that url, \nwhere voice \"1\" is the default if your file specified no voice:");
+            System.out.println("\nReady to play " + karaoke.getTitle() + " by " + karaoke.getComposer()  + ".");
+            System.out.println("\nTo get ready to view the lyrics, navigate in your browser \nto one of the following urls, where the extension."
+                    + " \nindicates which voice's lyrics will be streaming at that url, \nwhere voice \"1\" is the default if your file specified no voice:");
             System.out.println("\n"+String.join("\n", urls));
-            System.out.println("\nThe webpage will not load until you do the following instruction");
-            System.out.println("\nBegin playing the music and streaming the lyrics by typing \"play\" and hitting Enter");
-            System.out.println("\nTo exit at any time, press Ctrl-C");
+            System.out.println("\nNote: the webpage won't load until you do the following commands.");
+            System.out.println("\nYou may first try to type an instrument then press Enter, \nand we will try to play the karaoke with it and if \nyou don't, we will play with piano.");
+            System.out.println("\nBegin playing the music and streaming the lyrics \nby typing \"play\" and hitting Enter.");
+            System.out.println("\nTo exit at any time, press Ctrl-C.");
             
             
             BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
-            if (b.readLine().equals("play")) {
-                MusicPlayer.play(karaoke,server);
+            final String i = b.readLine().toUpperCase().replaceAll(" ", "_");
+            Instrument inst = Instrument.PIANO;
+            try {
+                
+                inst = Instrument.valueOf(i);
+                System.out.println("instrument found! now type \"play\" and Enter");
+            } catch (Exception e) {
+                System.out.println("instrument " + i + " not found. Playing with piano.");
+                
+            } finally {
+                if (b.readLine().equals("play")) {
+                    MusicPlayer.play(karaoke,server, inst);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

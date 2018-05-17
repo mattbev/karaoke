@@ -5,6 +5,7 @@ import java.util.List;
 
 
 import karaoke.server.WebServer;
+import karaoke.sound.Instrument;
 import karaoke.sound.SequencePlayer;
 
 /**
@@ -65,10 +66,11 @@ public class Karaoke {
      * Play this karaoke
      * @param player player to play on
      * @param server the server the karaoke is being played on
+     * @param i the instrument to play the karaoke on
      */
-    public void play(SequencePlayer player, WebServer server) {
+    public void play(SequencePlayer player, WebServer server, Instrument i) {
         checkRep();
-        body.play(player, server);
+        body.play(player, server, i);
     }
     
     /**

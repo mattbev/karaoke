@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import karaoke.server.WebServer;
+import karaoke.sound.Instrument;
 import karaoke.sound.SequencePlayer;
 
 public class Repeat implements Music{
@@ -69,7 +70,7 @@ public class Repeat implements Music{
 
     @Override
     
-    public void play(SequencePlayer player, double startBeat, WebServer server) {
+    public void play(SequencePlayer player, double startBeat, WebServer server, Instrument i) {
         Music finalCombined;
         if(this.endings.size() != 2) {
              finalCombined = new Concat(this.toBeRepeated, this.toBeRepeated);
@@ -80,7 +81,7 @@ public class Repeat implements Music{
             Music newCombined = new Concat(combined,this.toBeRepeated);
              finalCombined = new Concat(newCombined, this.endings.get(1));
         }
-        finalCombined.play(player,startBeat, server);
+        finalCombined.play(player,startBeat, server, i);
            
     }
     @Override

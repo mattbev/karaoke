@@ -6,6 +6,7 @@ import java.util.Set;
 
 
 import karaoke.server.WebServer;
+import karaoke.sound.Instrument;
 import karaoke.sound.SequencePlayer;
 
 /**
@@ -81,12 +82,13 @@ public class Body {
      * @param player the player to play the music
      * @param server the server on which the body's
      *        music is played
+     * @param i the instrument to be played on
      */
-    public void play(SequencePlayer player, WebServer server) {
+    public void play(SequencePlayer player, WebServer server, Instrument i) {
         checkRep();
         for (String voice : this.voiceToMusic.keySet()) {
             final Music voiceMusic = this.voiceToMusic.get(voice);
-            voiceMusic.play(player, 0, server);
+            voiceMusic.play(player, 0, server, i);
         }
     }
 

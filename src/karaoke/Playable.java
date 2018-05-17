@@ -3,6 +3,7 @@ package karaoke;
 import java.util.List;
 
 import karaoke.server.WebServer;
+import karaoke.sound.Instrument;
 import karaoke.sound.SequencePlayer;
 
 /**
@@ -96,8 +97,9 @@ public interface Playable {
      * @param player player on which to play
      * @param startBeat when to play
      * @param server the playable is played on
+     * @param i the instrument to play this chord on 
      */
-    public void play(SequencePlayer player, double startBeat, WebServer server) ;
+    public void play(SequencePlayer player, double startBeat, WebServer server, Instrument i) ;
         
     @Override
     public boolean equals(Object that);

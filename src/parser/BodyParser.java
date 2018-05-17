@@ -298,7 +298,6 @@ public class BodyParser {
         }
         if (musicMap.containsKey(voice)) { // if there, add it to current list
             final List<Music> musicList = musicMap.get(voice);
-            System.out.println(musicList);
             musicList.add(Music.createLine(line));
             
             musicMap.put(voice, musicList);

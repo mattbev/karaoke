@@ -24,10 +24,11 @@ public class MusicPlayer {
      * play a Karaoke 
      * @param karaoke Karaoke expression to play
      * @param server server on which the MusicPlayer is played
+     * @param i the instrument to play on using this player
      * @throws MidiUnavailableException thrown if the Midi synthesizer is unavailable
      * @throws InvalidMidiDataException thrown if Midi cannot play the Karaoke file
      */
-    public static void play(Karaoke karaoke, WebServer server) throws MidiUnavailableException, InvalidMidiDataException{
+    public static void play(Karaoke karaoke, WebServer server, Instrument i) throws MidiUnavailableException, InvalidMidiDataException{
         final Header header = karaoke.getHeader();
         final String tempo = header.getTempo();
         final String[] components = tempo.split("=");
@@ -49,7 +50,7 @@ public class MusicPlayer {
         }
         final int ticksPerBeat = 64;
         SequencePlayer player = new MidiSequencePlayer(beatsPerMinute, ticksPerBeat);
-        karaoke.play(player, server);
+        karaoke.play(player, server, i);
         
         //recurses all the way down to note class which is added to player in addNote(), then play the player
         player.play();

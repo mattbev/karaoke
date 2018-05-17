@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import karaoke.server.WebServer;
+import karaoke.sound.Instrument;
 import karaoke.sound.SequencePlayer;
 
 /**
@@ -92,11 +93,11 @@ public class Chord implements Playable {
      * @param server server the chord is played on
      */
     @Override
-    public void play(SequencePlayer player, double startBeat, WebServer server) {
+    public void play(SequencePlayer player, double startBeat, WebServer server, Instrument inst) {
         
         //iterate through every note in the chord and give it the same startBeat on which to play
         for(Note note: notes) {
-            note.play(player, startBeat);
+            note.play(player, startBeat, inst);
         }
         Consumer<Double> c1 = i -> {
             try {
