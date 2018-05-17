@@ -49,6 +49,7 @@ public interface Playable {
      * 
      * @param duration the length of this rest
      * @param lyricLine the line of lyrics, with nothing bolded, corresponding to this rest
+     * @param header the header that the rest is parsed from
      * @return a new rest in music with length duration and lyric lyric
      */
     public static Rest createRestFromString(String duration,LyricLine lyricLine, Header header) {

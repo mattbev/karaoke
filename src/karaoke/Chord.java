@@ -135,7 +135,6 @@ public class Chord implements Playable {
     
     
     /**
-     * 
      * @param t the tuplet type
      * @return the number to divide the total duration by
      */

@@ -53,6 +53,7 @@ public class Rest implements Playable {
      * 
      * @param duration the duration of the pause
      * @param lyricLine a line of lyrics tied to the rest
+     * @param header the header of the music that the rest is parsed from 
      */
     public Rest(String duration, LyricLine lyricLine, Header header) {
         this.lyricLine = lyricLine;
@@ -76,7 +77,8 @@ public class Rest implements Playable {
         if (denominator.length() > 0) {
             denominatorInt = Integer.parseInt(denominator);
         }
-        this.duration = ((double) numeratorInt) / ((double) denominatorInt) * header.getDefaultLengthDouble() * 4.;
+        final double beatMultiplier = 4.;
+        this.duration = ((double) numeratorInt) / ((double) denominatorInt) * header.getDefaultLengthDouble() * beatMultiplier;
     }
 
     @Override
