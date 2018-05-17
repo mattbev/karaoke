@@ -72,7 +72,6 @@ public class Chord implements Playable {
     public double duration() {
         checkRep();
         double dur = this.notes.get(0).getDuration();
-        System.out.println("Chorddur: "+dur);
         return dur;
     }
 

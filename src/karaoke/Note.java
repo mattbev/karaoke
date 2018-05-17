@@ -56,7 +56,7 @@ public class Note {
      * @param header the header of the nmusic that the note is parsed from
      */
     public Note(String pitch, String noteLength, Header header) {
-
+        
         Set<String> validNotes = new HashSet<>(Arrays.asList("C","D","E","F","G","A","B","c","d","e","f","g","a","b"));
         String basenote = "";
         for (String note : validNotes) {
@@ -72,8 +72,14 @@ public class Note {
             notePitch = notePitch.transpose(Pitch.OCTAVE);
         }
         String noteAccidental = "";
-        if (pitchParams.length > 0) {
+        if (pitchParams.length > 0 && (pitchParams[0].contains("^") || pitchParams[0].contains("_"))) {
             noteAccidental += pitchParams[0];
+            if (noteAccidental.contains("^")) {
+                notePitch = notePitch.transpose(noteAccidental.length());
+            }
+            else if (noteAccidental.contains("_")) {
+                notePitch = notePitch.transpose(-noteAccidental.length());
+            }
         }
         if (pitchParams.length == 2) {
             final String octave = pitchParams[1];            
@@ -83,12 +89,6 @@ public class Note {
             }
             else if(octave.contains(",")) {
                 notePitch = notePitch.transpose(-Pitch.OCTAVE*octave.length());
-            }
-            if (noteAccidental.contains("^")) {
-                notePitch = notePitch.transpose(noteAccidental.length());
-            }
-            else if (noteAccidental.contains("_")) {
-                notePitch = notePitch.transpose(-noteAccidental.length());
             }
         }        
         final double beatMultiplier = 4.;
@@ -187,7 +187,6 @@ public class Note {
      * @param startBeat beat at which the note should play
      */
     public void play(SequencePlayer player, double startBeat) {
-
         player.addNote(instrument, pitch, startBeat, duration);
         checkRep();        
     }
