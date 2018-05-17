@@ -371,7 +371,7 @@ public class SequencePlayerTest {
         player.addNote(piano, new Pitch('G'), startBeat, 3.0/4);
         startBeat += 3.0/4;
         //end measure and tuplet
-        
+        System.out.println(startBeat);
         player.addNote(piano, new Pitch('B'), startBeat, 2);
         player.addEvent(startBeat, consumerMaker(startBeat));
 
@@ -426,7 +426,7 @@ public class SequencePlayerTest {
    
         startBeat += 1;
         //end measure
-        
+        System.out.println(startBeat);
         player.addNote(piano, new Pitch('D').transpose(Pitch.OCTAVE), startBeat, 3);
         player.addEvent(startBeat, consumerMaker(startBeat));
 

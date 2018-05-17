@@ -4,9 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.mit.eecs.parserlib.ParseTree;
 import edu.mit.eecs.parserlib.Parser;
@@ -97,10 +100,8 @@ public class BodyParser {
     private static Map<String,List<Music>> evaluateLine(ParseTree<BodyGrammar> parseTree, Header header, Map<String, List<Music>> currentMap, String voice) {
         final List<Playable> line = new ArrayList<>();
         final Map<String, List<Music>> musicMap = new HashMap<>(currentMap);
-        
+
         for (ParseTree<BodyGrammar> child : parseTree.children()) {
-//            System.out.println(line);
-//            System.out.println(child);
             switch(child.name()) {
             case ELEMENT: //element ::= note_element | rest_element | tuplet_element | barline | nth_repeat | space_or_tab 
             {
@@ -240,14 +241,15 @@ public class BodyParser {
                     continue;
                 case NEWLINE: //newline ::= "\n" | "\r""\n"?
                 {
-                    if (musicMap.containsKey(voice)) { // if there, add it to current list
-                        final List<Music> musicList = musicMap.get(voice);
-                        musicList.add(Music.createLine(line));
-                        musicMap.put(voice, musicList);
-                    } else { // if not there, create new entry
-                        musicMap.put(voice, Arrays.asList(Music.createLine(line)));
-                    }
-                    return musicMap;                   
+//                    if (musicMap.containsKey(voice)) { // if there, add it to current list
+//                        final List<Music> musicList = musicMap.get(voice);
+//                        musicList.add(Music.createLine(line));
+//                        musicMap.put(voice, musicList);
+//                    } else { // if not there, create new entry
+//                        musicMap.put(voice, Arrays.asList(Music.createLine(line)));
+//                    }
+//                    return musicMap;     
+                    continue;
                 }
                 default:
                     throw new AssertionError("should never get here");
@@ -255,31 +257,27 @@ public class BodyParser {
             }
             case LYRIC: //lyric ::= "w:" lyrical_element*
             {
-                final Music mostRecentLine = musicMap.get(voice).get(-1);
-                musicMap.get(voice).remove(-1);
+                System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
                 final List<ParseTree<BodyGrammar>> lyricChildren = child.children();
-                final List<String> lyricElements = new ArrayList<>();
-                
-                for (int i=1; i < lyricChildren.size(); i++) {
-                    if (mostRecentLine.getComponents().get(i-1) instanceof Rest) {
-                        lyricElements.add("");
-                    } else {
-                        lyricElements.add(lyricChildren.get(i).text());
-                    }
-                }    
-                System.out.println(lyricElements);
-      
-                for (int i=0; i < mostRecentLine.getComponents().size(); i++) {
-                    
-                    try {
-                        final LyricLine lyricLine = new LyricLine(lyricElements, i, voice);
-                        line.add(mostRecentLine.getComponents().get(i).copyWithNewLyric(lyricLine));
-                    } catch(IndexOutOfBoundsException e) {
-                        line.add(mostRecentLine.getComponents().get(i).copyWithNewLyric(LyricLine.emptyLyricLine()));
-                    }
+                final List<String> lyricStrings = getLyricStrings(lyricChildren);
+                final List<Object> parsedLyricElements = asssignLyricsToPlayables(lyricStrings, line, lyricChildren);
+                final Map<Integer, Integer> playableLyricIndexes = (Map<Integer, Integer>) parsedLyricElements.get(0);
+                final List<String> parsedLyricStrings = (List<String>) parsedLyricElements.get(1);
+                System.out.println(parsedLyricStrings);
+                final List<Playable> modifiedLine = new ArrayList<>();
+
+                for (int i=0; i<line.size(); i++) {
+                    final Playable p = line.get(i);
+                    final LyricLine lyricLine = new LyricLine(parsedLyricStrings, playableLyricIndexes.get(i), voice);
+                    modifiedLine.add(p.copyWithNewLyric(lyricLine));
                 }
-                final List<Music> musicList = musicMap.get(voice); 
-                musicList.add(Music.createLine(line));
+                final List<Music> musicList;
+                if (musicMap.containsKey(voice)) {
+                    musicList = musicMap.get(voice);
+                    musicList.add(Music.createLine(modifiedLine));
+                } else {
+                    musicList = Arrays.asList(Music.createLine(modifiedLine));
+                }
                 musicMap.put(voice, musicList);
                 return musicMap;  
             }
@@ -302,6 +300,193 @@ public class BodyParser {
             
     }
     
+    private static List<String> getLyricStrings(List<ParseTree<BodyGrammar>> lyricChildren) {
+        final List<String> lyricList = new ArrayList<>();
+        String currentString = "";
+        for (int i=0; i < lyricChildren.size(); i++) {
+            final ParseTree<BodyGrammar> child = lyricChildren.get(i);
+
+            if (child.children().size() > 0 && child.children().get(0).name().equals(BodyGrammar.LYRIC_TEXT)) { //has text child
+                currentString += child.children().get(0).text();
+            }
+            else if (child.text().equals("-")) {
+                currentString += child.text();
+                lyricList.add(currentString);
+                currentString = "";
+            }
+            else if (child.text().equals("~")) {
+                currentString += " ";
+            }
+            else if (child.text().equals("\\-")) {
+                currentString += "-";
+            }
+            else if (child.text().equals(" ")) {
+                lyricList.add(currentString);
+                currentString = "";
+            }            
+        }
+        lyricList.add(currentString);
+        while (lyricList.contains("")) {
+            lyricList.remove("");
+        }
+        return lyricList;        
+    }
+    
+    private static List<Object> asssignLyricsToPlayables(List<String> lyricStrings, List<Playable> playableList, List<ParseTree<BodyGrammar>> treeChildren) {
+        final Map<Integer, Integer> assignments = new HashMap<>();
+        final List<Playable> playables = new ArrayList<>();
+        for (Playable p : playableList) {
+            if (!(p instanceof Rest)) {
+                playables.add(p);
+            }
+        }
+        
+        int k = 0;
+        do {
+            ParseTree<BodyGrammar> c = treeChildren.get(k);
+            if (c.text().equals(" ")) {
+                k++;
+            }
+            else {
+                break;
+            }
+        } while (true);
+        
+        final List<ParseTree<BodyGrammar>> lyricChildren = treeChildren.subList(k, treeChildren.size());
+        System.out.println(lyricStrings);
+        System.out.println(lyricChildren);
+        System.out.println(playableList);
+        int playableIndex = 0;
+        int lyricIndex = 0;
+        int i = 0;
+        outerloop:
+        while (i < lyricChildren.size()) {
+            ParseTree<BodyGrammar> child = lyricChildren.get(i);
+            System.out.println(child);
+            System.out.println(playableIndex);
+            //case 1: a text = assign to playable
+            if (child.children().size() > 0 && child.children().get(0).name().equals(BodyGrammar.LYRIC_TEXT)) {
+                assignments.put(playableIndex, lyricIndex);
+                playableIndex++;
+                if (! (playableIndex < playables.size())) {
+                    break outerloop;
+                }
+            }
+            //case 2: a hyphen or underscore
+            else if (child.text().equals("-") || child.text().equals("_")) {
+//                int nextIndex = i;
+//                while (lyricChildren.get(nextIndex).text().equals("-")) {
+//                    assignments.put(playableIndex, lyricIndex);
+//                    playableIndex++;
+//                    if (! (playableIndex < playables.size())) {
+//                        break outerloop;
+//                    }
+//                    lyricIndex++;
+//                    nextIndex++;                
+//                }
+                if (child.text().equals("-")) {
+                    lyricIndex++;
+                }
+//                while (lyricChildren.get(nextIndex).text().equals("_")) {
+//                    assignments.put(playableIndex, lyricIndex);
+//                    playableIndex++;
+//                    if (! (playableIndex < playables.size())) {
+//                        break outerloop;
+//                    }
+//                    nextIndex++;
+//                }
+//                i = nextIndex;
+//                lyricIndex++;
+//                if (child.text().equals("_")) {
+//                    
+//                }
+            }
+            //case 3: star
+            else if (child.text().equals("*")) {
+                int nextIndex = i;
+                while (lyricChildren.get(nextIndex).text().equals("*")) {
+                    assignments.put(nextIndex, lyricIndex);
+                    playableIndex++;
+                    if (! (playableIndex < playables.size())) {
+                        break outerloop;
+                    }
+                    nextIndex++;
+                }
+                i = nextIndex;
+                lyricIndex++;
+            }
+            //case 4: squiggle
+            else if (child.text().equals("~")) {
+                assignments.put(playableIndex, lyricIndex);
+                playableIndex++;
+                if (! (playableIndex < playables.size())) {
+                    break outerloop;
+                }
+                lyricIndex++;
+            }
+            //case 5: backslash hyphen
+            else if (child.text().equals("\\-")) {
+                assignments.put(playableIndex, lyricIndex);
+                playableIndex++;
+                if (! (playableIndex < playables.size())) {
+                   break outerloop;
+                }                
+                lyricIndex++;
+            }
+            //case 6: barline
+            else if (child.text().equals("|")) {
+                //TODO
+            }
+            //case 7: space
+            else if (child.text().equals(" ")) {
+//                if (! (playableIndex < playables.size())) {
+//                   break outerloop;
+//                }
+                lyricIndex++;
+            }
+            i++;
+        }
+        lyricIndex++;
+        assignments.put(playableIndex, lyricIndex);
+
+//        for (int j=0; j<playableList.size(); j++) {
+//            if (assignments.containsKey(j)) { //!(p instanceof Rest)
+//                assignments.put(j, assignments.get(j) + numRests);
+//                currentLyricIndex = assignments.get(j);
+//            } else {
+//                numRests++;
+//                System.out.println("hskjlfhkadsjlhfkldshfkls");
+//                lyricStrings.add(currentLyricIndex, "");
+//                int assigningIndex = currentLyricIndex;
+//                if (currentLyricIndex != 0) {
+//                    assigningIndex++;
+//                }
+//                assignments.put(j, assigningIndex);
+//            }
+//        }
+        
+        int numRests = 0;
+        int counter = 0;
+        Map<Integer, Integer> newAssignments = new HashMap<>();
+        for (Playable p : playableList) {
+            if ((p instanceof Rest)) {
+                numRests++;
+                lyricStrings.add(counter, "");
+                newAssignments.put(counter, assignments.get(counter) + numRests);
+            } else {
+                newAssignments.put(counter, 0);
+            }
+            counter++;
+
+        }
+       
+        System.out.println(lyricStrings);
+        System.out.println(newAssignments);
+// w: A-_maze-__ing_ grace!__ How_ sweet__ the_ sound__ That_ saved__ a_ wretch__ like_ me.___
+        return Collections.unmodifiableList(Arrays.asList(assignments, lyricStrings));
+        
+    }
+    
     
     /**
      * Convert a parse tree into an abstract syntax tree.
@@ -319,11 +504,13 @@ public class BodyParser {
         String voice = "1"; //default voice of 1
         
         //case ABC_LINE: // abc_line ::= element+ end_of_line (lyric end_of_line)?  | middle_of_body_field | comment
-        for (ParseTree<BodyGrammar> child : children) {   // for each line
-            switch(child.children().get(0).name()) {
+        for (ParseTree<BodyGrammar> child : children) {// for each line
+            switch(child.name()) {
+                
                 case MIDDLE_OF_BODY_FIELD: //middle_of_body_field ::= field_voice
                 {
                     voice = child.children().get(0).text(); //should always be declared before hitting default case if there are voices in the abc file
+                    continue;
                 }
                 case COMMENT: //comment ::= space_or_tab* "%" text newline
                 {
@@ -331,12 +518,8 @@ public class BodyParser {
                 }
                 default: // when abc_line ::= element+ end_of_line (lyric end_of_line)?
                     try {
-                        System.out.println("child: " + child.children().get(0).name());
-                        System.out.println(child);
                         voicesToLines = evaluateLine(child, header, voicesToLines, voice);
-//                        System.out.println(voicesToLines.get("1").get(0).getComponents());
                     } catch(AssertionError e) {
-                        System.out.println(e.toString());
                         throw new AssertionError("should never get here");
                     }
             }

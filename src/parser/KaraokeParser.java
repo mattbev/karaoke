@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,7 @@ public class KaraokeParser {
      * @throws IOException 
      */
     public static void main(final String[] args) throws UnableToParseException, IOException {
-        File f = new File("samples/fur_elise.abc");
+        File f = new File("samples/piece3.abc");
         List<String> s = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8).stream()
                 .filter(i -> !i.isEmpty())
                 .collect(Collectors.toList());
