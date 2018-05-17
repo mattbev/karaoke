@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 import karaoke.server.WebServer;
 import karaoke.sound.MusicPlayer;
@@ -53,12 +54,16 @@ public class Main {
         }
         
         try {
-            List<String> s = Files.readAllLines(Paths.get(songPath), StandardCharsets.UTF_8);
+            List<String> s = Files.readAllLines(Paths.get(songPath), StandardCharsets.UTF_8).stream()
+                    .filter(i -> !i.isEmpty())
+                    .collect(Collectors.toList());
             String contents = String.join("\n",s) + "\n";
             karaoke = KaraokeParser.parse(contents);
             System.out.println(karaoke.getHeader().toString());
             System.out.println(karaoke.getBody().getVoicesToMusics().get("1").getComponents());
             
+            
+            /*
             //
             //
             //
@@ -91,6 +96,7 @@ public class Main {
             //
             //
             //
+            */
             
             
             List<String> voices = karaoke.getVoices();
