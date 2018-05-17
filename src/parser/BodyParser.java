@@ -265,13 +265,14 @@ public class BodyParser {
             }
             case LYRIC: //lyric ::= "w:" lyrical_element*
             {
-                System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+//                System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
                 final List<ParseTree<BodyGrammar>> lyricChildren = child.children();
                 final List<String> lyricStrings = getLyricStrings(lyricChildren);
                 final List<Object> parsedLyricElements = asssignLyricsToPlayables(lyricStrings, line, lyricChildren);
+//                System.out.println(parsedLyricElements);
                 final Map<Integer, Integer> playableLyricIndexes = (Map<Integer, Integer>) parsedLyricElements.get(0);
                 final List<String> parsedLyricStrings = (List<String>) parsedLyricElements.get(1);
-                System.out.println(parsedLyricStrings);
+//                System.out.println(parsedLyricStrings);
                 final List<Playable> modifiedLine = new ArrayList<>();
 
                 for (int i=0; i<line.size(); i++) {
@@ -282,11 +283,17 @@ public class BodyParser {
                 final List<Music> musicList;
                 if (musicMap.containsKey(voice)) {
                     musicList = musicMap.get(voice);
-                    musicList.add(Music.createLine(modifiedLine));
+                    Music m = Music.createLine(modifiedLine);
+                    musicList.add(m);
                 } else {
                     musicList = Arrays.asList(Music.createLine(modifiedLine));
                 }
                 musicMap.put(voice, musicList);
+                for (Playable p : musicMap.get("1").get(0).getComponents()) {
+                    System.out.println(p);
+                    System.out.println(p.getLyricLine().toString());
+                    
+                }
                 return musicMap;  
             }
             case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
@@ -473,6 +480,34 @@ public class BodyParser {
 //            }
 //        }
         
+/*
+        Map<Integer, Integer> newAssignments = new HashMap<>();
+        
+        for (Map.Entry<Integer, Integer> entry : assignments.entrySet())
+        {
+            newAssignments.put(entry.getKey(), entry.getValue());
+        }
+        
+        int counter = 0;
+        int numRests = 0;
+        for (Playable p : playableList) {
+            if ((p instanceof Rest)) {
+                for (int j = assignments.size(); j > counter; j--) {
+                    lyricStrings.add(counter, "");
+                    
+                    int oldKey = j;
+                    int oldValue = assignments.get(counter + numRests);
+                    newAssignments.put(oldKey + 1, oldValue + 1);
+                }
+                numRests++;
+                lyricStrings.add(counter, "");
+                newAssignments.put(counter, assignments.get(counter) + numRests);
+            } else {
+                newAssignments.put(counter, 0);
+            }
+            counter++;
+        
+        
         int numRests = 0;
         int counter = 0;
         Map<Integer, Integer> newAssignments = new HashMap<>();
@@ -485,11 +520,11 @@ public class BodyParser {
                 newAssignments.put(counter, 0);
             }
             counter++;
-
-        }
+        */
+        
        
         System.out.println(lyricStrings);
-        System.out.println(newAssignments);
+//        System.out.println(newAssignments);
 // w: A-_maze-__ing_ grace!__ How_ sweet__ the_ sound__ That_ saved__ a_ wretch__ like_ me.___
         return Collections.unmodifiableList(Arrays.asList(assignments, lyricStrings));
         

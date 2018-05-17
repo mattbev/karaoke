@@ -20,7 +20,7 @@ import karaoke.sound.MusicPlayer;
 import parser.KaraokeParser;
 
 /**
- * Main entry point of the karaoke machine, run to make karaoke song requests and stream lyrics
+ * How to play the karaoke machine. run to make karaoke song requests and stream lyrics
  */
 public class Main {
 

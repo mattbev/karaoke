@@ -46,9 +46,10 @@ public class WebServer {
     // 
     // Thread safety argument:
     //   the shared karaoke is immutable, with immutable lyrics as well
-    //   safe b/c will never have multiple users on the same thread (multiple players are on multiple threads)
+    //   thread safe bc will never have multiple users on the same thread (multiple players are on multiple threads)
     //   multiple users have their own blocking queues
     //   uses thread safe types internally 
+    //   mutable rep only changed in constructor that is a threadsafe java method
 
 
     /**
@@ -71,14 +72,14 @@ public class WebServer {
         for(String voice: this.karaoke.getVoices()) {
             HttpContext url = this.server.createContext("/"+voice, new HttpHandler(){
                 public void handle(HttpExchange exchange) throws IOException{
-                    countPerVoice.put(voice, countPerVoice.get(voice) + 1);
+//                    countPerVoice.put(voice, countPerVoice.get(voice) + 1);
                     
                     html2(exchange);
                     
                 }
             });
             bq.put(voice, new LinkedBlockingQueue<>());
-            countPerVoice.put(voice, 0);
+//            countPerVoice.put(voice, 0);
         
             // add logging to the /hello/ handler and set required HTTP headers
             //   (do this on all your handlers)
@@ -130,9 +131,9 @@ public class WebServer {
      * @throws InterruptedException if the thread is interrupted
      */
     public void putInBlockingQueue(LyricLine l) throws InterruptedException {
-        for (int i = 0; i < countPerVoice.get(l.getVoice()); i ++) {
+//        for (int i = 0; i < countPerVoice.get(l.getVoice()); i ++) {
             bq.get(l.getVoice()).put(l);
-        }
+//        }
         checkRep();
         
     }

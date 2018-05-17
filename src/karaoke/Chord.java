@@ -97,16 +97,15 @@ public class Chord implements Playable {
         //iterate through every note in the chord and give it the same startBeat on which to play
         for(Note note: notes) {
             note.play(player, startBeat);
-            Consumer<Double> c1 = i -> {
-                try {
-                    server.putInBlockingQueue(lyricLine);
-                } catch (InterruptedException e) {
-                    System.out.println("hey");
-                    e.printStackTrace();
-                }
-            };
-            player.addEvent(startBeat , c1 );
         }
+        Consumer<Double> c1 = i -> {
+            try {
+                server.putInBlockingQueue(lyricLine);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
+        player.addEvent(startBeat , c1);
         checkRep();
     }
     
