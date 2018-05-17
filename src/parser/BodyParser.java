@@ -276,7 +276,6 @@ public class BodyParser {
                 final List<String> parsedLyricStrings = (List<String>) parsedLyricElements.get(1);
 
                 final List<Playable> modifiedLine = new ArrayList<>();
-
                 for (int i=0; i<line.size(); i++) {
                     final Playable p = line.get(i);
                     final LyricLine lyricLine = new LyricLine(parsedLyricStrings, playableLyricIndexes.get(i), voice);
@@ -435,14 +434,18 @@ public class BodyParser {
             i++;
         }
         
-        final Set<Integer> restIndices = new HashSet<>();
+        final List<Integer> restIndices = new ArrayList<>();
         Map<Integer, Integer> newAssignments = new HashMap<>();
         
         for (int n=0; n < playableList.size(); n++) {
             Playable p = playableList.get(n);
             if (p instanceof Rest) {
                 restIndices.add(n);
-                lyricStrings.add(n, "");
+                try {
+                    lyricStrings.add(n, "");
+                } catch (IndexOutOfBoundsException e) {
+                    lyricStrings.add("");
+                }
             }
 
         
@@ -460,7 +463,11 @@ public class BodyParser {
         }
 
         for (Integer index : restIndices) {
-            newAssignments.put(index, assignments.get(index));
+            if (index == 0 || index == 1) {
+                newAssignments.put(index, index);
+            } else {
+            newAssignments.put(index, newAssignments.get(index-1)+1);
+            }
         }
         return Collections.unmodifiableList(Arrays.asList(newAssignments, lyricStrings));
         

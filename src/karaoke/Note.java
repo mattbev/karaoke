@@ -71,6 +71,7 @@ public class Note {
         if (basenote.toLowerCase().equals(basenote)) {
             notePitch = notePitch.transpose(Pitch.OCTAVE);
         }
+        
         String noteAccidental = "";
         if (pitchParams.length > 0 && (pitchParams[0].contains("^") || pitchParams[0].contains("_"))) {
             noteAccidental += pitchParams[0];
@@ -106,18 +107,6 @@ public class Note {
     public static double parseLength(String noteLength) {
         String numerator;
         String denominator;
-//        if (noteLength.length() == 0) {
-//            numerator = "1";
-//            denominator = "1";
-//        }
-//        else if (noteLength.length() == 1) {
-//            numerator = noteLength;
-//            denominator = "1";
-//        } else {
-//            final String[] lengthParams = noteLength.split("/");
-//            numerator = lengthParams[0];
-//            denominator = lengthParams[1];
-//        }
         if (noteLength.length() == 0) {
             numerator = "1";
             denominator = "1";
