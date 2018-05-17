@@ -232,7 +232,10 @@ public class BodyParser {
                     //      -clear repeat list and first and second seen slots
                     //ELSE  list it as first major bar line
                     //--->  start keeping "repeat list" of notes that come after it
-                    continue;
+                    final String barline = child.children().get(0).text();
+                    if (barline.equals(":|")) {
+                        
+                    }
                 case NTH_REPEAT: //nth_repeat ::= "[1" | "[2"
                     continue;
                 case SPACE_OR_TAB: //space_or_tab ::= " " | "\t"
@@ -297,7 +300,7 @@ public class BodyParser {
             
         }
         if (musicMap.containsKey(voice)) { // if there, add it to current list
-            final List<Music> musicList = musicMap.get(voice);
+            final List<Music> musicList = new ArrayList<>(musicMap.get(voice));
             musicList.add(Music.createLine(line));
             musicMap.put(voice, musicList);
         } else { // if not there, create new entry
@@ -480,8 +483,7 @@ public class BodyParser {
         
         //case ABC_LINE: // abc_line ::= element+ end_of_line (lyric end_of_line)?  | middle_of_body_field | comment
         for (ParseTree<BodyGrammar> child : children) {// for each line
-            switch(child.name()) {
-                
+            switch(child.children().get(0).name()) {                
                 case MIDDLE_OF_BODY_FIELD: //middle_of_body_field ::= field_voice
                 {
                     voice = child.children().get(0).text(); //should always be declared before hitting default case if there are voices in the abc file

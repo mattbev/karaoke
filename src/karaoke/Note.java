@@ -106,14 +106,31 @@ public class Note {
     public static double parseLength(String noteLength) {
         String numerator;
         String denominator;
+//        if (noteLength.length() == 0) {
+//            numerator = "1";
+//            denominator = "1";
+//        }
+//        else if (noteLength.length() == 1) {
+//            numerator = noteLength;
+//            denominator = "1";
+//        } else {
+//            final String[] lengthParams = noteLength.split("/");
+//            numerator = lengthParams[0];
+//            denominator = lengthParams[1];
+//        }
         if (noteLength.length() == 0) {
             numerator = "1";
             denominator = "1";
         }
-        else if (noteLength.length() == 1) {
+        else if (noteLength.length() == 1 && !noteLength.contains("/")) {
             numerator = noteLength;
             denominator = "1";
-        } else {
+        } 
+        else if (noteLength.length() == 1 && noteLength.contains("/")) {
+            numerator = "1";
+            denominator = "2";
+        }
+        else {
             final String[] lengthParams = noteLength.split("/");
             numerator = lengthParams[0];
             denominator = lengthParams[1];

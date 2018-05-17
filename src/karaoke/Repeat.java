@@ -37,7 +37,7 @@ public class Repeat implements Music{
      * @param endingTwo the optional second ending of
      *        the music
      */
-    public Repeat(Music rMusic, Music endingOne,Music endingTwo) {
+    public Repeat(Music rMusic, Music endingOne, Music endingTwo) {
         this.endings.add(endingOne);
         this.endings.add(endingTwo);
         this.toBeRepeated = rMusic;

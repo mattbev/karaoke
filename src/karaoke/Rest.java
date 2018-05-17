@@ -60,7 +60,7 @@ public class Rest implements Playable {
         
         String numerator;
         String denominator;
-        
+
         if (duration.length() == 1) {
             numerator = duration;
             denominator = "1";

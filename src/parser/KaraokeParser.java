@@ -29,14 +29,14 @@ public class KaraokeParser {
      * @throws IOException 
      */
     public static void main(final String[] args) throws UnableToParseException, IOException {
-        File f = new File("samples/waxies_dargle.abc");
+        File f = new File("samples/fur_elise_no_repeats.abc");
         List<String> s = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8).stream()
                 .filter(i -> !i.isEmpty())
                 .collect(Collectors.toList());
         String contents = String.join("\n", s) +"\n";
         Karaoke karaoke = KaraokeParser.parse(contents);
-        System.out.println(karaoke.getBody().getVoicesToMusics().get("1").getComponents());
-        System.out.println(karaoke.getLinesOfLyrics("1"));
+//        System.out.println(karaoke.getBody().getVoicesToMusics().get("V:1").getComponents());
+//        System.out.println(karaoke.getLinesOfLyrics("1"));
     }
     
     // the nonterminals of the grammar
