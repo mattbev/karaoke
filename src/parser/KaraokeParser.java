@@ -4,11 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import edu.mit.eecs.parserlib.ParseTree;
 import edu.mit.eecs.parserlib.Parser;
 import edu.mit.eecs.parserlib.UnableToParseException;
+import edu.mit.eecs.parserlib.Visualizer;
 import karaoke.Body;
 import karaoke.Header;
 import karaoke.Karaoke;
@@ -29,11 +32,14 @@ public class KaraokeParser {
      */
     public static void main(final String[] args) throws UnableToParseException, IOException {
         File f = new File("samples/minimal_song.abc");
-        List<String> s = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8);
-        String contents = String.join("\n", s) +"\n";
+        List<String> s = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8).stream()
+                .filter(i -> !i.isEmpty())
+                .collect(Collectors.toList());
+        String contents = String.join("\n",s) + "\n";
+        System.out.println(contents);
         Karaoke karaoke = KaraokeParser.parse(contents);
-        System.out.println(karaoke.getHeader().toString());
         System.out.println(karaoke.getBody().getVoicesToMusics().get("1").getComponents());
+        System.out.println(karaoke.getLinesOfLyrics("1"));
     }
     
     // the nonterminals of the grammar
@@ -91,7 +97,7 @@ public class KaraokeParser {
         
         //for visuals
 //        System.out.println("parse tree " + parseTree);
-//        Visualizer.showInBrowser(parseTree);
+        Visualizer.showInBrowser(parseTree);
         
         //make AST from parse tree
         final Karaoke karaoke = makeAbstractSyntaxTree(parseTree);

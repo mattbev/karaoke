@@ -101,7 +101,7 @@ public class LyricLine {
     public static LyricLine emptyLyricLine() {
         List<String> lyr = new ArrayList<String>();
         lyr.add("");
-        LyricLine lyrics =  new LyricLine(lyr, 0, "main");  //no lyrics
+        LyricLine lyrics =  new LyricLine(lyr, 0, "1");  //no lyrics
         return lyrics;
     }
     

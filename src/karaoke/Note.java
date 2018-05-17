@@ -64,7 +64,7 @@ public class Note {
                 break;
             }
         }
-        System.out.println(basenote);
+//        System.out.println(basenote);
         String[] pitchParams = pitch.split(basenote);
 
         Pitch notePitch = new Pitch(basenote.toUpperCase().toCharArray()[0]);
@@ -73,7 +73,7 @@ public class Note {
             notePitch = notePitch.transpose(Pitch.OCTAVE);
         }
         String noteAccidental = "";
-        System.out.println(pitchParams.length);
+//        System.out.println(pitchParams.length);
         if (pitchParams.length == 2) {
             noteAccidental = pitchParams[0];
             final String octave = pitchParams[1];            
@@ -118,7 +118,7 @@ public class Note {
         this.accidental = noteAccidental;
         this.duration = noteDuration;
         this.pitch = notePitch;
-        System.out.println("constructor pitch: "+pitch);
+//        System.out.println("constructor pitch: "+pitch);
 
     }
     
