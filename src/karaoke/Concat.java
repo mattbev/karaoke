@@ -42,9 +42,9 @@ public class Concat implements Music {
      * @param secondMusic the second Music piece in the sequence
      */
     public Concat(Music firstMusic, Music secondMusic) {
-        checkRep();
         this.firstMusic = firstMusic;
         this.secondMusic = secondMusic;
+        checkRep();
     }
     
     /**

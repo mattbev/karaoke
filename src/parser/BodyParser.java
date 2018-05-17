@@ -278,22 +278,15 @@ public class BodyParser {
                     final Playable p = line.get(i);
                     final LyricLine lyricLine = new LyricLine(parsedLyricStrings, playableLyricIndexes.get(i), voice);
                     modifiedLine.add(p.copyWithNewLyric(lyricLine));
+                } 
+                if (musicMap.containsKey(voice)) { // if there, add it to current list
+                    final List<Music> musicList = new ArrayList<>(musicMap.get(voice));
+                    musicList.add(Music.createLine(modifiedLine));
+                    musicMap.put(voice, musicList);
+                } else { // if not there, create new entry
+                    musicMap.put(voice, Arrays.asList(Music.createLine(modifiedLine)));
                 }
-                final List<Music> musicList;
-                if (musicMap.containsKey(voice)) {
-                    musicList = musicMap.get(voice);
-                    Music m = Music.createLine(modifiedLine);
-                    musicList.add(m);
-                } else {
-                    musicList = Arrays.asList(Music.createLine(modifiedLine));
-                }
-                musicMap.put(voice, musicList);
-                for (Playable p : musicMap.get("1").get(0).getComponents()) {
-                    System.out.println(p);
-                    System.out.println(p.getLyricLine().toString());
-                    
-                }
-                return musicMap;  
+                return musicMap;
             }
             case COMMENT: //comment ::= space_or_tab* "%" comment_text newline
                 return musicMap; //make no changes to ADTs
@@ -495,9 +488,7 @@ public class BodyParser {
                     continue;
                 }
                 case COMMENT: //comment ::= space_or_tab* "%" text newline
-                {
                     continue; //do nothing with this
-                }
                 default: // when abc_line ::= element+ end_of_line (lyric end_of_line)?
                     try {
                         voicesToLines = evaluateLine(child, header, voicesToLines, voice);

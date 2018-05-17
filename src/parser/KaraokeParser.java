@@ -29,7 +29,7 @@ public class KaraokeParser {
      * @throws IOException 
      */
     public static void main(final String[] args) throws UnableToParseException, IOException {
-        File f = new File("samples/piece3.abc");
+        File f = new File("samples/waxies_dargle.abc");
         List<String> s = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8).stream()
                 .filter(i -> !i.isEmpty())
                 .collect(Collectors.toList());
