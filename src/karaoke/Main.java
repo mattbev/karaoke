@@ -68,8 +68,7 @@ public class Main {
             }
             WebServer server = new WebServer(karaoke, port);
             server.start();
-            
-            
+            System.out.println(karaoke.getLinesOfLyrics("1"));
             
             System.out.println("\nReady to play " + karaoke.getTitle() + " by " + karaoke.getComposer());
             System.out.println("\nTo get ready to view the lyrics, navigate in your browser to one of the following urls, \nwhere the extension"
