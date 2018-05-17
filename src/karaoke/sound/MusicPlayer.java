@@ -47,8 +47,6 @@ public class MusicPlayer {
                 beatsPerMinute /= 2;
             }
         }
-        System.out.println(noteLength);
-        System.out.println(beatsPerMinute);
         final int ticksPerBeat = 64;
         SequencePlayer player = new MidiSequencePlayer(beatsPerMinute, ticksPerBeat);
         karaoke.play(player, server);

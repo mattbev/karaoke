@@ -59,8 +59,8 @@ public class Main {
                     .collect(Collectors.toList());
             String contents = String.join("\n",s) + "\n";
             karaoke = KaraokeParser.parse(contents);
-            System.out.println(karaoke.getHeader().toString());
-            System.out.println(karaoke.getBody().getVoicesToMusics().get("1").getComponents());
+//            System.out.println(karaoke.getHeader().toString());
+//            System.out.println(karaoke.getBody().getVoicesToMusics().get("1").getComponents());
             
             
             /*
