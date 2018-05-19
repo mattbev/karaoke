@@ -58,18 +58,28 @@ public class Rest implements Playable {
      */
     public Rest(String duration, LyricLine lyricLine, Header header) {
         this.lyricLine = lyricLine;
-        
+
         String numerator;
         String denominator;
-
-        if (duration.length() == 1) {
+        if (duration.length() == 0) {
+            numerator = "1";
+            denominator = "1";
+        }
+        else if (duration.length() == 1 && !duration.contains("/")) {
             numerator = duration;
             denominator = "1";
-        } else {
+        } 
+        else if (duration.length() == 1 && duration.contains("/")) {
+            numerator = "1";
+            denominator = "2";
+        }
+        else {
             final String[] lengthParams = duration.split("/");
             numerator = lengthParams[0];
             denominator = lengthParams[1];
         }
+    
+    
         int numeratorInt = 1;
         int denominatorInt = 1;
         if (numerator.length() > 0) {
